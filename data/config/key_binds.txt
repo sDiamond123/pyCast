@@ -1,0 +1,14 @@
+# move forward
+119
+# move backward
+s
+# strafe left
+A
+# strafe right
+d
+# look left
+ q
+# look right
+    e
+# exit
+p

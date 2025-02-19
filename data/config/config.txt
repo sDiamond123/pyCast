@@ -1,0 +1,14 @@
+# name
+Long's Word
+# fullscreen
+False
+# display width
+800
+# display height
+600
+# target FPS
+60
+# internal resolution (width)
+800
+# internal resolution (height)
+600
