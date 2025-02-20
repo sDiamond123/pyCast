@@ -21,6 +21,8 @@ class Key:
     S_RIGHT = get_key(binds)
     TURN_L = get_key(binds)
     TURN_R = get_key(binds)
+    JUMP = get_key(binds)
+    CROUCH = get_key(binds)
     EXIT = get_key(binds)
     binds.close()
     print("Successfully loaded key binds")
@@ -28,6 +30,7 @@ class Key:
 class Player:
     x = 0
     y = 0
+    z = 0
     ang = 0
 
     def __init__(self, x, y, ang):
@@ -71,3 +74,9 @@ def convert_csv_to_float(array, row):
     after_decimal = array[row][1]
     after_decimal /= (10**math.ceil(math.log(after_decimal, 10)))
     return before_decimal + after_decimal
+
+def nomralize_angle (ang):
+    ang %= math.pi * 2
+    if (ang < 0):
+        ang += math.pi * 2
+    return ang

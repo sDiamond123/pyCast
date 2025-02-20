@@ -15,7 +15,7 @@ class Map :
     T_MAP = "\\tmap.csv"
     TEXTS = "\\texts.csv"
     META_W = 3
-    META_H = 3
+    META_H = 4
 
     has_ceil = True # true if has ceil, false use rolling skybox
     # array of tile colors
@@ -33,6 +33,9 @@ class Map :
 
     text_map = []
 
+    skybox = None
+    skybox_phase = 0
+
     def __init__(self, map_name):
         # set up path to map directery
         map_name = self.PATH + map_name
@@ -41,7 +44,7 @@ class Map :
         map_w = meta[0][0]
         map_h = meta[0][1]
         map_p = meta[0][2]
-        map_t = meta [2] [0]
+        map_t = meta [3] [0]
         self.has_ceil = (meta[1][0].lower()) == "true"
         # load maps
         self.map = utils.csv_load(map_name + self.H_MAP, map_w, map_h)
@@ -49,6 +52,9 @@ class Map :
         self.text_map = utils.csv_load(map_name + self.T_MAP, map_w, map_h)
         if (self.has_ceil):
             self.ceil_map = utils.csv_load(map_name + self.C_MAP, map_w, map_h)
+        else:
+            self.skybox = meta[1][1]
+            self.skybox_phase = utils.convert_csv_to_float(meta, 2)
         # load palette
         colors = utils.csv_load(map_name + self.COLOR, 3, map_p)
         self.palette = [None] * map_p
@@ -84,6 +90,9 @@ class Map :
     
     def get_text(self, x, y, off):
         return self.text_palette[self.text_map[int(y)][int(x)]].get_slice(off)
+    
+    def get_skybox(self):
+        return (self.skybox, self.skybox_phase)
     
     def rendermap(self, screen, Player, fill_w, fill_h, x0, y0, w, h):
             center_x = Player.x

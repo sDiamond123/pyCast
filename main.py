@@ -1,5 +1,5 @@
 import pygame
-import world
+import world, texture
 
 
 if __name__ == "__main__":
@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     # finish pygame init
     if not fullscreen:
-        screen = pygame.display.set_mode((w, h))
+        screen = pygame.display.set_mode((w, h), pygame.RESIZABLE)
     else:
         screen = pygame.display.set_mode((w, h), pygame.FULLSCREEN)
     clock = pygame.time.Clock()
@@ -54,7 +54,7 @@ if __name__ == "__main__":
         if running:
             running = manager.update(keys)
             manager.render()
-
+            
         # push frame to screen
         pygame.display.flip()
 

@@ -1,5 +1,6 @@
 import pygame
 import utils
+import math
 
 class Texture:
     PATH = "data\\textures\\"
@@ -13,13 +14,7 @@ class Texture:
         self.slice_count = dimensions[0]
         self.slices = [None] * self.slice_count
         for i in range(self.slice_count):
-            slice = pygame.Surface((1, dimensions[1]))
-            slice.unlock()
-            for j in range (dimensions[1]):
-                slice.set_at((0, j), base_image.get_at((i, j)))
-            slice.lock()
-            self.slices[i] = slice
-            #self.slices[i] = base_image
+            self.slices[i] = base_image.subsurface((i,0,1,dimensions[1]))
         #print ("Successfully loaded sliced texture:" + file)
 
     def update(self):
@@ -69,3 +64,42 @@ class AnimatedTexture:
     def get_slice(self, request):
         self.update()
         return self.textures[self.current][0].get_slice(request)
+    
+class RollingTexture:
+    PATH = "data\\textures\\rolling\\"
+
+    base_image = None
+    phase = 0
+    internal_screen = None
+    external_screen = None
+    fov = 0
+    height = 0
+    width = 0
+    scale = 0
+
+    def __init__ (self, file, t_0, fov, w, h):
+        file = self.PATH + file
+        self.phase = t_0
+        self.fov = fov
+        self.external_screen = pygame.Surface((w,h))
+        self.base_image = pygame.image.load(file)
+        self.height = self.base_image.size[1]
+        self.width = self.base_image.size[0]
+        self.scale = self.width/(2 * math.pi)
+        self.internal_screen = pygame.Surface((fov * self.scale, self.height))
+
+    def render (self, phase):
+        ang = phase - self.phase
+        lower = utils.nomralize_angle(ang - self.fov/2) * self.scale
+        upper = utils.nomralize_angle(ang + self.fov/2) * self.scale
+        if (lower > upper):
+            front = pygame.Rect(lower, 0, self.width - lower, self.height)
+            back = pygame.Rect(0,0,upper, self.height)
+            self.internal_screen.blit(self.base_image.subsurface(front))
+            self.internal_screen.blit(self.base_image.subsurface(back),(self.width - lower, 0))
+        else:
+            whole = pygame.Rect(lower, 0, upper - lower, self.height)
+            self.internal_screen.blit(self.base_image.subsurface(whole))
+        pygame.transform.scale(self.internal_screen, self.external_screen.size, self.external_screen)
+        
+        

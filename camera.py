@@ -1,5 +1,6 @@
 import map
 import math
+import texture
 import pygame
 
 class Camera:
@@ -11,6 +12,7 @@ class Camera:
     # camera world
     position_vector = None
     map = None
+    skybox = None
     # camera variables
     fov = 0
     raycount = 0
@@ -44,6 +46,9 @@ class Camera:
         self.ext_h = h
         self.external_surface = pygame.Surface((self.ext_w, self.ext_h))
         self.z_buffer = [0] * self.raycount
+        if not self.map.has_ceil:
+            sky = self.map.get_skybox()
+            self.skybox = texture.RollingTexture(sky[0],sky[1],self.fov, self.int_w, self.int_h/2)
         # print statement
         print("Set up camera at ("+str(camera_man.x)+","+str(camera_man.y)
               +") with a " + str(math.degrees(self.fov)) + 
@@ -51,7 +56,10 @@ class Camera:
               + str(self.draw_dist) +" cells")
 
     def render(self):
-        #self.internal_surface.fill("yellow")
+        if not self.map.has_ceil:
+            self.internal_surface.fill("white")
+            self.skybox.render(self.position_vector.ang)
+            self.internal_surface.blit(self.skybox.external_screen)
         ang = self.position_vector.ang - self.fov/2
         for i in range(self.raycount):
             ang %= 2 * math.pi
@@ -152,9 +160,10 @@ class Camera:
         if offset != -1:
             # we hit a wall
             self.z_buffer[ray_offset] = distance
-            scale = self.map.get_height(x,y) * 2 - 1
-            top = (ray_offset, self.midpoint - scale * draw_height)
+            height = self.map.get_height(x,y)
+            scale = height * 2 - 1
+            top = (ray_offset, self.midpoint - scale * draw_height + self.position_vector.z)
             #pygame.draw.line(self.internal_surface,(255 * offset, 0, 255), (ray_offset, self.midpoint + draw_height), top)
-            self.internal_surface.blit(pygame.transform.scale(self.map.get_text(x,y,offset), (1,2 * draw_height * scale)),top)
+            self.internal_surface.blit(pygame.transform.scale(self.map.get_text(x,y,offset), (1,2 * draw_height * height)),top)
         else:
             self.z_buffer[ray_offset] = -1

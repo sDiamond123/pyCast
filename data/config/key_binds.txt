@@ -10,5 +10,9 @@ d
  q
 # look right
     e
+# jump
+32
+# crouch
+    c
 # exit
 p
