@@ -3,7 +3,6 @@ import utils
 
 class Texture:
     PATH = "data\\textures\\"
-    base_image = None
     slices = []
     slice_count = 0
 
