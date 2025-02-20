@@ -112,4 +112,4 @@ class Map :
             # draw player
             point =  pygame.Vector2(x0+ w*(center_x-int(center_x)), y0 + h*(center_y-int(center_y)))
             pygame.draw.circle(screen, "green",point, w/4)
-            pygame.draw.line(screen, "green", point, (point.x + w/2 * math.cos(ang), point.y + w/2 * math.sin(ang)))
+            pygame.draw.line(screen, "green", point, (point.x + w/2 * math.cos(ang), point.y + w/2 * math.sin(ang)), 2)
