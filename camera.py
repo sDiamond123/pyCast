@@ -57,7 +57,6 @@ class Camera:
 
     def render(self):
         if not self.map.has_ceil:
-            self.internal_surface.fill("white")
             self.skybox.render(self.position_vector.ang)
             self.internal_surface.blit(self.skybox.external_screen)
         ang = self.position_vector.ang - self.fov/2
@@ -112,11 +111,15 @@ class Camera:
                 if distance != 0:
                     # draw ceil/map
                     delta_h = self.midpoint + draw_height
-                    pygame.draw.line(self.internal_surface, prev_color_up, (ray_offset, prev_y_up), (ray_offset, delta_h))
+                    pygame.draw.line(self.internal_surface, prev_color_up, 
+                                     (ray_offset, prev_y_up + self.position_vector.z), 
+                                     (ray_offset, delta_h + self.position_vector.z))
                     prev_y_up = delta_h
                     if (self.map.has_ceil):
                         delta_h = self.midpoint - draw_height
-                        pygame.draw.line(self.internal_surface, prev_color_down , (ray_offset, prev_y_down), (ray_offset, delta_h))
+                        pygame.draw.line(self.internal_surface, prev_color_down , 
+                                         (ray_offset, prev_y_down + self.position_vector.z), 
+                                         (ray_offset, delta_h + self.position_vector.z))
                         prev_y_down = delta_h
                 if not self.map.is_empty(x,y):
                     # hit wall, set up parameters to draw wall

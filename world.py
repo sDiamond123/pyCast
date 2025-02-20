@@ -3,6 +3,7 @@ import utils
 import map
 import camera
 import math
+import texture
 
 class World:
     PATH = "data\state\\"
@@ -22,6 +23,7 @@ class World:
     p = None
     m = None
     c = None
+    compass = None
     move_speed = 0.1
     truen_speed = 0.4
 
@@ -33,6 +35,7 @@ class World:
         self.internal_w = i_w
         self.internal_h = i_h
         self.internal_display = pygame.Surface((i_w, i_h))
+        self.compass = texture.RollingTexture("\\compass\compass_scroll.bmp", math.pi, math.pi , 250, 32)
         # load into our game state
         self.load_state(entry_state)
 
@@ -70,6 +73,12 @@ class World:
             player.turn(0.04)
         if keys[utils.Key.EXIT]:
             return False
+        if keys[utils.Key.JUMP]:
+            player.z = 50
+        elif keys[utils.Key.CROUCH]:
+            player.z = -50
+        else:
+            player.z = 0 
         return True
 
     def render (self):
@@ -79,5 +88,8 @@ class World:
         self.internal_display.blit(self.c.external_surface)
         # render minimap
         self.m.rendermap (self.internal_display, self.p, 4, 3, 600, 20, 20, 20)
+        # render compass
+        self.compass.render(self.p.ang)
+        self.internal_display.blit(self.compass.external_screen, (300,560))
         # output rendered frame (push to external display)
         pygame.transform.smoothscale(self.internal_display, (self.ext_w,self.ext_h), self.out_display)
