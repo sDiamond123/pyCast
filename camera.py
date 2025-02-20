@@ -56,6 +56,7 @@ class Camera:
               + str(self.draw_dist) +" cells")
 
     def render(self):
+        self.internal_surface.fill((35,35,35))
         if not self.map.has_ceil:
             self.skybox.render(self.position_vector.ang)
             self.internal_surface.blit(self.skybox.external_screen)

@@ -40,7 +40,7 @@ if __name__ == "__main__":
     running = True
     dt = 0
 
-    manager = world.World(screen,w,h,i_w, i_h, "default.csv")
+    manager = world.World(screen,w,h,i_w, i_h, "town.csv")
     print("Game Start!")
     # main loop
     while running:
@@ -54,7 +54,7 @@ if __name__ == "__main__":
         if running:
             running = manager.update(keys)
             manager.render()
-            
+
         # push frame to screen
         pygame.display.flip()
 
