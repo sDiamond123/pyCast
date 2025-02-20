@@ -20,7 +20,7 @@ class Texture:
             slice.lock()
             self.slices[i] = slice
             #self.slices[i] = base_image
-        print ("Successfully loaded sliced texture:" + file)
+        #print ("Successfully loaded sliced texture:" + file)
 
     def update(self):
         # nothing to update so waste a line b/c python
@@ -53,7 +53,7 @@ class AnimatedTexture:
         frame_manifest = utils.csv_load(file + self.MANIFEST, 2, self.frames)
         for i in range (self.frames):
             self.textures[i] = (Texture(directory + "\\" + frame_manifest[i][0]), frame_manifest[i][1])
-        print("Successfully loaded animated texture: " + directory)
+        #print("Successfully loaded animated texture: " + directory)
 
     # loop through frames
     def update(self):
