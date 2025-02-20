@@ -12,6 +12,8 @@ if __name__ == "__main__":
     name = config.readline().strip()
     pygame.display.set_caption(name)
     config.readline()
+    pygame.display.set_icon(pygame.image.load(config.readline()[:-1]))
+    config.readline()
     fullscreen = "true" == (config.readline().strip().lower())
     config.readline()
     w = int(config.readline())
