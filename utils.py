@@ -1,5 +1,51 @@
 import map
 import math
+import pygame
+
+
+class Mouse_Manager:
+    COOL_DOWN = 500
+    MOUSE_FACTOR = 1000
+
+    sensetivity = (0,0)
+    alive = False
+    last = (0,0)
+    size = (0,0)
+    abs = (0,0)
+    rel = (0,0)
+    prev_toggle = 0
+    hold_x = 0
+
+    def __init__ (self, sensitivity, dimensions):
+        self.alive = False
+        self.sensetivity = (sensitivity[0]/self.MOUSE_FACTOR, sensitivity[1]/self.MOUSE_FACTOR)
+        self.size = dimensions
+        self.prev_toggle = 0
+        self.hold_x = int(self.size[0]/2)
+        self.abs = (self.size[0], self.size[1])
+
+    def toggle(self):
+        time = pygame.time.get_ticks()
+        if (time - self.prev_toggle > self.COOL_DOWN):
+            self.prev_toggle = time
+            self.alive = not self.alive
+            pygame.mouse.set_visible(not self.alive)
+            pygame.event.set_grab(self.alive)
+
+    def poll_delta(self):
+        return self.last
+    
+    def poll_abs(self):
+        return self.abs
+    
+    def poll_rel(self):
+        return self.rel
+
+    def update(self):
+        raw = pygame.mouse.get_rel()
+        self.abs = pygame.mouse.get_pos()
+        self.rel = (self.abs[0]/self.size[0], self.abs[1]/self.size[1])
+        self.last = (raw[0] * self.sensetivity[0], raw[1] * self.sensetivity[1])
 
 class Key:
     def get_key (file):
@@ -23,6 +69,7 @@ class Key:
     TURN_R = get_key(binds)
     JUMP = get_key(binds)
     CROUCH = get_key(binds)
+    FREE_LOOK = get_key(binds)
     EXIT = get_key(binds)
     binds.close()
     print("Successfully loaded key binds")

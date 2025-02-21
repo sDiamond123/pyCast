@@ -1,5 +1,6 @@
 import pygame
-import world, texture
+import world, utils
+
 
 
 if __name__ == "__main__":
@@ -25,12 +26,16 @@ if __name__ == "__main__":
     i_w = int(config.readline())
     config.readline()
     i_h = int(config.readline())
+    config.readline()
+    x_sense = int(config.readline())
+    config.readline()
+    y_sense = int(config.readline())
     config.close()
 
     #print out config to terminal
     print ("Started: "+name+"\nWindow: " + str(w) + " by " + str(h) +"\nFullscreen: "+str(fullscreen)+
            "\nInternal Resolution: "+str(i_w)+" by "+ str(i_h)+"\nTargeting " + str(fps) +" FPS")
-
+    #print(str(pygame.K_ESCAPE))
     # finish pygame init
     if not fullscreen:
         screen = pygame.display.set_mode((w, h), pygame.RESIZABLE)
@@ -40,25 +45,30 @@ if __name__ == "__main__":
     running = True
     dt = 0
 
+    mouse = utils.Mouse_Manager((x_sense,y_sense),(w,h))
     manager = world.World(screen,w,h,i_w, i_h, "town.csv")
     print("Game Start!")
     # main loop
     while running:
+        
         # poll for events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
         
         # run a frame of the game
-        keys = pygame.key.get_pressed()
         if running:
-            running = manager.update(keys)
+            keys = pygame.key.get_pressed()
+            running = manager.update(keys, mouse)
             manager.render()
+            if mouse.alive:
+                # if we are holding mouse, reset position
+                # for some reason this doesn't work in the mouse class
+                pygame.mouse.set_pos((w/2, mouse.abs[1]))
+            # push frame to screen
+            pygame.display.flip()
 
-        # push frame to screen
-        pygame.display.flip()
-
-        # limits FPS
-        dt = clock.tick(fps) / 1000
+            # limits FPS
+            dt = clock.tick(fps) / 1000
     print("Exited: " + name)
     pygame.quit()

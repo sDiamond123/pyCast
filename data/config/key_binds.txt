@@ -14,5 +14,7 @@ d
 32
 # crouch
     c
+# m_look
+z
 # exit
-p
+27

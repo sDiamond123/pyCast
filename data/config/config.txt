@@ -14,3 +14,7 @@ False
 800
 # internal resolution (height)
 600
+# x sensitivity
+10
+# y sensitivity
+50

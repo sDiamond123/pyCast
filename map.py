@@ -43,7 +43,6 @@ class Map :
         meta = utils.csv_load(map_name+self.DATA, self.META_W, self.META_H)
         map_w = meta[0][0]
         map_h = meta[0][1]
-        print(str(map_w) + str(map_h))
         map_p = meta[0][2]
         map_t = meta [3] [0]
         self.has_ceil = (meta[1][0].lower()) == "true"

@@ -55,7 +55,7 @@ class World:
         # print state
         print("Successfully loaded state: " + self.state)
 
-    def update (self, keys):
+    def update (self, keys, mouse):
         # update keys
         player = self.p
         world = self.m
@@ -79,6 +79,13 @@ class World:
             player.z = -50
         else:
             player.z = 0 
+        if keys[utils.Key.FREE_LOOK]:
+            mouse.toggle()
+
+        mouse.update()
+        if (mouse.alive):
+            player.turn(mouse.poll_delta()[0])
+
         return True
 
     def render (self):
@@ -91,5 +98,7 @@ class World:
         # render compass
         self.compass.render(self.p.ang)
         self.internal_display.blit(self.compass.external_screen, (300,560))
+        # render crosshair
+
         # output rendered frame (push to external display)
-        pygame.transform.smoothscale(self.internal_display, (self.ext_w,self.ext_h), self.out_display)
+        pygame.transform.smoothscale(self.internal_display, self.out_display.size, self.out_display)
