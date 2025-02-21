@@ -46,7 +46,7 @@ class Camera:
         self.ext_h = h
         self.external_surface = pygame.Surface((self.ext_w, self.ext_h))
         self.z_buffer = [0] * self.raycount
-        if not self.map.has_ceil:
+        if self.map.has_skybox:
             sky = self.map.get_skybox()
             self.skybox = texture.RollingTexture(sky[0],sky[1],self.fov, self.int_w, self.int_h/2)
         # print statement
@@ -57,7 +57,7 @@ class Camera:
 
     def render(self):
         self.internal_surface.fill((35,35,35))
-        if not self.map.has_ceil:
+        if self.map.has_skybox:
             self.skybox.render(self.position_vector.ang)
             self.internal_surface.blit(self.skybox.external_screen)
         ang = self.position_vector.ang - self.fov/2
@@ -116,7 +116,7 @@ class Camera:
                                      (ray_offset, prev_y_up + self.position_vector.z), 
                                      (ray_offset, delta_h + self.position_vector.z))
                     prev_y_up = delta_h
-                    if (self.map.has_ceil):
+                    if (self.map.has_ceil and prev_color_down != self.map.TRANS):
                         delta_h = self.midpoint - draw_height
                         pygame.draw.line(self.internal_surface, prev_color_down , 
                                          (ray_offset, prev_y_down + self.position_vector.z), 

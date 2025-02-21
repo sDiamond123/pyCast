@@ -15,8 +15,8 @@ class Map :
     T_MAP = "\\tmap.csv"
     TEXTS = "\\texts.csv"
     META_W = 3
-    META_H = 4
-
+    META_H = 5
+    TRANS = "x" # transparent color, also trans rights 
     has_ceil = True # true if has ceil, false use rolling skybox
     # array of tile colors
     palette = []
@@ -44,15 +44,16 @@ class Map :
         map_w = meta[0][0]
         map_h = meta[0][1]
         map_p = meta[0][2]
-        map_t = meta [3] [0]
-        self.has_ceil = (meta[1][0].lower()) == "true"
+        map_t = meta [4] [0]
+        self.has_skybox = (meta[1][0].lower()) == "true"
+        self.has_ceil = (meta[3][0].lower()) == "true"
         # load maps
         self.map = utils.csv_load(map_name + self.H_MAP, map_w, map_h)
         self.floor_map = utils.csv_load(map_name + self.F_MAP, map_w, map_h)
         self.text_map = utils.csv_load(map_name + self.T_MAP, map_w, map_h)
         if (self.has_ceil):
             self.ceil_map = utils.csv_load(map_name + self.C_MAP, map_w, map_h)
-        else:
+        if(self.has_skybox):
             self.skybox = meta[1][1]
             self.skybox_phase = utils.convert_csv_to_float(meta, 2)
         # load palette
@@ -83,7 +84,10 @@ class Map :
         return self.palette[self.floor_map[int(y)][int(x)]]
     
     def get_ceil_text (self, x, y):
-        return self.palette[self.ceil_map[int(y)][int(x)]]
+        result = self.ceil_map[int(y)][int(x)]
+        if (result != 'x'):
+            return self.palette[result]
+        return result
     
     def get_height(self, x, y):
         return self.map[int(y)][int(x)]
