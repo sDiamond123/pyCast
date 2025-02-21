@@ -9,6 +9,7 @@ class Camera:
     MARGIN_OF_ERROR = 0.0001
     MAX_CELL_TRAVERSE = 20
     NO_CELL_H = 50
+    BRIGHTNESS_MODIFIER = 1.2
 
     # camera world
     position_vector = None
@@ -75,6 +76,10 @@ class Camera:
     def __distance__ (self,x, y, x1, y1):
         return math.dist((x,y), (x1,y1))
 
+    def __apply_brightness__ (self, dist, color):
+        scale = self.BRIGHTNESS_MODIFIER * (1 - dist/self.draw_dist)
+        return (color[0] * scale, color[1] * scale, color[2] * scale)
+
     def __cast__ (self, ang, ray_offset):
         ang_check = ang%(math.pi/2) > self.MARGIN_OF_ERROR
         if (ang_check):
@@ -113,13 +118,13 @@ class Camera:
                 if distance != 0:
                     # draw ceil/map
                     delta_h = self.midpoint + draw_height
-                    pygame.draw.line(self.internal_surface, prev_color_up, 
+                    pygame.draw.line(self.internal_surface, self.__apply_brightness__(distance, prev_color_up), 
                                      (ray_offset, prev_y_up + self.position_vector.z), 
                                      (ray_offset, delta_h + self.position_vector.z))
                     prev_y_up = delta_h
                     if (self.map.has_ceil and prev_color_down != self.map.TRANS):
                         delta_h = self.midpoint - draw_height
-                        pygame.draw.line(self.internal_surface, prev_color_down , 
+                        pygame.draw.line(self.internal_surface, self.__apply_brightness__(distance, prev_color_down) , 
                                          (ray_offset, prev_y_down + self.position_vector.z), 
                                          (ray_offset, delta_h + self.position_vector.z))
                         prev_y_down = delta_h

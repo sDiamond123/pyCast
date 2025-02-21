@@ -122,7 +122,7 @@ def convert_csv_to_float(array, row):
     after_decimal /= (10**math.ceil(math.log(after_decimal, 10)))
     return before_decimal + after_decimal
 
-def nomralize_angle (ang):
+def normalize_angle (ang):
     ang %= math.pi * 2
     if (ang < 0):
         ang += math.pi * 2

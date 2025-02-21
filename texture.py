@@ -4,6 +4,7 @@ import math
 
 class Texture:
     PATH = "data\\textures\\"
+    
     slices = []
     slice_count = 0
 
@@ -90,8 +91,8 @@ class RollingTexture:
 
     def render (self, phase):
         ang = phase - self.phase
-        lower = utils.nomralize_angle(ang - self.fov/2) * self.scale
-        upper = utils.nomralize_angle(ang + self.fov/2) * self.scale
+        lower = utils.normalize_angle(ang - self.fov/2) * self.scale
+        upper = utils.normalize_angle(ang + self.fov/2) * self.scale
         if (lower > upper):
             front = pygame.Rect(lower, 0, self.width - lower, self.height)
             back = pygame.Rect(0,0,upper, self.height)
