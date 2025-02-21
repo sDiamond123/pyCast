@@ -8,6 +8,7 @@ class Camera:
     CAST_OFFSET = 0.00001
     MARGIN_OF_ERROR = 0.0001
     MAX_CELL_TRAVERSE = 20
+    NO_CELL_H = 50
 
     # camera world
     position_vector = None
@@ -56,7 +57,7 @@ class Camera:
               + str(self.draw_dist) +" cells")
 
     def render(self):
-        self.internal_surface.fill((35,35,35))
+        pygame.draw.rect(self.internal_surface, (35,35,35), (0,self.midpoint-self.NO_CELL_H, self.int_w, 2 * self.NO_CELL_H))
         if self.map.has_skybox:
             self.skybox.render(self.position_vector.ang)
             self.internal_surface.blit(self.skybox.external_screen)
