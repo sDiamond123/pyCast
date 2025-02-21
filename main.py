@@ -8,6 +8,7 @@ if __name__ == "__main__":
     pygame.init()
 
     # read in config file and set w/h
+    # should probably move to it's own class, but whatever
     config = open("data\config\config.txt", "r")
     config.readline()
     name = config.readline().strip()
@@ -35,7 +36,7 @@ if __name__ == "__main__":
     #print out config to terminal
     print ("Started: "+name+"\nWindow: " + str(w) + " by " + str(h) +"\nFullscreen: "+str(fullscreen)+
            "\nInternal Resolution: "+str(i_w)+" by "+ str(i_h)+"\nTargeting " + str(fps) +" FPS")
-    #print(str(pygame.K_ESCAPE))
+    
     # finish pygame init
     if not fullscreen:
         screen = pygame.display.set_mode((w, h), pygame.RESIZABLE)
