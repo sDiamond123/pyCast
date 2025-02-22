@@ -2,6 +2,7 @@ import map
 import math
 import texture
 import pygame
+import threading
 
 class Camera:
     # camera constants
@@ -10,7 +11,7 @@ class Camera:
     MAX_CELL_TRAVERSE = 20
     NO_CELL_H = 50
     BRIGHTNESS_MODIFIER = 1.2
-
+    THREADS = 4
     # camera world
     position_vector = None
     map = None
@@ -30,6 +31,9 @@ class Camera:
     ext_w = 0
     ext_h = 0
     external_surface = None
+    #multithreading information
+    rays_per_thread = 0
+    threads = []
 
     def __init__(self, map, camera_man, w, h, ray_count, fov, draw_dist):
         # set up location
@@ -51,11 +55,15 @@ class Camera:
         if self.map.has_skybox:
             sky = self.map.get_skybox()
             self.skybox = texture.RollingTexture(sky[0],sky[1],self.fov, self.int_w, self.int_h/2)
+        #threading set up
+        self.threads = [None] * self.THREADS
+        self.rays_per_thread = int(self.raycount/self.THREADS)
         # print statement
         print("Set up camera at ("+str(camera_man.x)+","+str(camera_man.y)
               +") with a " + str(math.degrees(self.fov)) + 
               " degree FOV and casting " + str(self.raycount) +" rays out to " 
-              + str(self.draw_dist) +" cells")
+              + str(self.draw_dist) +" cells using " + str(self.THREADS) + " threads")
+        
 
     def render(self):
         pygame.draw.rect(self.internal_surface, (35,35,35), (0,self.midpoint-self.NO_CELL_H, self.int_w, 2 * self.NO_CELL_H))
@@ -63,15 +71,24 @@ class Camera:
             self.skybox.render(self.position_vector.ang)
             self.internal_surface.blit(self.skybox.external_screen)
         ang = self.position_vector.ang - self.fov/2
-        for i in range(self.raycount):
-            ang %= 2 * math.pi
-            if ang < 0:
-                ang += 2 * math.pi
-            self.__cast__(ang, i)
-            ang += self.delta_ang
+        for i in range(self.THREADS):
+            self.threads[i] = threading.Thread(target=self.__render_thread__, args = (ang, self.rays_per_thread, i * self.rays_per_thread))
+            self.threads[i].start()
+            ang += self.rays_per_thread * self.delta_ang
+        for i in range(self.THREADS):
+            self.threads[i].join()
         # scale picture for output
         pygame.transform.smoothscale(self.internal_surface, (self.ext_w,self.ext_h), self.external_surface)
         
+
+    def __render_thread__ (self, offset, view, render_start):
+        ang = offset
+        for i in range(view):
+            ang %= 2 * math.pi
+            if ang < 0:
+                ang += 2 * math.pi
+            self.__cast__(ang, render_start + i)
+            ang += self.delta_ang
 
     def __distance__ (self,x, y, x1, y1):
         return math.dist((x,y), (x1,y1))
