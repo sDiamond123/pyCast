@@ -119,7 +119,8 @@ def csv_load(csv_file, w, h):
 def convert_csv_to_float(array, row):
     before_decimal = array[row][0]
     after_decimal = array[row][1]
-    after_decimal /= (10**math.ceil(math.log(after_decimal, 10)))
+    if after_decimal != 0:
+        after_decimal /= (10**math.ceil(math.log(after_decimal, 10)))
     return before_decimal + after_decimal
 
 def normalize_angle (ang):

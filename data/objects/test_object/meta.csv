@@ -1,5 +1,5 @@
 test_object, name
-STANDING, starting_state
+STANDING, starting state
 1, 0, h
 1, 0, w
 8, faces

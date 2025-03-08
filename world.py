@@ -23,6 +23,7 @@ class World:
     ext_h = 0
     state_objects = []
     object_count = 0
+    base_sprites = {}
     
     # game objects
     p = None
@@ -68,11 +69,11 @@ class World:
                 x = utils.convert_csv_to_float(objects, line)
                 y = utils.convert_csv_to_float(objects, line + 1)
                 ang = utils.convert_csv_to_float(objects, line + 2)
-                self.state_objects[i] = game_object.Game_Object(x, y, ang, objects[line + 3][0])
-                print("Successfully placed a " + self.state_objects[i].name + " at (" + str(x) + "," + str(y) + ")")
+                self.state_objects[i] = game_object.Game_Object(x, y, ang, objects[line + 3][0], self.base_sprites)
                 line += self.LINES_PER_OBJ
         else:
             self.state_objects = []
+            self.base_sprites = {}
         # print state
         print("Successfully loaded state: " + self.state)
 
