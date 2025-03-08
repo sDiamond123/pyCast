@@ -1,8 +1,12 @@
 4, 5
 3, 2
 0, 1
+100, 0
+DEFAULT
 data\objects\test_object
 6, 7
 5, 20
 3, 14
+95, 5
+STANDING
 data\objects\test_object

@@ -10,7 +10,7 @@ class World:
     PATH = "data\state\\"
     STATE_W = 2
     STATE_H = 7
-    LINES_PER_OBJ = 4
+    LINES_PER_OBJ = 6
     OBJ_W = 2
 
     state = None
@@ -69,7 +69,9 @@ class World:
                 x = utils.convert_csv_to_float(objects, line)
                 y = utils.convert_csv_to_float(objects, line + 1)
                 ang = utils.convert_csv_to_float(objects, line + 2)
-                self.state_objects[i] = game_object.Game_Object(x, y, ang, objects[line + 3][0], self.base_sprites)
+                health = utils.convert_csv_to_float(objects, line +3)
+                state = objects[line + 4][0]
+                self.state_objects[i] = game_object.Game_Object(x, y, ang, objects[line + 5][0], self.base_sprites, state, health)
                 line += self.LINES_PER_OBJ
         else:
             self.state_objects = []

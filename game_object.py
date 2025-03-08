@@ -26,6 +26,7 @@ class Game_Object:
     SPRITE_PATH = "\sprites"
     SPRITE_MANIFEST = "\manifest.csv"
     SPRITE_MAINIFEST_W = 4
+    DEFAULT_STATE = "DEFAULT"
 
     x = 0
     y = 0
@@ -35,17 +36,21 @@ class Game_Object:
     sprite = None
     name = "UNDEFINED"
     state = None
+    health = 0
     
-    def __init__ (self, x, y, ang, obj, sprites):
-        SPRITE_PATH = "\sprites\\"
-
+    def __init__ (self, x, y, ang, obj, sprites, state, health):
+        
 
         self.x = x
         self.y = y
         self.ang = ang
         data = utils.csv_load(obj + self.META, self.META_W, self.META_H)
         self.name = data[0][0]
-        self.state = data[1][0]
+        self.health = health
+        if state == self.DEFAULT_STATE:
+            self.state = data[1][0]
+        else:
+            self.state = state
         self.h = utils.convert_csv_to_float(data, 2)
         self.w = utils.convert_csv_to_float(data, 3)
         # load in sprites if we don't already have them
@@ -56,9 +61,9 @@ class Game_Object:
                 key = self.__get_sprite_key(sprite_data[i][0])
                 if not key in sprites:
                     if sprite_data[i][1] == "simple":
-                        sprites[key] = World_Sprite(obj +self.SPRITE_PATH + sprite_data[i][2])
+                        sprites[key] = World_Sprite(obj + self.SPRITE_PATH + sprite_data[i][2])
                         print ("Successfully loaded sprite: " +key)
-        print("Successfully placed a " + self.name + " at (" + str(x) + "," + str(y) + ")")
+        print("Successfully placed a " + self.name + " <" + self.state + ", " + str(self.health)+ " HP> at (" + str(x) + "," + str(y) + ")")
 
 
     def __get_sprite_key(self, state):
