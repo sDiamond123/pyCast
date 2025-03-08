@@ -1,6 +1,6 @@
-4, 512, x
-4, 52, y
-0, 0, starting angle
+test_object, name
+STANDING, starting_state
 1, 0, h
 1, 0, w
 8, faces
+1, number of sprites

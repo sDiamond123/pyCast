@@ -4,11 +4,14 @@ import map
 import camera
 import math
 import texture
+import game_object
 
 class World:
     PATH = "data\state\\"
     STATE_W = 2
-    STATE_H = 6
+    STATE_H = 7
+    LINES_PER_OBJ = 4
+    OBJ_W = 2
 
     state = None
     state_data = []
@@ -18,6 +21,8 @@ class World:
     out_display = None
     ext_w = 0
     ext_h = 0
+    state_objects = []
+    object_count = 0
     
     # game objects
     p = None
@@ -52,6 +57,22 @@ class World:
         self.c = camera.Camera(self.m, self.p, self.internal_w, self.internal_h, 
                                self.state_data[4][0], math.radians(self.state_data[5][0]), 
                                self.state_data[5][1])
+        
+        #load game objects
+        self.object_count = self.state_data[6][1]
+        if self.object_count > 0:
+            self.state_objects = [None] * self.state_data[6][1]
+            objects = utils.csv_load(self.PATH + self.state_data[6][0], self.OBJ_W, self.LINES_PER_OBJ * self.object_count)
+            line = 0
+            for i in range (self.object_count):
+                x = utils.convert_csv_to_float(objects, line)
+                y = utils.convert_csv_to_float(objects, line + 1)
+                ang = utils.convert_csv_to_float(objects, line + 2)
+                self.state_objects[i] = game_object.Game_Object(x, y, ang, objects[line + 3][0])
+                print("Successfully placed a " + self.state_objects[i].name + " at (" + str(x) + "," + str(y) + ")")
+                line += self.LINES_PER_OBJ
+        else:
+            self.state_objects = []
         # print state
         print("Successfully loaded state: " + self.state)
 
