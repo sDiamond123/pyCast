@@ -181,8 +181,8 @@ class Camera:
         else:
             self.z_buffer[ray_offset] = -1
     
-    def __check_sprite_visiblity__ (self, min, max, cam_min, cam_max):        
-        return not ((min < cam_min and max < cam_min) or (min > cam_min and max > cam_max))
+    def __check_sprite_visiblity__ (self, min, max):        
+        return not ((min < 0 and max < 0) or (min > self.int_w and max > self.int_w))
 
     def __ang_to_offset__ (self, ang, cam_min):
         return int(self.int_w*(ang - cam_min)/self.delta_ang)
@@ -191,26 +191,31 @@ class Camera:
         x0 = self.position_vector.x
         y0 = self.position_vector.y
         cam_min = self.position_vector.ang - self.fov/2
-        cam_max = cam_min + self.fov
         for sprite in self.objects:
             x = sprite.x
             y = sprite.y
             #make sure sprite is within draw distance
             distance_to_sprite = self.__distance__(x0,y0,x,y)
             if distance_to_sprite < self.draw_dist:
-                w = (sprite.w/distance_to_sprite)
-                h = (sprite.h/distance_to_sprite)
-                ang_to_sprite = utils.get_angle(x0,y0,x,y)
-                sprite_min = (ang_to_sprite - w/2)
-                sprite_max = (ang_to_sprite + w/2)
+                w = self.int_w * (sprite.w/distance_to_sprite)
+                h = self.int_h * (sprite.h/distance_to_sprite)
+                ang_to_sprite = (utils.get_angle(x0,y0,x,y) - cam_min)/self.delta_ang
+                sprite_min = int(ang_to_sprite - w/2)
+                sprite_max = int(ang_to_sprite + w/2)
                 # make sure at least some of the sprite is visible to the camera
-                if (self.__check_sprite_visiblity__(sprite_min,sprite_max, cam_min, cam_max)):
-                    h *= self.int_h
-                    w *= self.int_w
-                    start = math.degrees(sprite_min - cam_min)
-                    end = math.degrees(sprite_max - cam_min)
-                    print("from "+str(start) + " to " + str(end))
-                    print(sprite.name + "("+str(x) +","+str(y)+") is visible to " + str(self.position_vector))
-                    print("dist:" + str(distance_to_sprite) + " width:" + str(w))
-                else:
-                    print(sprite.name + "("+str(x) +","+str(y)+") is NOT visible to " + str(self.position_vector))
+                if (self.__check_sprite_visiblity__(sprite_min,sprite_max)):
+                    delta = 0
+                    start = sprite_min
+                    floor = self.int_h/(2 * distance_to_sprite)
+                    if (start < 0):
+                        start =0
+                        delta = abs(sprite_min)
+                    end = sprite_max
+                    if (end > self.int_w):
+                        end = self.int_w
+                    for i in range (start, end):
+                        z = self.z_buffer[i]
+                        if z == -1 or z > distance_to_sprite:
+                            pygame.draw.line(self.internal_surface, "red", 
+                                            (i, self.int_h/2 + floor - h + self.position_vector.z), 
+                                            (i, self.int_h/2 + floor + self.position_vector.z))
