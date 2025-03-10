@@ -20,7 +20,7 @@ class World_Sprite:
 
 class Game_Object:
     META_W = 2
-    META_H = 6
+    META_H = 7
     META = "\meta.csv"
     SPRITE_PATH = "\sprites"
     SPRITE_MANIFEST = "\manifest.csv"
@@ -31,6 +31,7 @@ class Game_Object:
     y = 0
     w = 0
     h = 0
+    z = 0
     ang = 0
     sprite = None
     name = "UNDEFINED"
@@ -52,8 +53,9 @@ class Game_Object:
             self.state = state
         self.h = utils.convert_csv_to_float(data, 2)
         self.w = utils.convert_csv_to_float(data, 3)
+        self.z = utils.convert_csv_to_float(data, 4)
         # load in sprites if we don't already have them
-        sprite_count = data[5][0]
+        sprite_count = data[6][0]
         if (sprite_count > 0):
             sprite_data = utils.csv_load(obj + self.SPRITE_PATH + self.SPRITE_MANIFEST, self.SPRITE_MAINIFEST_W, sprite_count)
             for i in range(sprite_count):

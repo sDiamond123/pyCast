@@ -1,6 +1,7 @@
 test_object, name
 STANDING, starting state
-1, 0, h
-0, 5, w
+0, 9, h
+0, 75, w
+0, 0, height off ground
 8, faces
 1, number of sprites

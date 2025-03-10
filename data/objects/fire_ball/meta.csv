@@ -1,0 +1,7 @@
+fire_ball, name
+CAST, starting state
+0, 25, h
+0, 25, w
+0, 3, height off ground
+8, faces
+0, number of sprites

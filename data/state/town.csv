@@ -4,4 +4,4 @@ test_town ,MAP
       6 ,5         ,PLAYER Y
     250 ,RAY COUNT
      90 ,15        ,FOV AND DRAW DIST
-town_obj.csv, 2,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
+town_obj.csv, 3,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
