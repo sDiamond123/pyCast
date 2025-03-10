@@ -54,10 +54,7 @@ class World:
         self.p = utils.Player(utils.convert_csv_to_float(self.state_data,2), 
                               utils.convert_csv_to_float(self.state_data,3),
                               utils.convert_csv_to_float(self.state_data,1))
-        # load camera
-        self.c = camera.Camera(self.m, self.p, self.internal_w, self.internal_h, 
-                               self.state_data[4][0], math.radians(self.state_data[5][0]), 
-                               self.state_data[5][1])
+       
         
         #load game objects
         self.object_count = self.state_data[6][1]
@@ -76,6 +73,10 @@ class World:
         else:
             self.state_objects = []
             self.base_sprites = {}
+         # load camera
+        self.c = camera.Camera(self.m, self.p, self.internal_w, self.internal_h, 
+                               self.state_data[4][0], math.radians(self.state_data[5][0]), 
+                               self.state_data[5][1], self.state_objects)
         # print state
         print("Successfully loaded state: " + self.state)
 

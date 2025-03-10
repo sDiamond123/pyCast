@@ -1,5 +1,4 @@
-import utils
-import pygame
+import utils, math, pygame
 
 class World_Sprite:
     META = "\meta.csv"
@@ -68,5 +67,4 @@ class Game_Object:
 
     def __get_sprite_key(self, state):
         return self.name + " -> " + state
-
-
+    

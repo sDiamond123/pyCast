@@ -99,6 +99,9 @@ class Player:
         if self.ang < 0:
             self.ang += 2 * math.pi
 
+    def __str__ (self):
+        return "("+str(self.x)+","+str(self.y)+","+str(math.degrees(self.ang))+")"
+
 def csv_load(csv_file, w, h):
     csv = open(csv_file)
     out = [ [0]*w for i in range(h)]
@@ -128,3 +131,7 @@ def normalize_angle (ang):
     if (ang < 0):
         ang += math.pi * 2
     return ang
+
+# gets angle from (x0,y0) to (x1,y1)
+def get_angle (x0,y0, x1, y1):
+        return normalize_angle(math.atan2(y1-y0, x1-x0))

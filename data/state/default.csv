@@ -4,4 +4,4 @@ default ,MAP
       4 ,5         ,PLAYER Y
     400 ,RAY COUNT
      90 ,10        ,FOV AND DRAW DIST
-def_obg.csv, 0,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
+def_obg.csv, 0,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE (0 loads nothing)

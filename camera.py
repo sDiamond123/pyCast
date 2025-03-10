@@ -2,6 +2,7 @@ import map
 import math
 import texture
 import pygame
+import utils
 
 class Camera:
     # camera constants
@@ -31,7 +32,7 @@ class Camera:
     ext_h = 0
     external_surface = None
 
-    def __init__(self, map, camera_man, w, h, ray_count, fov, draw_dist):
+    def __init__(self, map, camera_man, w, h, ray_count, fov, draw_dist, sprites):
         # set up location
         self.position_vector = camera_man
         self.map = map
@@ -48,6 +49,7 @@ class Camera:
         self.ext_h = h
         self.external_surface = pygame.Surface((self.ext_w, self.ext_h))
         self.z_buffer = [0] * self.raycount
+        self.objects = sprites
         if self.map.has_skybox:
             sky = self.map.get_skybox()
             self.skybox = texture.RollingTexture(sky[0],sky[1],self.fov, self.int_w, self.int_h/2)
@@ -69,6 +71,7 @@ class Camera:
                 ang += 2 * math.pi
             self.__cast__(ang, i)
             ang += self.delta_ang
+        self.__render_objects__()
         # scale picture for output
         pygame.transform.smoothscale(self.internal_surface, (self.ext_w,self.ext_h), self.external_surface)
         
@@ -177,3 +180,37 @@ class Camera:
             self.internal_surface.blit(pygame.transform.scale(self.map.get_text(x,y,offset), (1,2 * draw_height * height)),top)
         else:
             self.z_buffer[ray_offset] = -1
+    
+    def __check_sprite_visiblity__ (self, min, max, cam_min, cam_max):        
+        return not ((min < cam_min and max < cam_min) or (min > cam_min and max > cam_max))
+
+    def __ang_to_offset__ (self, ang, cam_min):
+        return int(self.int_w*(ang - cam_min)/self.delta_ang)
+
+    def __render_objects__(self):
+        x0 = self.position_vector.x
+        y0 = self.position_vector.y
+        cam_min = self.position_vector.ang - self.fov/2
+        cam_max = cam_min + self.fov
+        for sprite in self.objects:
+            x = sprite.x
+            y = sprite.y
+            #make sure sprite is within draw distance
+            distance_to_sprite = self.__distance__(x0,y0,x,y)
+            if distance_to_sprite < self.draw_dist:
+                w = (sprite.w/distance_to_sprite)
+                h = (sprite.h/distance_to_sprite)
+                ang_to_sprite = utils.get_angle(x0,y0,x,y)
+                sprite_min = (ang_to_sprite - w/2)
+                sprite_max = (ang_to_sprite + w/2)
+                # make sure at least some of the sprite is visible to the camera
+                if (self.__check_sprite_visiblity__(sprite_min,sprite_max, cam_min, cam_max)):
+                    h *= self.int_h
+                    w *= self.int_w
+                    start = math.degrees(sprite_min - cam_min)
+                    end = math.degrees(sprite_max - cam_min)
+                    print("from "+str(start) + " to " + str(end))
+                    print(sprite.name + "("+str(x) +","+str(y)+") is visible to " + str(self.position_vector))
+                    print("dist:" + str(distance_to_sprite) + " width:" + str(w))
+                else:
+                    print(sprite.name + "("+str(x) +","+str(y)+") is NOT visible to " + str(self.position_vector))
