@@ -167,19 +167,14 @@ class Camera:
                     x -= abs(y-proj_y) * dx * x_increase
                 x += d2x
                 y += d2y
+                distance = self.__distance__(x,y,x0,y0)
+                draw_height = self.int_h/(2 * distance)
+                if draw_height > self.midpoint:
+                    draw_height = self.midpoint
             else:
-                if (ang == 0):
-                    x += 1
-                elif (ang == math.pi/2):
-                    y -= 1
-                elif (ang == math.pi):
-                    x -= 1
-                else:
-                    y +=1
-            distance = self.__distance__(x,y,x0,y0)
-            draw_height = self.int_h/(2 * distance)
-            if draw_height > self.midpoint:
-                draw_height = self.midpoint
+                ang += self.MARGIN_OF_ERROR
+                ang_check = True
+            
         # out of cast
         if offset != -1:
             # we hit a wall
