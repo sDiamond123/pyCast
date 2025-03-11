@@ -4,10 +4,8 @@ class World_Sprite:
     META = "\meta.csv"
     MANIFEST = "\manifest.csv"
     META_W = 2
-    META_H = 8
+    META_H = 2
 
-    sprites = []
-    faces = 0
     def __init__(self, file):
         data = utils.csv_load(file + self.META, self.META_W, self.META_H)
         self.faces = data[0][0]
@@ -16,9 +14,13 @@ class World_Sprite:
         self.sprites = [None] * self.faces
         for i in range (self.faces):
             self.sprites[i] = pygame.image.load(file + "\\" + manifest[i][0])
+        self.ang_per_face = 2 * math.pi / self.faces
+        self.offset = utils.convert_csv_to_float(data, 1)
 
     def get_face (self, ang):
-        return self.sprites[0]
+        ang = utils.normalize_angle(ang + self.offset)
+        index = int(ang/self.ang_per_face)
+        return self.sprites[index]
 
 
 class Game_Object:
@@ -79,4 +81,4 @@ class Game_Object:
         return self.sprites[self.__get_sprite_key__(self.state)].get_face(ang)
 
     def get_sprite(self, w, h, ang):
-        return pygame.transform.scale(self.__get_raw_sprite__(ang), (w,h))
+        return pygame.transform.scale(self.__get_raw_sprite__(self.ang - ang + math.pi), (w,h))

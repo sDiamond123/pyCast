@@ -179,7 +179,6 @@ class Camera:
             height = self.map.get_height(x,y)
             scale = height * 2 - 1
             top = (ray_offset, self.midpoint - scale * draw_height + self.position_vector.z)
-            #pygame.draw.line(self.internal_surface,(255 * offset, 0, 255), (ray_offset, self.midpoint + draw_height), top)
             self.internal_surface.blit(pygame.transform.scale(self.map.get_text(x,y,offset), (1,2 * draw_height * height)),top)
         else:
             self.z_buffer[ray_offset] = -1
