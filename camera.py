@@ -31,6 +31,7 @@ class Camera:
     ext_w = 0
     ext_h = 0
     external_surface = None
+    x_ray = False
 
     def __init__(self, map, camera_man, w, h, ray_count, fov, draw_dist, sprites):
         # set up location
@@ -194,13 +195,13 @@ class Camera:
             #make sure sprite is within draw distance
             distance_to_sprite = self.__distance__(x0,y0,x,y)
             if distance_to_sprite < self.draw_dist:
-                w = self.int_w * (sprite.w/distance_to_sprite)
-                h = self.int_h * (sprite.h/distance_to_sprite)
-                ang_to_sprite = (utils.get_angle(x0,y0,x,y) - cam_min)
-                ang_to_sprite %= 2 * math.pi
+                w = int(self.int_w * (sprite.w/distance_to_sprite)/2) # not sure why I have to divide by 2 here, but I do
+                h = int(self.int_h * (sprite.h/distance_to_sprite))
+                raw_ang= utils.get_angle(x0,y0,x,y)
+                ang_to_sprite = (raw_ang - cam_min) % (2 * math.pi)
                 ang_to_sprite/=self.delta_ang 
-                sprite_min = int(ang_to_sprite - w/4)
-                sprite_max = int(ang_to_sprite + w/4)
+                sprite_min = int(ang_to_sprite - w/2)
+                sprite_max = int(ang_to_sprite + w/2)
                 # make sure at least some of the sprite is visible to the camera
                 if (self.__check_sprite_visiblity__(sprite_min,sprite_max)):
                     delta = 0
@@ -212,11 +213,29 @@ class Camera:
                     end = sprite_max
                     if (end > self.int_w):
                         end = self.int_w
+                    top = self.int_h/2 + floor - h + self.position_vector.z
+                    image = sprite.get_sprite(w,h,raw_ang)
+                    to_draw = []
+                    in_drawing = False
+                    frame = [0,0,0]
                     for i in range (start, end):
                         z = self.z_buffer[i]
-                        if z == -1 or z > distance_to_sprite:
-                            self.z_buffer[i] = distance_to_sprite
-                            pygame.draw.line(self.internal_surface, "red", 
-                                            (i, self.int_h/2 + floor - h + self.position_vector.z), 
-                                            (i, self.int_h/2 + floor + self.position_vector.z))
+                        if z == -1 or z > distance_to_sprite or self.x_ray:
+                            if (sprite.is_opaque):
+                                self.z_buffer[i] = distance_to_sprite
+                            if not in_drawing:
+                                in_drawing = True
+                                frame[0] = delta
+                                frame[2] = i
+                        elif in_drawing:
+                            in_drawing = False
+                            frame[1] = delta
+                            to_draw.append(frame)
                         delta += 1
+                    if in_drawing:
+                        frame[1] = delta
+                        to_draw.append(frame)
+                    for frame in to_draw:
+                        slice_w = frame[1] - frame[0] 
+                        slice = image.subsurface((frame[0], 0, slice_w, h))
+                        self.internal_surface.blit(slice, (frame[2], top))

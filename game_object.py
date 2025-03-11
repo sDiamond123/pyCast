@@ -17,6 +17,9 @@ class World_Sprite:
         for i in range (self.faces):
             self.sprites[i] = pygame.image.load(file + "\\" + manifest[i][0])
 
+    def get_face (self, ang):
+        return self.sprites[0]
+
 
 class Game_Object:
     META_W = 2
@@ -55,18 +58,25 @@ class Game_Object:
         self.w = utils.convert_csv_to_float(data, 3)
         self.z = utils.convert_csv_to_float(data, 4)
         # load in sprites if we don't already have them
+        self.is_opaque = data[6][1] == 'True'
         sprite_count = data[6][0]
         if (sprite_count > 0):
             sprite_data = utils.csv_load(obj + self.SPRITE_PATH + self.SPRITE_MANIFEST, self.SPRITE_MAINIFEST_W, sprite_count)
             for i in range(sprite_count):
-                key = self.__get_sprite_key(sprite_data[i][0])
+                key = self.__get_sprite_key__(sprite_data[i][0])
                 if not key in sprites:
                     if sprite_data[i][1] == "simple":
                         sprites[key] = World_Sprite(obj + self.SPRITE_PATH + sprite_data[i][2])
                         print ("Successfully loaded sprite: " +key)
+        self.sprites = sprites
         print("Successfully placed a " + self.name + " <" + self.state + ", " + str(self.health)+ " HP> at (" + str(x) + "," + str(y) + ")")
 
 
-    def __get_sprite_key(self, state):
+    def __get_sprite_key__(self, state):
         return self.name + " -> " + state
     
+    def __get_raw_sprite__ (self, ang):
+        return self.sprites[self.__get_sprite_key__(self.state)].get_face(ang)
+
+    def get_sprite(self, w, h, ang):
+        return pygame.transform.scale(self.__get_raw_sprite__(ang), (w,h))

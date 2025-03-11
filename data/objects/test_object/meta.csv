@@ -3,5 +3,5 @@ STANDING, starting state
 0, 9, h
 0, 75, w
 0, 0, height off ground
-8, faces
+8, True faces
 1, number of sprites
