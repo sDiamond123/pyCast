@@ -150,24 +150,32 @@ class Camera:
                 if self.map.has_ceil:
                     prev_color_down = self.map.get_ceil_text(x,y)
             # move on to next grid cell
-            x_n = 1 + int(x) - x
-            if x_increase < 0:
-                 x_n = x - int(x)
-            proj_y = y + dy * x_n * y_increase
-            if (ang_check):
+            if ang_check:
+                x_n = 1 + int(x) - x
+                if x_increase < 0:
+                    x_n = x - int(x)
+                proj_y = y + dy * x_n * y_increase
                 x = int(x)
                 if (x_increase > 0):
                     x += 1
-            if proj_y < int(y) + 1 and proj_y > int(y):
-                y = proj_y
-            else:
-                y = int(y)
-                if (y_increase > 0):
-                    y += 1
-                if ang_check:
+                if proj_y < int(y) + 1 and proj_y > int(y):
+                    y = proj_y
+                else:
+                    y = int(y)
+                    if (y_increase > 0):
+                        y += 1
                     x -= abs(y-proj_y) * dx * x_increase
-            x += d2x
-            y += d2y
+                x += d2x
+                y += d2y
+            else:
+                if (ang == 0):
+                    x -= 1
+                elif (ang == math.pi/2):
+                    y -= 1
+                elif (ang == math.pi):
+                    x += 1
+                else:
+                    y += 1
             distance = self.__distance__(x,y,x0,y0)
             draw_height = self.int_h/(2 * distance)
             if draw_height > self.midpoint:
