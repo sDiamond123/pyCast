@@ -135,3 +135,18 @@ def normalize_angle (ang):
 # gets angle from (x0,y0) to (x1,y1)
 def get_angle (x0,y0, x1, y1):
         return normalize_angle(math.atan2(y1-y0, x1-x0))
+
+def bottomless_csv_load(csv_file):
+    csv = open(csv_file)
+    out = []
+    #loop through each row
+    while(True):
+        # break up rows
+        as_split = csv.readline().strip().split(",")
+        # exit when we reach an empty row
+        if len(as_split)== 0 or (len(as_split) == 1 and len(as_split[0]) <= 1):
+            break
+        # otherwise append
+        out.append(as_split)
+    csv.close
+    return out

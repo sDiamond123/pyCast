@@ -11,7 +11,7 @@ class Camera:
     MAX_CELL_TRAVERSE = 20
     NO_CELL_H = 50
     BRIGHTNESS_MODIFIER = 1.2
-
+    
     # camera world
     position_vector = None
     map = None
@@ -45,6 +45,8 @@ class Camera:
         self.int_w = ray_count
         self.int_h = h
         self.midpoint = self.int_h/2
+        self.max_sprite_w = self.int_w << 3
+        self.max_sprite_h = self.int_h << 3
         self.internal_surface = pygame.Surface((self.int_w, self.int_h))
         self.ext_w = w
         self.ext_h = h
@@ -197,6 +199,10 @@ class Camera:
             if distance_to_sprite < self.draw_dist:
                 w = int(self.int_w * (sprite.w/distance_to_sprite)/2) # not sure why I have to divide by 2 here, but I do
                 h = int(self.int_h * (sprite.h/distance_to_sprite))
+                if (w > self.max_sprite_w):
+                    w = self.max_sprite_w
+                if (h > self.max_sprite_h):
+                    h = self.max_sprite_h
                 raw_ang= utils.get_angle(x0,y0,x,y)
                 ang_to_sprite = (raw_ang - cam_min) % (2 * math.pi)
                 ang_to_sprite/=self.delta_ang 
