@@ -175,7 +175,7 @@ class Camera:
                 elif (ang == math.pi):
                     x += 1
                 else:
-                    y += 1
+                    y +=1
             distance = self.__distance__(x,y,x0,y0)
             draw_height = self.int_h/(2 * distance)
             if draw_height > self.midpoint:
