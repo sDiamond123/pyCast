@@ -89,7 +89,7 @@ class Camera:
     def __cast__ (self, ang, ray_offset):
         ang_check = ang%(math.pi/2) > self.MARGIN_OF_ERROR
         if (ang_check):
-            ang += self.delta_ang
+            ang += self.MARGIN_OF_ERROR
         offset = -1
         x0 = self.position_vector.x
         y0 = self.position_vector.y
@@ -150,30 +150,28 @@ class Camera:
                 if self.map.has_ceil:
                     prev_color_down = self.map.get_ceil_text(x,y)
             # move on to next grid cell
-            if ang_check:
-                x_n = 1 + int(x) - x
-                if x_increase < 0:
-                    x_n = x - int(x)
-                proj_y = y + dy * x_n * y_increase
-                x = int(x)
-                if (x_increase > 0):
-                    x += 1
-                if proj_y < int(y) + 1 and proj_y > int(y):
-                    y = proj_y
-                else:
-                    y = int(y)
-                    if (y_increase > 0):
-                        y += 1
-                    x -= abs(y-proj_y) * dx * x_increase
-                x += d2x
-                y += d2y
-                distance = self.__distance__(x,y,x0,y0)
-                draw_height = self.int_h/(2 * distance)
-                if draw_height > self.midpoint:
-                    draw_height = self.midpoint
+                
+            x_n = 1 + int(x) - x
+            if x_increase < 0:
+                x_n = x - int(x)
+            proj_y = y + dy * x_n * y_increase
+            x = int(x)
+            if (x_increase > 0):
+                x += 1
+            if proj_y < int(y) + 1 and proj_y > int(y):
+                y = proj_y
             else:
-                ang += self.MARGIN_OF_ERROR
-                ang_check = True
+                y = int(y)
+                if (y_increase > 0):
+                    y += 1
+                x -= abs(y-proj_y) * dx * x_increase
+            x += d2x
+            y += d2y
+            distance = self.__distance__(x,y,x0,y0)
+            draw_height = self.int_h/(2 * distance)
+            if draw_height > self.midpoint:
+                draw_height = self.midpoint
+                
             
         # out of cast
         if offset != -1:
