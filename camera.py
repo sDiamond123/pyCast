@@ -78,6 +78,8 @@ class Camera:
             self.__cast__(ang, i)
             ang += self.delta_ang
         # render sprites
+        # draw sprites w/ painters algo. enabled
+        self.objects.sort(key = lambda obj : self.__distance__(self.position_vector.x, self.position_vector.y, obj.x, obj.y), reverse = True)
         self.__render_objects__()
         # scale picture for output
         pygame.transform.smoothscale(self.internal_surface, (self.ext_w,self.ext_h), self.external_surface)
