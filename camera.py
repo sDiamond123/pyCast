@@ -169,11 +169,11 @@ class Camera:
                 y += d2y
             else:
                 if (ang == 0):
-                    x -= 1
+                    x += 1
                 elif (ang == math.pi/2):
                     y -= 1
                 elif (ang == math.pi):
-                    x += 1
+                    x -= 1
                 else:
                     y +=1
             distance = self.__distance__(x,y,x0,y0)
@@ -204,7 +204,7 @@ class Camera:
             #make sure sprite is within draw distance
             distance_to_sprite = self.__distance__(x0,y0,x,y)
             if distance_to_sprite < self.draw_dist:
-                w = int(self.int_w * (sprite.w/distance_to_sprite)/2) # not sure why I have to divide by 2 here, but I do
+                w = int(self.int_w * (sprite.w/distance_to_sprite)) >> 1 # not sure why I have to divide by 2 here, but I do
                 h = int(self.int_h * (sprite.h/distance_to_sprite))
                 if (w > self.max_sprite_w):
                     w = self.max_sprite_w
