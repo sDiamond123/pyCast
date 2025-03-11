@@ -79,6 +79,7 @@ class Player:
     y = 0
     z = 0
     ang = 0
+    no_clip = False
 
     def __init__(self, x, y, ang):
         self.x = x
@@ -89,7 +90,7 @@ class Player:
     def move(self, Map, v_forward, v_side_to_side):
         new_x = self.x + v_forward * math.cos(self.ang) + v_side_to_side * math.cos(self.ang + math.pi/2)
         new_y = self.y + v_forward * math.sin(self.ang) + v_side_to_side * math.sin(self.ang + math.pi/2)
-        if Map.is_empty (new_x, new_y):
+        if self.no_clip or Map.is_empty (new_x, new_y):
             self.x = new_x
             self.y = new_y    
 
