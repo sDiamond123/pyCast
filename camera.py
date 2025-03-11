@@ -78,8 +78,6 @@ class Camera:
             self.__cast__(ang, i)
             ang += self.delta_ang
         # render sprites
-        # draw sprites w/ painters algo. enabled
-        self.objects.sort(key = lambda obj : self.__distance__(self.position_vector.x, self.position_vector.y, obj.x, obj.y), reverse = True)
         self.__render_objects__()
         # scale picture for output
         pygame.transform.smoothscale(self.internal_surface, (self.ext_w,self.ext_h), self.external_surface)
@@ -197,6 +195,8 @@ class Camera:
         x0 = self.position_vector.x
         y0 = self.position_vector.y
         cam_min = self.position_vector.ang - self.fov/2
+        draw_me = []
+        # find all sprits in fov and add them to a queue to draw
         for sprite in self.objects:
             x = sprite.x
             y = sprite.y
@@ -216,39 +216,54 @@ class Camera:
                 sprite_max = int(ang_to_sprite + w/2)
                 # make sure at least some of the sprite is visible to the camera
                 if (self.__check_sprite_visiblity__(sprite_min,sprite_max)):
-                    delta = 0
-                    start = sprite_min
-                    floor = self.int_h * (0.5 -sprite.z)/distance_to_sprite
-                    if (start < 0):
-                        start =0
-                        delta = abs(sprite_min)
-                    end = sprite_max
-                    if (end > self.int_w):
-                        end = self.int_w
-                    to_draw = []
+                    # we can see this sprite so add to queue
+                    draw_me.append((distance_to_sprite, sprite, raw_ang,sprite_min,sprite_max, w, h))
+        # sort so drawing queue is in descending order (no longer a queue I suppose)
+        # draws sprites in order via painters algo.
+        draw_me.sort(key = lambda obj : obj[0], reverse = True)
+        # draw elements in queue
+        for tup in draw_me:
+            # pull out sprite from queue
+            # not the most elegant solution, but whatever
+            distance_to_sprite = tup[0]
+            sprite = tup[1]
+            w = tup [5]
+            h = tup [6]
+            delta = 0
+            start = tup[3]
+            floor = self.int_h * (0.5 -sprite.z)/distance_to_sprite
+            if (start < 0):
+                start =0
+                delta = abs(tup[3])
+            end = tup[4]
+            if (end > self.int_w):
+                end = self.int_w
+            # find all slices of a sprite we can see
+            to_draw = []
+            in_drawing = False
+            frame = [0,0,0]
+            for i in range (start, end):
+                z = self.z_buffer[i]
+                if z == -1 or z > distance_to_sprite or self.x_ray:
+                    if (sprite.is_opaque):
+                        self.z_buffer[i] = distance_to_sprite
+                    if not in_drawing:
+                        in_drawing = True
+                        frame[0] = delta
+                        frame[2] = i
+                elif in_drawing:
                     in_drawing = False
-                    frame = [0,0,0]
-                    for i in range (start, end):
-                        z = self.z_buffer[i]
-                        if z == -1 or z > distance_to_sprite or self.x_ray:
-                            if (sprite.is_opaque):
-                                self.z_buffer[i] = distance_to_sprite
-                            if not in_drawing:
-                                in_drawing = True
-                                frame[0] = delta
-                                frame[2] = i
-                        elif in_drawing:
-                            in_drawing = False
-                            frame[1] = delta
-                            to_draw.append(frame)
-                        delta += 1
-                    if in_drawing:
-                        frame[1] = delta
-                        to_draw.append(frame)
-                    if (len(to_draw) > 0):
-                        top = self.int_h/2 + floor - h + self.position_vector.z
-                        image = sprite.get_sprite(w,h,raw_ang)
-                        for frame in to_draw:
-                            slice_w = frame[1] - frame[0] 
-                            slice = image.subsurface((frame[0], 0, slice_w, h))
-                            self.internal_surface.blit(slice, (frame[2], top))
+                    frame[1] = delta
+                    to_draw.append(frame)
+                delta += 1
+            if in_drawing:
+                frame[1] = delta
+                to_draw.append(frame)
+            # draw the slices if we have any
+            if (len(to_draw) > 0):
+                top = self.int_h/2 + floor - h + self.position_vector.z
+                image = sprite.get_sprite(w,h,tup[2])
+                for frame in to_draw:
+                    slice_w = frame[1] - frame[0] 
+                    slice = image.subsurface((frame[0], 0, slice_w, h))
+                    self.internal_surface.blit(slice, (frame[2], top))
