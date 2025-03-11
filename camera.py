@@ -245,8 +245,6 @@ class Camera:
             for i in range (start, end):
                 z = self.z_buffer[i]
                 if z == -1 or z > distance_to_sprite or self.x_ray:
-                    if (sprite.is_opaque):
-                        self.z_buffer[i] = distance_to_sprite
                     if not in_drawing:
                         in_drawing = True
                         frame[0] = delta
