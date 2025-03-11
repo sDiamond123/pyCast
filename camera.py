@@ -53,6 +53,7 @@ class Camera:
         self.external_surface = pygame.Surface((self.ext_w, self.ext_h))
         self.z_buffer = [0] * self.raycount
         self.objects = sprites
+        self.object_w_factor = (math.pi/(self.fov * 4))
         if self.map.has_skybox:
             sky = self.map.get_skybox()
             self.skybox = texture.RollingTexture(sky[0],sky[1],self.fov, self.int_w, self.int_h/2)
@@ -64,9 +65,11 @@ class Camera:
 
     def render(self):
         pygame.draw.rect(self.internal_surface, (35,35,35), (0,self.midpoint-self.NO_CELL_H, self.int_w, 2 * self.NO_CELL_H))
+        # render skybox (if applicable)
         if self.map.has_skybox:
             self.skybox.render(self.position_vector.ang)
             self.internal_surface.blit(self.skybox.external_screen)
+        # render walls/floor/ceiling
         ang = self.position_vector.ang - self.fov/2
         for i in range(self.raycount):
             ang %= 2 * math.pi
@@ -74,6 +77,7 @@ class Camera:
                 ang += 2 * math.pi
             self.__cast__(ang, i)
             ang += self.delta_ang
+        # render sprites
         self.__render_objects__()
         # scale picture for output
         pygame.transform.smoothscale(self.internal_surface, (self.ext_w,self.ext_h), self.external_surface)
@@ -197,7 +201,7 @@ class Camera:
             #make sure sprite is within draw distance
             distance_to_sprite = self.__distance__(x0,y0,x,y)
             if distance_to_sprite < self.draw_dist:
-                w = int(self.int_w * (sprite.w/distance_to_sprite)* (math.pi/(self.fov * 4)))  # not sure why I have to divide by 2 here, but I do
+                w = int(self.int_w * (sprite.w/distance_to_sprite)* self.object_w_factor)  # not sure why I have to divide by 2 here, but I do
                 h = int(self.int_h * (sprite.h/distance_to_sprite))
                 if (w > self.max_sprite_w):
                     w = self.max_sprite_w

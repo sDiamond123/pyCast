@@ -81,4 +81,4 @@ class Game_Object:
         return self.sprites[self.__get_sprite_key__(self.state)].get_face(ang)
 
     def get_sprite(self, w, h, ang):
-        return pygame.transform.scale(self.__get_raw_sprite__(self.ang - ang + math.pi), (w,h))
+        return pygame.transform.smoothscale(self.__get_raw_sprite__(self.ang - ang + math.pi), (w,h))
