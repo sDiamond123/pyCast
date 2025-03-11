@@ -223,8 +223,6 @@ class Camera:
                     end = sprite_max
                     if (end > self.int_w):
                         end = self.int_w
-                    top = self.int_h/2 + floor - h + self.position_vector.z
-                    image = sprite.get_sprite(w,h,raw_ang)
                     to_draw = []
                     in_drawing = False
                     frame = [0,0,0]
@@ -245,7 +243,10 @@ class Camera:
                     if in_drawing:
                         frame[1] = delta
                         to_draw.append(frame)
-                    for frame in to_draw:
-                        slice_w = frame[1] - frame[0] 
-                        slice = image.subsurface((frame[0], 0, slice_w, h))
-                        self.internal_surface.blit(slice, (frame[2], top))
+                    if (len(to_draw) > 0):
+                        top = self.int_h/2 + floor - h + self.position_vector.z
+                        image = sprite.get_sprite(w,h,raw_ang)
+                        for frame in to_draw:
+                            slice_w = frame[1] - frame[0] 
+                            slice = image.subsurface((frame[0], 0, slice_w, h))
+                            self.internal_surface.blit(slice, (frame[2], top))
