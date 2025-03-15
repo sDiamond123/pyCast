@@ -1,7 +1,7 @@
-wall_tile\cobble_stone\cobble_stone.bmp, False
-wall_tile\cobble_stone\cobble_stone_door.bmp, False
-wall_tile\cobble_stone\cobble_stone_poster.bmp, False
-wall_tile\cobble_stone\cobble_stone_cell.bmp, False
-wall_tile\cobble_stone\cobble_stone_cell_filled, True
-wall_tile\cobble_stone\cobble_stone_torch, True
-wall_tile\cobble_stone\cobble_stone_torch_empty.bmp, False
+wall_tile/cobble_stone/cobble_stone.bmp, False
+wall_tile/cobble_stone/cobble_stone_door.bmp, False
+wall_tile/cobble_stone/cobble_stone_poster.bmp, False
+wall_tile/cobble_stone/cobble_stone_cell.bmp, False
+wall_tile/cobble_stone/cobble_stone_cell_filled, True
+wall_tile/cobble_stone/cobble_stone_torch, True
+wall_tile/cobble_stone/cobble_stone_torch_empty.bmp, False

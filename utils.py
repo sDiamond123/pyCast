@@ -60,7 +60,7 @@ class Key:
         return ord(out[0])
 
     #set up key binds
-    binds = open("data\config\key_binds.txt", "r")
+    binds = open("data/config/key_binds.txt", "r")
     FORWARD = get_key(binds)
     BACK = get_key(binds)
     S_LEFT = get_key(binds)

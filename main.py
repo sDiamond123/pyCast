@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     # read in config file and set w/h
     # should probably move to it's own class, but whatever
-    config = open("data\config\config.txt", "r")
+    config = open("data/config/config.txt", "r")
     config.readline()
     name = config.readline().strip()
     pygame.display.set_caption(name)

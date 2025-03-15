@@ -1,0 +1,7 @@
+prototype, name
+INIT, starting state
+0, 85, h
+0, 65, w
+0, 0, height off ground
+8, True, faces, transparency
+1, number of sprites

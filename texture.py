@@ -3,7 +3,7 @@ import utils
 import math
 
 class Texture:
-    PATH = "data\\textures\\"
+    PATH = "data/textures/"
     
     slices = []
     slice_count = 0
@@ -26,9 +26,9 @@ class Texture:
         return self.slices[int(request * self.slice_count)]
     
 class AnimatedTexture:
-    PATH = "data\\textures\\"
-    MANIFEST = "\manifest.csv"
-    DATA = "\meta.csv"
+    PATH = "data/textures/"
+    MANIFEST = "/manifest.csv"
+    DATA = "/meta.csv"
 
     current = 0
     clock = 0
@@ -48,7 +48,7 @@ class AnimatedTexture:
         self.textures = [None] * self.frames
         frame_manifest = utils.csv_load(file + self.MANIFEST, 2, self.frames)
         for i in range (self.frames):
-            self.textures[i] = (Texture(directory + "\\" + frame_manifest[i][0]), frame_manifest[i][1])
+            self.textures[i] = (Texture(directory + "/" + frame_manifest[i][0]), frame_manifest[i][1])
         #print("Successfully loaded animated texture: " + directory)
 
     # loop through frames
@@ -67,7 +67,7 @@ class AnimatedTexture:
         return self.textures[self.current][0].get_slice(request)
     
 class RollingTexture:
-    PATH = "data\\textures\\rolling\\"
+    PATH = "data/textures/rolling/"
 
     base_image = None
     phase = 0

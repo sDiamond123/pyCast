@@ -6,14 +6,14 @@ import texture
 class Map :
     EMPTY_TILE = 0
     #organization for loading maps
-    PATH = "data\maps\\"
-    H_MAP = "\hmap.csv"
-    F_MAP = "\\fmap.csv"
-    C_MAP = "\cmap.csv"
-    COLOR = "\colors.csv"
-    DATA = "\meta.csv"
-    T_MAP = "\\tmap.csv"
-    TEXTS = "\\texts.csv"
+    PATH = "data/maps/"
+    H_MAP = "/hmap.csv"
+    F_MAP = "/fmap.csv"
+    C_MAP = "/cmap.csv"
+    COLOR = "/colors.csv"
+    DATA = "/meta.csv"
+    T_MAP = "/tmap.csv"
+    TEXTS = "/texts.csv"
     META_W = 3
     META_H = 5
     TRANS = "x" # transparent color, also trans rights 

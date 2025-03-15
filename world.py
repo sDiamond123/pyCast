@@ -7,7 +7,7 @@ import texture
 import game_object
 
 class World:
-    PATH = "data\state\\"
+    PATH = "data/state/"
     STATE_W = 2
     STATE_H = 7
     LINES_PER_OBJ = 6
@@ -41,7 +41,7 @@ class World:
         self.internal_w = i_w
         self.internal_h = i_h
         self.internal_display = pygame.Surface((i_w, i_h))
-        self.compass = texture.RollingTexture("\\compass\compass_scroll.bmp", math.pi, math.pi , 250, 32)
+        self.compass = texture.RollingTexture("/compass/compass_scroll.bmp", math.pi, math.pi , 250, 32)
         # load into our game state
         self.load_state(entry_state)
 

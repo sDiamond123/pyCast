@@ -1,8 +1,8 @@
 import utils, math, pygame
 
 class World_Sprite:
-    META = "\meta.csv"
-    MANIFEST = "\manifest.csv"
+    META = "/meta.csv"
+    MANIFEST = "/manifest.csv"
     META_W = 2
     META_H = 2
 
@@ -13,7 +13,7 @@ class World_Sprite:
         manifest = utils.csv_load(file + self.MANIFEST, w, self.faces)
         self.sprites = [None] * self.faces
         for i in range (self.faces):
-            self.sprites[i] = pygame.image.load(file + "\\" + manifest[i][0])
+            self.sprites[i] = pygame.image.load(file + "/" + manifest[i][0])
         self.ang_per_face = 2 * math.pi / self.faces
         self.offset = utils.convert_csv_to_float(data, 1)
 
@@ -26,9 +26,9 @@ class World_Sprite:
 class Game_Object:
     META_W = 2
     META_H = 7
-    META = "\meta.csv"
-    SPRITE_PATH = "\sprites"
-    SPRITE_MANIFEST = "\manifest.csv"
+    META = "/meta.csv"
+    SPRITE_PATH = "/sprites"
+    SPRITE_MANIFEST = "/manifest.csv"
     SPRITE_MAINIFEST_W = 4
     DEFAULT_STATE = "DEFAULT"
 

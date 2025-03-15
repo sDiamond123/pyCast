@@ -1,7 +1,7 @@
 # name
 Long's Word
 # icon
-data\config\icon.bmp
+data/config/icon.bmp
 # fullscreen
 False
 # display width

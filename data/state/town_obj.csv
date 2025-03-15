@@ -3,16 +3,16 @@
 0, 1, heading
 1, 0, health
 DEFAULT, starting state
-data\objects\fire_ball, object file
+data/objects/fire_ball, object file
 6, 7
 5, 20
 3, 14
 95, 5
 STANDING
-data\objects\test_object
+data/objects/test_object
 4, 7
 17, 5
 0, 0
 100, 0
 DEFAULT
-data\objects\test_object
+data/objects/test_object
