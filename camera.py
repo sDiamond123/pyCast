@@ -121,6 +121,7 @@ class Camera:
         prev_color_up = self.map.get_floor_text(x,y)
         if self.map.has_ceil:
             prev_color_down = self.map.get_ceil_text(x,y)
+        correction = math.cos(self.fov/2 * (0.5 - (self.raycount - ray_offset)/self.raycount))
         # enter cast
         while distance <= self.draw_dist and step > 0:
             step -= 1
@@ -171,7 +172,7 @@ class Camera:
                 x -= abs(y-proj_y) * dx * x_increase
             x += d2x
             y += d2y
-            distance = self.__distance__(x,y,x0,y0)
+            distance = self.__distance__(x,y,x0,y0) * correction
             draw_height = self.int_h/(2 * distance)
             if draw_height > self.midpoint:
                 draw_height = self.midpoint
