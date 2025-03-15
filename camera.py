@@ -39,6 +39,7 @@ class Camera:
         self.map = map
         # set up camera variables
         self.fov = fov
+        self.half_fov = fov/2
         self.raycount = ray_count
         self.draw_dist = draw_dist
         self.delta_ang = fov/ray_count
@@ -70,7 +71,7 @@ class Camera:
             self.skybox.render(self.position_vector.ang)
             self.internal_surface.blit(self.skybox.external_screen)
         # render walls/floor/ceiling
-        ang = self.position_vector.ang - self.fov/2
+        ang = self.position_vector.ang - self.half_fov
         for i in range(self.raycount):
             ang %= 2 * math.pi
             if ang < 0:
@@ -121,7 +122,7 @@ class Camera:
         prev_color_up = self.map.get_floor_text(x,y)
         if self.map.has_ceil:
             prev_color_down = self.map.get_ceil_text(x,y)
-        correction = math.cos(self.fov/2 * (0.5 - (self.raycount - ray_offset)/self.raycount))
+        correction = math.cos(self.half_fov * (0.5 - (self.raycount - ray_offset)/self.raycount))
         # enter cast
         while distance <= self.draw_dist and step > 0:
             step -= 1
