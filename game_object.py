@@ -222,7 +222,7 @@ def spawn_objs (x, y, ang, obj, sprites, state, health):
     attr = utils.csv_load(obj + "/meta.csv", 2, 2) [1][0]
     if attr == "PROJECTILE":
         return Projectile(x,y,ang,obj,sprites,state,health)
-    elif attr == "CHASER":
+    elif attr == "CHASER": #chaser_gen -_-
         return Melee(x,y,ang,obj,sprites,state,health)
     else:
         return Game_Object(x,y,ang,obj,sprites,state,health)

@@ -1,8 +1,8 @@
 1, 5, x
 1, 5, y
 0, 1, heading
-1, 0, health
-STAND, starting state
+9, 0, health
+STANDING, starting state
 data/objects/fire_ball, object file
 6, 7
 5, 20
