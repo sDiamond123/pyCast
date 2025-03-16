@@ -49,14 +49,15 @@ class Weapon(item.Load_Item):
     def reload(self):
         if not self.in_reload:
             self.reload_timer = utils.Timed_Toggle(self.reload_rate)
-            self.reload_timer.clock = False
             self.in_reload = True
 
     def update(self):
         self.shoot_timer.update()
         if self.in_reload:
             if (self.reload_timer.update()):
+                
                 self.magazine.reload()
+                self.reload_timer = None
                 self.in_reload = False
 
 

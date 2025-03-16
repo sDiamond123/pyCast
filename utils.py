@@ -3,7 +3,7 @@ import map, math, pygame
 class Timed_Toggle():
     def __init__(self, cool_down):
         self.cool_down = cool_down
-        self.prev_toggle = cool_down
+        self.prev_toggle = pygame.time.get_ticks()
         self.clock = False
 
     def update(self):

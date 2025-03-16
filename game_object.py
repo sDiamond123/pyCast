@@ -74,7 +74,7 @@ class Game_Object:
                         sprites[key] = World_Sprite(obj + self.SPRITE_PATH + sprite_data[i][2])
                         #print ("Successfully loaded sprite: " +key)
         self.sprites = sprites
-        print("Successfully placed a " + self.name + " <" + self.state + ", " + str(self.health())+ " HP> at " + str(self.pos))
+        #print("Successfully placed a " + self.name + " <" + self.state + ", " + str(self.health())+ " HP> at " + str(self.pos))
         #print("\tattr: " +  str(self.attr))
 
     def x(self):
