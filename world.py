@@ -117,6 +117,7 @@ class World:
         mouse.update()
         if (mouse.alive):
             player.turn(mouse.poll_delta()[0])
+        self.mouse = mouse
         return True
 
     def update (self, keys, mouse):
@@ -152,6 +153,22 @@ class World:
         self.compass.render(self.p.ang)
         self.internal_display.blit(self.compass.external_screen, (300,560))
         # render crosshair
+        if (self.mouse.alive):
+            coor = self.mouse.poll_rel()
+            c_x = self.internal_w * coor[0]
+            c_y = self.internal_h * coor[1]
+            pygame.draw.rect(self.internal_display, "black", (c_x - 5, c_y - 5, 10, 10))
+        # render health
+        h_x = 15
+        h_y = 15
+        h_w = 150
+        h_h = 30
+        max_h = 100
+        if self.p.health >= 0:
+            pygame.draw.rect(self.internal_display, "crimson", (h_x, h_y, h_w * self.p.health/max_h, h_h))
+            pygame.draw.rect(self.internal_display, "grey", (h_x + h_w * self.p.health/max_h, h_y, h_w * (1 - self.p.health/max_h), h_h))
+        else:
+            pygame.draw.rect(self.internal_display, "black", (h_x,h_y,h_w,h_h))
 
         # output rendered frame (push to external display)
         pygame.transform.smoothscale(self.internal_display, self.out_display.size, self.out_display)

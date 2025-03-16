@@ -28,7 +28,9 @@ class Mouse_Manager:
     hold_x = 0
 
     def __init__ (self, sensitivity, dimensions):
-        self.alive = False
+        self.alive = True
+        pygame.mouse.set_visible(not self.alive)
+        pygame.event.set_grab(self.alive)
         self.sensetivity = (sensitivity[0]/self.MOUSE_FACTOR, sensitivity[1]/self.MOUSE_FACTOR)
         self.size = dimensions
         self.t_toggle = Timed_Toggle(self.COOL_DOWN)

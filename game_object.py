@@ -33,6 +33,7 @@ class Game_Object:
     DEFAULT_STATE = "DEFAULT"
     ATTR_CODE = "ATTR"
     ATTRIBUTES = "/attributes.csv"
+    REAP_CEIL = 20
 
     w = 0
     h = 0
@@ -140,7 +141,7 @@ class Game_Object:
         return self.__dist__(other.pos) < self.w + other.w
     
     def check_map_collision (self, map: map.Map):
-        return not(self.z() >= 0 and self.x() >= 0 and self.y() >= 0 and self.y() < len(map.map) and self.x ()< len(map.map[int(self.y())]) and map.is_empty(int(self.x()), int(self.y())) and (not map.has_ceil or map.get_ceil_text(int(self.x()), int(self.y())) == map.TRANS or self.z() < 1))
+        return not(self.z() >= 0 and self.z() < self.REAP_CEIL and self.x() >= 0 and self.y() >= 0 and self.y() < len(map.map) and self.x ()< len(map.map[int(self.y())]) and map.is_empty(int(self.x()), int(self.y())) and (not map.has_ceil or map.get_ceil_text(int(self.x()), int(self.y())) == map.TRANS or self.z() < 1))
 
     def __get_sprite_key__(self, state):
         return self.name + " -> " + state
@@ -201,11 +202,27 @@ class Projectile(Game_Object):
                 self.change_health(-self.attr["d_s"])
                 obj.change_health(-self.attr["d_o"])
                 print(self.name + " hit obj " + obj.name + " for " + str(self.attr["d_o"]) + " dmg with " + str(self.attr["d_s"]) + " decay")
+
+class Melee(Game_Object):
+     COOL_DOWN = 2500
+
+     def __init__ (self, x, y, ang, obj, sprites, state, health):
+         self.timer = utils.Timed_Toggle(self.COOL_DOWN)
+         super().__init__(x,y,ang,obj,sprites,state,health)
+
+     def update(self, player, objects, map: map.Map):
+        super().update(player,objects, map)
+        if self.check_collision_player(player) and self.timer.update():
+            print(self.name + " hit player for " + str(self.attr["d_p"]) + " dmg")
+            self.change_health(-self.attr["d_s"])
+            player.health -= self.attr["d_p"]
        
 
 def spawn_objs (x, y, ang, obj, sprites, state, health):
     attr = utils.csv_load(obj + "/meta.csv", 2, 2) [1][0]
     if attr == "PROJECTILE":
         return Projectile(x,y,ang,obj,sprites,state,health)
+    elif attr == "CHASER":
+        return Melee(x,y,ang,obj,sprites,state,health)
     else:
         return Game_Object(x,y,ang,obj,sprites,state,health)

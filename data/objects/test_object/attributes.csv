@@ -2,9 +2,9 @@ ATTR, STANDING
 ATTR, CIRCLE
 PROFILE, move, basic
 ang_v,
-0,.0025,
+0,.005,
 v_forward,
-0,.003, 
+0,.006, 
 v_side,
 0,0, 
 ATTR, HOME
@@ -13,3 +13,5 @@ v_forward
 0,.01
 ang_v
 0,.02
+d_p
+15,  02
