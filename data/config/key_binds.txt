@@ -11,10 +11,12 @@ d
 # look right
     e
 # jump
-32
+v
 # crouch
     c
 # m_look
 z
 # exit
 27
+#shoot
+32

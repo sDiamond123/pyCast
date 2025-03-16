@@ -1,7 +1,19 @@
-import map
-import math
-import pygame
+import map, math, pygame
 
+class Timed_Toggle():
+    def __init__(self, cool_down):
+        self.cool_down = cool_down
+        self.prev_toggle = 0
+        self.clock = False
+
+    def update(self):
+        time = pygame.time.get_ticks()
+        if (time - self.prev_toggle > self.cool_down):
+            self.prev_toggle = time
+            self.clock = True
+            return True
+        self.clock = False
+        return False
 
 class Mouse_Manager:
     COOL_DOWN = 500
@@ -13,21 +25,18 @@ class Mouse_Manager:
     size = (0,0)
     abs = (0,0)
     rel = (0,0)
-    prev_toggle = 0
     hold_x = 0
 
     def __init__ (self, sensitivity, dimensions):
         self.alive = False
         self.sensetivity = (sensitivity[0]/self.MOUSE_FACTOR, sensitivity[1]/self.MOUSE_FACTOR)
         self.size = dimensions
-        self.prev_toggle = 0
+        self.t_toggle = Timed_Toggle(self.COOL_DOWN)
         self.hold_x = int(self.size[0]/2)
         self.abs = (self.size[0], self.size[1])
 
     def toggle(self):
-        time = pygame.time.get_ticks()
-        if (time - self.prev_toggle > self.COOL_DOWN):
-            self.prev_toggle = time
+        if (self.t_toggle.update()):
             self.alive = not self.alive
             pygame.mouse.set_visible(not self.alive)
             pygame.event.set_grab(self.alive)
@@ -71,22 +80,17 @@ class Key:
     CROUCH = get_key(binds)
     FREE_LOOK = get_key(binds)
     EXIT = get_key(binds)
+    SHOOT = get_key(binds)
     binds.close()
     print("Successfully loaded key binds")
 
-class Player:
-    x = 0
-    y = 0
-    z = 0
-    health = 0
-    ang = 0
-    no_clip = False
-
+class Obj_Vector:
     def __init__(self, x, y, ang, h):
         self.x = x
         self.y = y
         self.ang = ang
         self.health = h
+        self.no_clip = False
 
     def move(self, Map, v_forward, v_side_to_side):
         new_x = self.x + v_forward * math.cos(self.ang) + v_side_to_side * math.cos(self.ang + math.pi/2)

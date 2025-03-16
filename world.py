@@ -5,6 +5,7 @@ import camera
 import math
 import texture
 import game_object
+import player
 
 class World:
     PATH = "data/state/"
@@ -44,6 +45,7 @@ class World:
         self.compass = texture.RollingTexture("/compass/compass_scroll.bmp", math.pi, math.pi , 250, 32)
         # load into our game state
         self.load_state(entry_state)
+        #change_latter
 
     def load_state(self, state):
         self.state = state
@@ -51,7 +53,7 @@ class World:
         # load map
         self.m = map.Map(self.state_data[0][0])
         # load player
-        self.p = utils.Player(utils.convert_csv_to_float(self.state_data,2), 
+        self.p = player.Player(utils.convert_csv_to_float(self.state_data,2), 
                               utils.convert_csv_to_float(self.state_data,3),
                               utils.convert_csv_to_float(self.state_data,1),
                               utils.convert_csv_to_float(self.state_data,4))
@@ -99,6 +101,8 @@ class World:
             player.turn(0.04)
         if keys[utils.Key.EXIT]:
             return False
+        if keys[utils.Key.SHOOT]:
+            self.p.shoot(self.state_objects,self.base_sprites, self.m)
         if keys[utils.Key.JUMP]:
             player.z = 50
         elif keys[utils.Key.CROUCH]:
@@ -112,6 +116,8 @@ class World:
         if (mouse.alive):
             player.turn(mouse.poll_delta()[0])
 
+        player.update()
+
         to_pop = []
         #update objects
         for i in range(len(self.state_objects)):
@@ -121,7 +127,7 @@ class World:
                 print("reaping: " + object.name)
                 to_pop.append(i)
         #reap dead objects
-        for dead in to_pop:
+        for dead in reversed(to_pop):
             self.state_objects.pop(dead)
 
         return True

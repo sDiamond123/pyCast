@@ -1,7 +1,7 @@
 ATTR, CAST
 PROFILE, move, basic
 v_forward
-0,.005
+0,.05
 d_o,
 15,0
 d_p,
@@ -12,6 +12,6 @@ ATTR, STAND
 d_p
 10,0
 d_o
-1,0
+50,0
 d_s
 0,.01

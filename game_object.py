@@ -46,7 +46,7 @@ class Game_Object:
     
 
     def __init__ (self, x, y, ang, obj, sprites, state, health):
-        self.pos = utils.Player(x,y,ang,health)
+        self.pos = utils.Obj_Vector(x,y,ang,health)
         data = utils.csv_load(obj + self.META, self.META_W, self.META_H)
         self.name = data[0][0]
         self.type = data[1][0]
@@ -127,10 +127,10 @@ class Game_Object:
                     in_att = not in_att
         return False
 
-    def __dist__ (self, other: utils.Player):
+    def __dist__ (self, other: utils.Obj_Vector):
         return math.dist((other.x, other.y), (self.pos.x, self.pos.y))
 
-    def check_collision_player (self, other : utils.Player):
+    def check_collision_player (self, other : utils.Obj_Vector):
         return self.__dist__(other) < self.w
     
     def check_collision_object (self, other):
