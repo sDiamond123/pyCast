@@ -12,5 +12,5 @@ class Player (utils.Obj_Vector):
     def shoot(self,objects, sprites, map):
         if (self.shoot_timer.clock):
             f_ball = game_object.spawn_objs(self.x, self.y, self.ang, "data/objects/fire_ball", sprites, "CAST", 5)
-            f_ball.__move__(map, 0.2, 0.2)
+            f_ball.__move__(map, 0.3, 0)
             objects.append(f_ball)
