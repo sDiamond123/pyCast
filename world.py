@@ -34,6 +34,16 @@ class World:
     move_speed = 0.1
     truen_speed = 0.4
 
+    #hud
+    map_w = 20
+    map_h = 20
+    map_trav_w = 4
+    map_trav_h = 3
+    default_map_w = 20
+    default_map_h = 20
+    map_cool_down = 100
+    map_t = utils.Timed_Toggle(map_cool_down)
+
     def __init__(self, out_display, w, h, i_w, i_h, entry_state):
         # set up internal display and external screen
         self.out_display = out_display
@@ -105,6 +115,24 @@ class World:
         if keys[utils.Key.SHOOT]:
             z = (0.5 - (mouse.poll_rel()[1])) * mouse.sensetivity[1]
             self.p.shoot(self.state_objects,self.base_sprites, self.m, z)
+        if keys[utils.Key.M_ZOOM_OUT]:
+            if (self.map_t.clock):
+                old_w = self.map_trav_w
+                old_h = self.map_trav_h
+                self.map_trav_w += 1
+                self.map_trav_h += 1
+                self.map_w = self.map_w * (old_w * 2 + 1)/(self.map_trav_w * 2 + 1)
+                self.map_h = self.map_h * (old_h * 2 + 1)/(self.map_trav_h * 2 + 1)
+        elif keys[utils.Key.M_ZOOM_IN]:
+            if (self.map_t.clock):
+                old_w = self.map_trav_w
+                old_h = self.map_trav_h
+                if (old_w > 0):
+                    self.map_trav_w -= 1
+                    self.map_w = self.map_w * (old_w * 2 + 1)/(self.map_trav_w * 2 + 1)
+                if (old_h > 0):
+                    self.map_trav_h -= 1
+                    self.map_h = self.map_h * (old_h * 2 + 1)/(self.map_trav_h * 2 + 1)
         if keys[utils.Key.JUMP]:
             player.z = 50
         elif keys[utils.Key.CROUCH]:
@@ -118,6 +146,8 @@ class World:
         if (mouse.alive):
             player.turn(mouse.poll_delta()[0])
         self.mouse = mouse
+
+        self.map_t.update()
         return True
 
     def update (self, keys, mouse):
@@ -148,7 +178,7 @@ class World:
         #push camera's display onto main display
         self.internal_display.blit(self.c.external_surface)
         # render minimap
-        self.m.rendermap (self.internal_display, self.p, 4, 3, 600, 20, 20, 20)
+        self.m.rendermap (self.internal_display, self.p, self.map_trav_w, self.map_trav_h, 600, 20, self.map_w, self.map_h)
         # render compass
         self.compass.render(self.p.ang)
         self.internal_display.blit(self.compass.external_screen, (300,560))

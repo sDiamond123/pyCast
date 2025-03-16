@@ -20,3 +20,7 @@ z
 27
 #shoot
 32
+#zoom in (map)
+,
+#zoom out (map)
+.

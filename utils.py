@@ -83,6 +83,8 @@ class Key:
     FREE_LOOK = get_key(binds)
     EXIT = get_key(binds)
     SHOOT = get_key(binds)
+    M_ZOOM_IN = get_key(binds)
+    M_ZOOM_OUT = get_key(binds)
     binds.close()
     print("Successfully loaded key binds")
 

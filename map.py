@@ -109,7 +109,7 @@ class Map :
                 for dx in range(-fill_w, fill_w + 1):
                     x = center_x + dx
                     y = center_y + dy
-                    cell = pygame.Rect(x0 + dx * w, y0 + dy * h, w, h)
+                    cell = (x0 + dx * w, y0 + dy * h, w, h)
                     color = "black"
                     if self.is_valid(x,y):
                         if (self.is_empty(x,y)):
