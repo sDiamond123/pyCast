@@ -99,13 +99,13 @@ class World:
         player = self.p
         world = self.m
         if keys[utils.Key.FORWARD]:
-            player.move(world, 0.1, 0)
+            player.move_with_minimum(world, 0.1, 0,0.25)
         if keys[utils.Key.BACK]:
-            player.move(world, -0.1, 0)
+            player.move_with_minimum(world, -0.1, 0,0.25)
         if keys[utils.Key.S_RIGHT]:
-            player.move(world, 0, 0.1)
+            player.move_with_minimum(world, 0, 0.1,0.25)
         if keys[utils.Key.S_LEFT]:
-            player.move(world, 0, -0.1)
+            player.move_with_minimum(world, 0, -0.1,0.25)
         if keys[utils.Key.TURN_L]:
             player.turn(-0.04)
         if keys[utils.Key.TURN_R]:

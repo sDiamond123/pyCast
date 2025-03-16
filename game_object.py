@@ -174,7 +174,7 @@ class Game_Object:
                             self.__turn__(-self.attr["ang_v"])
                         else:
                             self.__turn__(-diff)
-                        dist = self.__dist__(player)
+                        dist = self.__dist__(player) - self.w * 0.98
                         if (dist > self.attr["v_forward"]):
                             dist = self.attr["v_forward"]
                         self.__move__(map, dist, 0) 
