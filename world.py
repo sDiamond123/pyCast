@@ -3,14 +3,14 @@ import utils
 import map
 import camera
 import math
-import texture
+import hud
 import game_object
 import player
 
 class World:
     PATH = "data/state/"
     STATE_W = 2
-    STATE_H = 8
+    STATE_H = 9
     LINES_PER_OBJ = 6
     OBJ_W = 2
 
@@ -34,15 +34,7 @@ class World:
     move_speed = 0.1
     truen_speed = 0.4
 
-    #hud
-    map_w = 20
-    map_h = 20
-    map_trav_w = 4
-    map_trav_h = 3
-    default_map_w = 20
-    default_map_h = 20
-    map_cool_down = 100
-    map_t = utils.Timed_Toggle(map_cool_down)
+    
 
     def __init__(self, out_display, w, h, i_w, i_h, entry_state):
         # set up internal display and external screen
@@ -52,7 +44,6 @@ class World:
         self.internal_w = i_w
         self.internal_h = i_h
         self.internal_display = pygame.Surface((i_w, i_h))
-        self.compass = texture.RollingTexture("/compass/compass_scroll.bmp", math.pi, math.pi , 250, 32)
         # load into our game state
         self.load_state(entry_state)
         #change_latter
@@ -90,6 +81,8 @@ class World:
         self.c = camera.Camera(self.m, self.p, self.internal_w, self.internal_h, 
                                self.state_data[5][0], math.radians(self.state_data[6][0]), 
                                self.state_data[6][1], self.state_objects)
+        self.hud = hud.HUD(self.internal_display, self.m, self.p)
+        self.p.load_inv(self.state_data[8][0])
         # print state
         print("Successfully loaded state: " + self.state)
 
@@ -115,24 +108,16 @@ class World:
         if keys[utils.Key.SHOOT]:
             z = (0.5 - (mouse.poll_rel()[1])) * mouse.sensetivity[1]
             self.p.shoot(self.state_objects,self.base_sprites, self.m, z)
+        if keys[utils.Key.RELOAD]:
+            self.p.reload()
         if keys[utils.Key.M_ZOOM_OUT]:
-            if (self.map_t.clock):
-                old_w = self.map_trav_w
-                old_h = self.map_trav_h
-                self.map_trav_w += 1
-                self.map_trav_h += 1
-                self.map_w = self.map_w * (old_w * 2 + 1)/(self.map_trav_w * 2 + 1)
-                self.map_h = self.map_h * (old_h * 2 + 1)/(self.map_trav_h * 2 + 1)
+           self.hud.map_zoom_out()
         elif keys[utils.Key.M_ZOOM_IN]:
-            if (self.map_t.clock):
-                old_w = self.map_trav_w
-                old_h = self.map_trav_h
-                if (old_w > 0):
-                    self.map_trav_w -= 1
-                    self.map_w = self.map_w * (old_w * 2 + 1)/(self.map_trav_w * 2 + 1)
-                if (old_h > 0):
-                    self.map_trav_h -= 1
-                    self.map_h = self.map_h * (old_h * 2 + 1)/(self.map_trav_h * 2 + 1)
+            self.hud.map_zoom_in()
+        if keys[utils.Key.CYCLE_NEXT]:
+            self.p.cycle_next()
+        elif keys[utils.Key.CYCLE_PREV]:
+            self.p.cycle_prev()
         if keys[utils.Key.JUMP]:
             player.z = 50
         elif keys[utils.Key.CROUCH]:
@@ -147,11 +132,12 @@ class World:
             player.turn(mouse.poll_delta()[0])
         self.mouse = mouse
 
-        self.map_t.update()
+        
         return True
 
     def update (self, keys, mouse):
-        
+        self.hud.update(mouse)
+
         check = self.__controls__(keys, mouse)
         if not check:
             return check
@@ -177,28 +163,7 @@ class World:
         self.c.render()
         #push camera's display onto main display
         self.internal_display.blit(self.c.external_surface)
-        # render minimap
-        self.m.rendermap (self.internal_display, self.p, self.map_trav_w, self.map_trav_h, 600, 20, self.map_w, self.map_h)
-        # render compass
-        self.compass.render(self.p.ang)
-        self.internal_display.blit(self.compass.external_screen, (300,560))
-        # render crosshair
-        if (self.mouse.alive):
-            coor = self.mouse.poll_rel()
-            c_x = self.internal_w * coor[0]
-            c_y = self.internal_h * coor[1]
-            pygame.draw.rect(self.internal_display, "black", (c_x - 5, c_y - 5, 10, 10))
-        # render health
-        h_x = 15
-        h_y = 15
-        h_w = 150
-        h_h = 30
-        max_h = 100
-        if self.p.health >= 0:
-            pygame.draw.rect(self.internal_display, "crimson", (h_x, h_y, h_w * self.p.health/max_h, h_h))
-            pygame.draw.rect(self.internal_display, "grey", (h_x + h_w * self.p.health/max_h, h_y, h_w * (1 - self.p.health/max_h), h_h))
-        else:
-            pygame.draw.rect(self.internal_display, "black", (h_x,h_y,h_w,h_h))
-
+        # render hud
+        self.hud.render()
         # output rendered frame (push to external display)
         pygame.transform.smoothscale(self.internal_display, self.out_display.size, self.out_display)

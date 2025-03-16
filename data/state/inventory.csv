@@ -1,0 +1,22 @@
+ITEM, WEAPON, PISTOL,data/weapons/pea_shooter,BASIC
+FLAG, EQUIPED
+current_ammo, 
+150,0
+in_gun, 
+10,0
+max_ammo, 
+150,0
+ITEM, WEAPON, SHOTGUN,data/weapons/shotgun,BLAST
+current_ammo, 
+24,0
+in_gun, 
+5,0
+max_ammo, 
+24,0
+ITEM, WEAPON, MG,data/weapons/machine_gun,BASIC
+current_ammo, 
+500,0
+in_gun, 
+80,0
+max_ammo, 
+500,0

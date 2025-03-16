@@ -6,3 +6,4 @@ throwback ,MAP
     275 ,RAY COUNT
     90 ,15        ,FOV AND DRAW DIST
 town_obj.csv, 3,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
+data/state/inventory.csv, item inventory

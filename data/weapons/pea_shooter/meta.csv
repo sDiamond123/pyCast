@@ -1,0 +1,5 @@
+pea_shooter, name
+750, fire_rate
+2000, reload_rate
+1, max_deviation
+15, mag

@@ -7,9 +7,9 @@ A
 # strafe right
 d
 # look left
- q
+ [
 # look right
-    e
+ ]
 # jump
 v
 # crouch
@@ -20,6 +20,12 @@ z
 27
 #shoot
 32
+# reload
+r
+# cycle next
+q
+# cycle prev
+e
 #zoom in (map)
 ,
 #zoom out (map)

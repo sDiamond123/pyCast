@@ -1,0 +1,5 @@
+machine_gun, name
+100, fire_rate
+4000, reload_rate
+10, max_deviation
+100, mag

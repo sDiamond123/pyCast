@@ -6,3 +6,4 @@ default ,MAP
     400, RAY COUNT
      90 ,10        ,FOV AND DRAW DIST
 def_obg.csv, 0,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE (0 loads nothing)
+data/state/inventory.csv
