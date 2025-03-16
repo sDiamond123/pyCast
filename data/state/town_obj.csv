@@ -2,7 +2,7 @@
 1, 5, y
 0, 1, heading
 1, 0, health
-DEFAULT, starting state
+STAND, starting state
 data/objects/fire_ball, object file
 6, 7
 5, 20
@@ -15,4 +15,10 @@ data/objects/test_object
 0, 0
 100, 0
 CIRCLE
+data/objects/test_object
+18, 7
+17, 5
+0, 0
+100, 0
+HOME
 data/objects/test_object

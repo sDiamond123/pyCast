@@ -118,6 +118,7 @@ class World:
             object = self.state_objects[i]
             object.update(self.p, self.state_objects, self.m)
             if object.health() <= 0:
+                print("reaping: " + object.name)
                 to_pop.append(i)
         #reap dead objects
         for dead in to_pop:

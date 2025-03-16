@@ -60,7 +60,7 @@ class Game_Object:
         self.__raw_attr__ = utils.bottomless_csv_load(obj + self.ATTRIBUTES)
         self.load_state(self.state)
         # load in sprites if we don't already have them
-        self.has_collision = data[7][1] == 'True'
+        self.has_collision = data[6][1] == 'True'
         self.pos.no_clip = self.has_collision
         sprite_count = data[7][0]
         if (sprite_count > 0):
@@ -154,16 +154,16 @@ class Game_Object:
         self.pos.turn(ang)
 
     def __move__ (self,map, forward, side):
-        self.pos.move(map, forward,side)
+        self.pos.move_with_minimum(map, forward,side, self.w)
 
     def update(self, player, objects, map: map.Map):
         if (self.check_map_collision(map)):
-            self.health = 0
+            self.pos.health = 0
         else:
             if (self.moving):
                 if (self.seeking):
                     if self.b_type == "basic" and self.target == "player":
-                        diff = utils.get_angle(self.x(), self.y(), player.x, player.y)
+                        diff = self.pos.ang - utils.get_angle(self.x(), self.y(), player.x, player.y)
                         if diff < -self.attr["ang_v"]:
                             self.__turn__(self.attr["ang_v"])
                         elif diff > self.attr["ang_v"]:
@@ -196,7 +196,7 @@ class Projectile(Game_Object):
                 self.change_health(-self.attr["d_s"])
                 obj.change_health(-self.attr["d_o"])
                 print(self.name + " hit obj " + obj.name + " for " + str(self.attr["d_o"]) + " dmg with " + str(self.attr["d_s"]) + " decay")
-
+       
 
 def spawn_objs (x, y, ang, obj, sprites, state, health):
     attr = utils.csv_load(obj + "/meta.csv", 2, 2) [1][0]

@@ -2,8 +2,14 @@ ATTR, STANDING
 ATTR, CIRCLE
 PROFILE, move, basic
 ang_v,
-0,0005,
+0,.0025,
 v_forward,
-0,002, 
+0,.003, 
 v_side,
 0,0, 
+ATTR, HOME
+PROFILE, seek, basic, player
+v_forward
+0,.02
+ang_v
+0,.05

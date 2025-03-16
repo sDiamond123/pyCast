@@ -5,4 +5,4 @@ test_town ,MAP
     100, 0 , playe health
     275 ,RAY COUNT
     90 ,15        ,FOV AND DRAW DIST
-town_obj.csv, 3,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
+town_obj.csv, 4,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE

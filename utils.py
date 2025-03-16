@@ -93,6 +93,15 @@ class Player:
         new_y = self.y + v_forward * math.sin(self.ang) + v_side_to_side * math.sin(self.ang + math.pi/2)
         if self.no_clip or Map.is_empty (new_x, new_y):
             self.x = new_x
+            self.y = new_y   
+
+    def move_with_minimum (self, Map, v_forward, v_side_to_side, offset):
+        new_x = self.x + v_forward * math.cos(self.ang) + v_side_to_side * math.cos(self.ang + math.pi/2)
+        new_y = self.y + v_forward * math.sin(self.ang) + v_side_to_side * math.sin(self.ang + math.pi/2)
+        check_x = self.x + (v_forward + offset) * math.cos(self.ang) + (v_side_to_side + offset) * math.cos(self.ang + math.pi/2)
+        check_y = self.y + (v_forward + offset) * math.sin(self.ang) + (v_side_to_side + offset) * math.sin(self.ang + math.pi/2)
+        if self.no_clip or (Map.is_empty (check_x, check_y) and Map.is_empty(new_x,new_y)):
+            self.x = new_x
             self.y = new_y    
 
     def turn (self, theta):
@@ -124,7 +133,9 @@ def csv_load(csv_file, w, h):
 def convert_csv_to_float(array, row):
     before_decimal = array[row][0]
     after_decimal = array[row][1]
-    if after_decimal != 0:
+    if isinstance(after_decimal, str):
+        after_decimal = int(after_decimal[1:])/(10**(len(after_decimal) - 1))
+    elif after_decimal != 0:
         after_decimal /= (10**math.ceil(math.log(after_decimal, 10)))
     return before_decimal + after_decimal
 

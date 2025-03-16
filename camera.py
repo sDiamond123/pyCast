@@ -205,6 +205,8 @@ class Camera:
             y = sprite.y()
             #make sure sprite is within draw distance
             distance_to_sprite = self.__distance__(x0,y0,x,y)
+            if (distance_to_sprite <= self.MARGIN_OF_ERROR):
+                distance_to_sprite = self.MARGIN_OF_ERROR
             if distance_to_sprite < self.draw_dist:
                 w = int(self.int_w * (sprite.w/distance_to_sprite)* self.object_w_factor)  # not sure why I have to divide by 2 here, but I do
                 h = int(self.int_h * (sprite.h/distance_to_sprite))

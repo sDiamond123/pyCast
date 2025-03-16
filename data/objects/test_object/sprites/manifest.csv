@@ -1,3 +1,4 @@
 STANDING, simple, /standing, 8
 CIRCLE, simple, /standing, 8
+HOME, simple, /standing, 8
 state, type, folder, sprites
