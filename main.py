@@ -49,6 +49,7 @@ if __name__ == "__main__":
     mouse = utils.Mouse_Manager((x_sense,y_sense),(w,h))
     #manager = world.World(screen,w,h,i_w, i_h, "basic_mansion.csv")
     manager = world.World(screen, w,h,i_w,i_h,"town.csv")
+    #manager = world.World(screen, w, h, i_w, i_h, "default.csv")
     print("Game Start!")
     # main loop
     while running:

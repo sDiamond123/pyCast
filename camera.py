@@ -268,5 +268,7 @@ class Camera:
                 image = sprite.get_sprite(w,h,tup[2])
                 for frame in to_draw:
                     slice_w = frame[1] - frame[0] 
+                    if (slice_w > w):
+                        slice_w = w
                     slice = image.subsurface((frame[0], 0, slice_w, h))
                     self.internal_surface.blit(slice, (frame[2], top))
