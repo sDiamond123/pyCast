@@ -83,7 +83,8 @@ class World:
         # print state
         print("Successfully loaded state: " + self.state)
 
-    def update (self, keys, mouse):
+    def __controls__ (self, keys, mouse):
+
         # update keys
         player = self.p
         world = self.m
@@ -102,7 +103,8 @@ class World:
         if keys[utils.Key.EXIT]:
             return False
         if keys[utils.Key.SHOOT]:
-            self.p.shoot(self.state_objects,self.base_sprites, self.m)
+            z = (0.5 - (mouse.poll_rel()[1])) * mouse.sensetivity[1]
+            self.p.shoot(self.state_objects,self.base_sprites, self.m, z)
         if keys[utils.Key.JUMP]:
             player.z = 50
         elif keys[utils.Key.CROUCH]:
@@ -115,8 +117,15 @@ class World:
         mouse.update()
         if (mouse.alive):
             player.turn(mouse.poll_delta()[0])
+        return True
 
-        player.update()
+    def update (self, keys, mouse):
+        
+        check = self.__controls__(keys, mouse)
+        if not check:
+            return check
+        
+        self.p.update()
 
         to_pop = []
         #update objects
@@ -124,7 +133,7 @@ class World:
             object = self.state_objects[i]
             object.update(self.p, self.state_objects, self.m)
             if object.health() <= 0:
-                #print("reaping: " + object.name)
+                print("reaping: " + object.name)
                 to_pop.append(i)
         #reap dead objects
         for dead in reversed(to_pop):

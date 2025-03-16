@@ -10,6 +10,6 @@ v_side,
 ATTR, HOME
 PROFILE, seek, basic, player
 v_forward
-0,.02
+0,.01
 ang_v
-0,.05
+0,.02

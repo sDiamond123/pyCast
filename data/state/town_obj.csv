@@ -22,3 +22,15 @@ data/objects/test_object
 100, 0
 HOME
 data/objects/test_object
+1, 5, x
+1, 5, y
+0, 1, heading
+100, 0
+HOME
+data/objects/test_object
+18, 7
+1, 5
+0, 0
+100, 0
+HOME
+data/objects/test_object

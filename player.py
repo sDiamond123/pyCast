@@ -9,8 +9,9 @@ class Player (utils.Obj_Vector):
     def update(self):
         self.shoot_timer.update()
 
-    def shoot(self,objects, sprites, map):
+    def shoot(self,objects, sprites, map, z):
         if (self.shoot_timer.clock):
-            f_ball = game_object.spawn_objs(self.x, self.y, self.ang, "data/objects/fire_ball", sprites, "CAST", 5)
+            f_ball = game_object.spawn_objs(self.x, self.y, self.ang, "data/objects/fire_ball", sprites, "CAST", 99)
+            f_ball.delta_z = z
             f_ball.__move__(map, 0.3, 0)
             objects.append(f_ball)

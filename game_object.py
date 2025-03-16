@@ -63,6 +63,7 @@ class Game_Object:
         self.has_collision = data[6][1] == 'True'
         self.pos.no_clip = self.has_collision
         sprite_count = data[7][0]
+        self.delta_z = 0
         if (sprite_count > 0):
             sprite_data = utils.csv_load(obj + self.SPRITE_PATH + self.SPRITE_MANIFEST, self.SPRITE_MAINIFEST_W, sprite_count)
             for i in range(sprite_count):
@@ -72,7 +73,7 @@ class Game_Object:
                         sprites[key] = World_Sprite(obj + self.SPRITE_PATH + sprite_data[i][2])
                         #print ("Successfully loaded sprite: " +key)
         self.sprites = sprites
-        #print("Successfully placed a " + self.name + " <" + self.state + ", " + str(self.health())+ " HP> at " + str(self.pos))
+        print("Successfully placed a " + self.name + " <" + self.state + ", " + str(self.health())+ " HP> at " + str(self.pos))
         #print("\tattr: " +  str(self.attr))
 
     def x(self):
@@ -139,7 +140,7 @@ class Game_Object:
         return self.__dist__(other.pos) < self.w + other.w
     
     def check_map_collision (self, map: map.Map):
-        return not(self.x() >= 0 and self.y() >= 0 and self.y() < len(map.map) and self.x ()< len(map.map[int(self.y())]) and map.is_empty(int(self.x()), int(self.y())))
+        return not(self.z() >= 0 and self.x() >= 0 and self.y() >= 0 and self.y() < len(map.map) and self.x ()< len(map.map[int(self.y())]) and map.is_empty(int(self.x()), int(self.y())) and (not map.has_ceil or map.get_ceil_text(int(self.x()), int(self.y())) == map.TRANS or self.z() < 1))
 
     def __get_sprite_key__(self, state):
         return self.name + " -> " + state
@@ -163,7 +164,9 @@ class Game_Object:
             if (self.moving):
                 if (self.seeking):
                     if self.b_type == "basic" and self.target == "player":
-                        diff = self.pos.ang - utils.get_angle(self.x(), self.y(), player.x, player.y)
+                        diff = utils.normalize_angle(self.pos.ang - utils.get_angle(self.x(), self.y(), player.x, player.y))
+                        if diff > math.pi:
+                            diff -= math.pi * 2
                         if diff < -self.attr["ang_v"]:
                             self.__turn__(self.attr["ang_v"])
                         elif diff > self.attr["ang_v"]:
@@ -180,6 +183,8 @@ class Game_Object:
                         self.__move__(map, self.attr["v_forward"], self.attr["v_side"])
                     if (self.attr["ang_v"] != 0):
                         self.__turn__(self.attr["ang_v"])
+                    if (self.delta_z != 0):
+                        self.pos.z += self.delta_z
 
 
 class Projectile(Game_Object):
