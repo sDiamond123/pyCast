@@ -1,0 +1,22 @@
+ATTR, CAST
+PROFILE, move, basic
+v_forward
+0,00000005
+d_o,
+15,0
+d_p,
+0,0
+d_s,
+50,0
+ATTR, HOME
+PROFILE, seek, basic_player
+v_forward
+0,00002
+ang_v
+0,005
+d_p
+10,0
+d_o
+0,0
+d_s,
+100,0

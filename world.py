@@ -9,7 +9,7 @@ import game_object
 class World:
     PATH = "data/state/"
     STATE_W = 2
-    STATE_H = 7
+    STATE_H = 8
     LINES_PER_OBJ = 6
     OBJ_W = 2
 
@@ -53,14 +53,15 @@ class World:
         # load player
         self.p = utils.Player(utils.convert_csv_to_float(self.state_data,2), 
                               utils.convert_csv_to_float(self.state_data,3),
-                              utils.convert_csv_to_float(self.state_data,1))
-       
+                              utils.convert_csv_to_float(self.state_data,1),
+                              utils.convert_csv_to_float(self.state_data,4))
+        print("Successfully spawned player: " + str(self.p))
         
         #load game objects
-        self.object_count = self.state_data[6][1]
+        self.object_count = self.state_data[7][1]
         if self.object_count > 0:
-            self.state_objects = [None] * self.state_data[6][1]
-            objects = utils.csv_load(self.PATH + self.state_data[6][0], self.OBJ_W, self.LINES_PER_OBJ * self.object_count)
+            self.state_objects = [None] * self.state_data[7][1]
+            objects = utils.csv_load(self.PATH + self.state_data[7][0], self.OBJ_W, self.LINES_PER_OBJ * self.object_count)
             line = 0
             for i in range (self.object_count):
                 x = utils.convert_csv_to_float(objects, line)
@@ -68,15 +69,15 @@ class World:
                 ang = utils.convert_csv_to_float(objects, line + 2)
                 health = utils.convert_csv_to_float(objects, line +3)
                 state = objects[line + 4][0]
-                self.state_objects[i] = game_object.Game_Object(x, y, ang, objects[line + 5][0], self.base_sprites, state, health)
+                self.state_objects[i] = game_object.spawn_objs(x, y, ang, objects[line + 5][0], self.base_sprites, state, health)
                 line += self.LINES_PER_OBJ
         else:
             self.state_objects = []
             self.base_sprites = {}
          # load camera
         self.c = camera.Camera(self.m, self.p, self.internal_w, self.internal_h, 
-                               self.state_data[4][0], math.radians(self.state_data[5][0]), 
-                               self.state_data[5][1], self.state_objects)
+                               self.state_data[5][0], math.radians(self.state_data[6][0]), 
+                               self.state_data[6][1], self.state_objects)
         # print state
         print("Successfully loaded state: " + self.state)
 
@@ -110,6 +111,17 @@ class World:
         mouse.update()
         if (mouse.alive):
             player.turn(mouse.poll_delta()[0])
+
+        to_pop = []
+        #update objects
+        for i in range(len(self.state_objects)):
+            object = self.state_objects[i]
+            object.update(self.p, self.state_objects, self.m)
+            if object.health() <= 0:
+                to_pop.append(i)
+        #reap dead objects
+        for dead in to_pop:
+            self.state_objects.pop(dead)
 
         return True
 

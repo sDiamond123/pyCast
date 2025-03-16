@@ -78,14 +78,15 @@ class Player:
     x = 0
     y = 0
     z = 0
+    health = 0
     ang = 0
     no_clip = False
 
-    def __init__(self, x, y, ang):
+    def __init__(self, x, y, ang, h):
         self.x = x
         self.y = y
         self.ang = ang
-        print("Player spawned at (" +str(x)+","+str(y)+") facing " +str(math.degrees(ang)) +" degrees")
+        self.health = h
 
     def move(self, Map, v_forward, v_side_to_side):
         new_x = self.x + v_forward * math.cos(self.ang) + v_side_to_side * math.cos(self.ang + math.pi/2)
@@ -148,6 +149,11 @@ def bottomless_csv_load(csv_file):
         if len(as_split)== 0 or (len(as_split) == 1 and len(as_split[0]) <= 1):
             break
         # otherwise append
+        for i in range(len(as_split)):
+            entry = as_split[i].strip()
+            if entry.isnumeric(): 
+                entry = int(entry)
+            as_split[i] = entry
         out.append(as_split)
     csv.close
     return out

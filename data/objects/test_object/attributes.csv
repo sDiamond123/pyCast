@@ -1,0 +1,9 @@
+ATTR, STANDING
+ATTR, CIRCLE
+PROFILE, move, basic
+ang_v,
+0,0005,
+v_forward,
+0,002, 
+v_side,
+0,0, 

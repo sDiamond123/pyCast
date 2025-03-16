@@ -201,8 +201,8 @@ class Camera:
         draw_me = []
         # find all sprits in fov and add them to a queue to draw
         for sprite in self.objects:
-            x = sprite.x
-            y = sprite.y
+            x = sprite.x()
+            y = sprite.y()
             #make sure sprite is within draw distance
             distance_to_sprite = self.__distance__(x0,y0,x,y)
             if distance_to_sprite < self.draw_dist:
@@ -234,7 +234,7 @@ class Camera:
             h = tup [6]
             delta = 0
             start = tup[3]
-            floor = self.int_h * (0.5 -sprite.z)/distance_to_sprite
+            floor = self.int_h * (0.5 -sprite.z())/distance_to_sprite
             if (start < 0):
                 start =0
                 delta = abs(tup[3])

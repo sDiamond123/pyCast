@@ -8,11 +8,11 @@ data/objects/fire_ball, object file
 5, 20
 3, 14
 95, 5
-STANDING
+DEFAULT
 data/objects/test_object
 4, 7
 17, 5
 0, 0
 100, 0
-DEFAULT
+CIRCLE
 data/objects/test_object
