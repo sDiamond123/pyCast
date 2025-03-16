@@ -73,7 +73,7 @@ class Game_Object:
                         #print ("Successfully loaded sprite: " +key)
         self.sprites = sprites
         print("Successfully placed a " + self.name + " <" + self.state + ", " + str(self.health())+ " HP> at " + str(self.pos))
-        print("\tattr: " +  str(self.attr))
+        #print("\tattr: " +  str(self.attr))
 
     def x(self):
         return self.pos.x
