@@ -11,7 +11,7 @@ class Camera:
     MAX_CELL_TRAVERSE = 20
     NO_CELL_H = 50
     BRIGHTNESS_MODIFIER = 1.2
-    __CORRECTION_FACTOR = math.pi * 3/8 
+    __CORRECTION_FACTOR = math.pi * 1/4 
 
     # camera world
     position_vector = None
