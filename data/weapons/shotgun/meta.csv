@@ -1,5 +1,5 @@
 shotgun, name
 1500, fire_rate
 6000, reload_rate
-5, max_deviation
+10, max_deviation
 6, mag

@@ -6,13 +6,15 @@ in_gun,
 10,0
 max_ammo, 
 150,0
-ITEM, WEAPON, SHOTGUN,data/weapons/shotgun,BLAST
+ITEM, WEAPON, SHOTGUN,data/weapons/shotgun,SCATTER
 current_ammo, 
-24,0
+36,0
 in_gun, 
-5,0
+6,0
 max_ammo, 
-24,0
+36,0
+pellets,
+7,0
 ITEM, WEAPON, MG,data/weapons/machine_gun,BASIC
 current_ammo, 
 500,0

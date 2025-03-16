@@ -16,7 +16,10 @@ class Inventory():
             if "ITEM" in line:
                 in_attr = False
                 if "WEAPON" in line:
-                    cur_item = weapon.Weapon(line[2], line[3])
+                    if "SCATTER" in line:
+                        cur_item = weapon.Scatter_Gun(line[2], line[3])
+                    elif "BASIC" in line:
+                        cur_item = weapon.Weapon(line[2], line[3])
                 elif "MAG" in line:
                     #item = weapon.Weapon(line[2], line[3])
                     pass

@@ -4,7 +4,7 @@ import utils, inventory, weapon
 
 
 class Player (utils.Obj_Vector):
-    COOL_DOWN = 400
+    COOL_DOWN = 300
     MAX_HEALTH = 100
     
     def __init__(self, x, y, ang, h):

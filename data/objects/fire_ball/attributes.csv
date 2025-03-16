@@ -15,3 +15,13 @@ d_o
 0,5
 d_s
 1,5
+ATTR, SCATTER
+PROFILE, move, basic
+d_o,
+20,0
+v_forward
+0,.05
+d_s,
+100,0
+d_w,
+5,0

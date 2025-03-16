@@ -96,7 +96,7 @@ class Game_Object:
         self.pos.health += delta
     
     def load_state(self, state):
-        self.attr =  {"d_p" : 0, "d_o" : 0,  "d_s" : 0, "v_forward" : 0, "v_side" : 0, "ang_v" : 0}
+        self.attr =  {"d_w" : self.health(), "d_p" : 0, "d_o" : 0,  "d_s" : 0, "v_forward" : 0, "v_side" : 0, "ang_v" : 0}
         in_state = False
         in_att = False
         att = ""
@@ -160,7 +160,7 @@ class Game_Object:
 
     def update(self, player, objects, map: map.Map):
         if (self.check_map_collision(map)):
-            self.pos.health = 0
+            self.change_health(-self.attr["d_w"])
         else:
             if (self.moving):
                 if (self.seeking):
@@ -199,9 +199,10 @@ class Projectile(Game_Object):
             if self.health() < 0:
                 break
             if (self.check_collision_object(obj)):
-                self.change_health(-self.attr["d_s"])
-                obj.change_health(-self.attr["d_o"])
-                print(self.name + " hit obj " + obj.name + " for " + str(self.attr["d_o"]) + " dmg with " + str(self.attr["d_s"]) + " decay")
+                if (self.name != obj.name or self.state != "SCATTER"):
+                    self.change_health(-self.attr["d_s"])
+                    obj.change_health(-self.attr["d_o"])
+                    print(self.name + " hit obj " + obj.name + " for " + str(self.attr["d_o"]) + " dmg with " + str(self.attr["d_s"]) + " decay")
 
 class Melee(Game_Object):
      COOL_DOWN = 2500
