@@ -6,7 +6,6 @@ import world, utils
 if __name__ == "__main__":
     # pygame setup
     pygame.init()
-
     # read in config file and set w/h
     # should probably move to it's own class, but whatever
     config = open("data/config/config.txt", "r")

@@ -37,6 +37,9 @@ class HUD:
     a_filled = "yellow"
     a_empty = "grey"
     a_dead = "black"
+    #font
+    pygame.font.init()
+    FONT = pygame.font.SysFont('Comic Sans MS', 30)
     
 
     def __init__ (self, internal_screen :pygame.Surface, map : map.Map, player : player.Player):
@@ -110,3 +113,5 @@ class HUD:
        gun_state = self.player.get_weapon_state()
        self.__render_bar__(self.a_x, self.a_y, self.a_w, self.a_h, gun_state[0], gun_state[1], self.a_filled, self.a_empty, self.a_dead)
        self.__render_bar__(self.a_x, self.a_y + self.delta_a_y, self.a_w, self.a_h, gun_state[2], gun_state[3], self.a_filled, self.a_empty, self.a_dead)
+       text_surface = self.FONT.render(self.player.weapon.name, False, (0, 0, 0))
+       self.int_screen.blit(text_surface, (0,0))
