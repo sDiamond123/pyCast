@@ -7,9 +7,9 @@ class Player (utils.Obj_Vector):
     COOL_DOWN = 300
     MAX_HEALTH = 100
     
-    def __init__(self, x, y, ang, h):
-        super().__init__(x,y,ang,h)
-        self.weapon = None
+    def __init__(self, x, y, ang, h, max_health = MAX_HEALTH):
+        super().__init__(x,y,ang,h,max_health=max_health)
+        self.weapon : weapon.Weapon = None
         self.cycle_timer = utils.Timed_Toggle(self.COOL_DOWN)
     
     def load_inv(self, file):
@@ -39,5 +39,5 @@ class Player (utils.Obj_Vector):
 
     def get_weapon_state(self):
         if self.weapon != None:
-            return (self.weapon.magazine.in_mag, self.weapon.magazine.size, self.weapon.magazine.total, self.weapon.magazine.max)
-        return (1,1,1,1)
+            return (self.weapon.magazine.in_mag, self.weapon.magazine.in_inv)
+        return (utils.Partial(current = 0), utils.Partial(current=0))

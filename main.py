@@ -72,5 +72,6 @@ if __name__ == "__main__":
 
             # limits FPS
             dt = clock.tick(fps) / 1000
+            #print(clock.get_fps())
     print(name + " Succesfully Exited")
     pygame.quit()

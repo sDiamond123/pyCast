@@ -1,4 +1,4 @@
-import pygame,utils,map,camera,math,hud,game_object,player, ui, enum
+import pygame,utils,map,camera,math,ui_implementation,game_object,player, ui, enum
 
 class World:
     PATH = "data/state/"
@@ -42,7 +42,7 @@ class World:
         # load into our game state
         self.load_state(entry_state)
         #change_latter
-        self.menu = ui.Main_Menu(self.internal_display, self)
+        self.menu = ui_implementation.Main_Menu(self.internal_display, self)
 
     def load_state(self, state):
         self.state = state
@@ -77,7 +77,7 @@ class World:
         self.c = camera.Camera(self.m, self.p, self.internal_w, self.internal_h, 
                                self.state_data[5][0], math.radians(self.state_data[6][0]), 
                                self.state_data[6][1], self.state_objects)
-        self.hud = hud.HUD(self.internal_display, self.m, self.p)
+        self.hud = ui_implementation.HUD(self.internal_display, self.m, self.p)
         self.p.load_inv(self.state_data[8][0])
         # print state
         print("Successfully loaded state: " + self.state)
@@ -137,7 +137,7 @@ class World:
             return check
         if self.game_state == self.GAME_STATES.FPS:
             self.__fps_controls__(keys, mouse)
-            self.hud.update(mouse)
+            self.hud.update(mouse, keys)
             self.p.update()
             to_pop = []
             #update objects

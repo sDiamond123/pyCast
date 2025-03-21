@@ -2,24 +2,22 @@ import item, utils, math, random, game_object
 
 class Magazine():
     def __init__ (self, name, size, total_rounds, rounds_loaded, max_rounds):
-        self.size = size
-        self.total = total_rounds
-        self.in_mag = rounds_loaded
         self.name = name
-        self.max = max_rounds
+        self.in_mag = utils.Partial(size, current=rounds_loaded)
+        self.in_inv = utils.Partial(max_rounds, current=total_rounds)
         
 
     def fire(self):
-        if (self.in_mag > 0):
-            self.in_mag -= 1
+        if (self.in_mag.current > 0):
+            self.in_mag.update(-1)
     
     def reload(self):
-        if self.total > self.size:
-            self.total -= self.size
-            self.in_mag = self.size
+        if self.in_inv.current > self.in_mag.max:
+            self.in_inv.update(- self.in_mag.max)
+            self.in_mag.update(abs = self.in_mag.max)
         else:
-            self.in_mag = self.total
-            self.total = 0
+            self.in_mag.update(abs = self.in_inv.current)
+            self.in_inv.update(abs = 0)
 
 
 class Weapon(item.Load_Item):
@@ -48,7 +46,7 @@ class Weapon(item.Load_Item):
 
     def reload(self):
         if not self.in_reload:
-            self.magazine.in_mag = -1
+            self.magazine.in_mag.update(abs = -1)
             self.reload_timer = utils.Timed_Toggle(self.reload_rate)
             self.in_reload = True
 
@@ -65,6 +63,7 @@ class Weapon(item.Load_Item):
 
 
     def __actual_shot__ (self,x, y,ang, objects, sprites, map, z):
+        
         deviation = 0
         if self.max_dev > 0:
             deviation = math.pi * random.uniform(-self.max_dev, self.max_dev)
@@ -77,7 +76,7 @@ class Weapon(item.Load_Item):
         if not self.shoot_toggle:
             self.shoot_toggle = True
             self.shoot_timer = utils.Timed_Toggle(self.fire_rate)
-            if (self.magazine.in_mag > 0):
+            if (self.magazine.in_mag.current > 0):
                 self.magazine.fire()
                 self.__actual_shot__(x, y,ang, objects, sprites, map, z)
 

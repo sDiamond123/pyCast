@@ -99,6 +99,8 @@ class Map :
         return (self.skybox, self.skybox_phase)
     
     def rendermap(self, screen, Player, fill_w, fill_h, x0, y0, w, h):
+            w = math.floor(w)
+            h = math.floor(h)
             center_x = Player.x
             center_y = Player.y
             ang = Player.ang

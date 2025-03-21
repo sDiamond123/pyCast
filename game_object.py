@@ -93,10 +93,10 @@ class Game_Object:
         return self.pos.ang
     
     def health(self):
-        return self.pos.health
+        return self.pos.health()
     
     def change_health(self, delta):
-        self.pos.health += delta
+        self.pos.health(delta)
     
     def load_state(self, state):
         self.attr =  {"d_w" : self.health(), "d_p" : 0, "d_o" : 0,  "d_s" : 0, "v_forward" : 0, "v_side" : 0, "ang_v" : 0}
@@ -195,13 +195,14 @@ class Projectile(Game_Object):
     def __init__ (self, x, y, ang, obj, sprites, state, health):
         super().__init__(x,y,ang,obj,sprites,state,health)
         self.is_projectile = True
+        
 
     def update(self, player, objects, map: map.Map):
         super().update(player,objects, map)
         if self.check_collision_player(player):
             print(self.name + " hit player for " + str(self.attr["d_p"]) + " dmg with " + str(self.attr["d_s"]) + " decay")
             self.change_health(-self.attr["d_s"])
-            player.health -= self.attr["d_p"]
+            player.health(-self.attr["d_p"])
         for obj in objects:
             if self.health() < 0:
                 break
@@ -226,7 +227,7 @@ class Melee(Game_Object):
         if self.check_collision_player(player) and self.timer.update():
             print(self.name + " hit player for " + str(self.attr["d_p"]) + " dmg")
             self.change_health(-self.attr["d_s"])
-            player.health -= self.attr["d_p"]
+            player.health(- self.attr["d_p"])
        
 
 def spawn_objs (x, y, ang, obj, sprites, state, health):
@@ -237,3 +238,4 @@ def spawn_objs (x, y, ang, obj, sprites, state, health):
         return Melee(x,y,ang,obj,sprites,state,health)
     else:
         return Game_Object(x,y,ang,obj,sprites,state,health)
+    

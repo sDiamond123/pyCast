@@ -120,13 +120,40 @@ class Key:
     binds.close()
     print("Successfully loaded key binds")
 
+class Ptr():
+    def __init__ (self, value):
+        self.value = value
+
+class Partial ():
+    def __init__(self, max = 1, min = 0, current = 1):
+        self.max = max 
+        self.min = min
+        self.spread = max - min
+        self.current = current
+        self.ratio = self.current/self.spread
+
+    def update(self, current = 0, abs = 0):
+        if current != 0 or abs != 0:
+            if abs != 0:
+                self.current = abs
+            if current != 0:
+                self.current += current
+            self.ratio = self.current/self.spread
+
+    def __str__ (self):
+        return "("+str(self.current) + "/" + str(self.spread) + ")"
+
 class Obj_Vector:
-    def __init__(self, x, y, ang, h):
+    def __init__(self, x, y, ang, h, max_health = 100):
         self.x = x
         self.y = y
         self.ang = ang
-        self.health = h
+        self.h = Partial(max_health, current=h)
         self.no_clip = False
+
+    def health(self, delta = 0):
+        self.h.update(delta)
+        return self.h.current
 
     def move(self, Map, v_forward, v_side_to_side):
         new_x = self.x + v_forward * math.cos(self.ang) + v_side_to_side * math.cos(self.ang + math.pi/2)
@@ -221,3 +248,5 @@ def clamp_multiplication (a,b, max, min):
 
 def clamp_addition (a,b, max, min):
     return clamp (a+b, max, min)
+
+
