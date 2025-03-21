@@ -1,52 +1,74 @@
 import utils, map, pygame, player, texture, math, ui
 
-class HUD(ui.UI_Composite):
+class Map_Screen(ui.UI_Composite):
+     MAP_INDEX = 0
+     DEFAULT_X_TRAV = 11
+     DEFAULT_Y_TRAV = 8
+     DEFAULT_W = 35
+
+     def __init__ (self, internal_screen :pygame.Surface, map : map.Map, player : player.Player,draw_background = False, map_x = 0, map_y = 0, trav_x = DEFAULT_X_TRAV, trav_y = DEFAULT_Y_TRAV, cell_w = DEFAULT_W):
+        self.phase = utils.Ptr(player.ang)
+        self.player = player
+        super().__init__(internal_screen, draw_background= draw_background)
+        self.elements.append(ui.Map_Display(map_x, map_y, internal_screen, map, player, trav_w = trav_x, trav_h = trav_y, cell_w=cell_w, cell_h=cell_w))
+
+
+     def update(self, mouse : utils.Mouse_Manager, keys):
+        self.phase.value = self.player.ang
+        super().update(mouse, keys)
+
+     def map_zoom_out(self):
+        self.elements[self.MAP_INDEX].map_zoom_out()
+
+     def map_zoom_in(self):
+        self.elements[self.MAP_INDEX].map_zoom_in()
+
+
+class HUD(Map_Screen):
+    #map
     MAP_X = 600
     MAP_Y = 20
+    DEFAULT_X_TRAV = 4
+    DEFAULT_Y_TRAV = 3
+    #compass
     COMPASS_X = 300
-    COMPASS_Y = 560
-    COMPASS_W = 250
-    COMPASS_H = 32
+    COMPASS_Y = 540
+    COMPASS_W = 275
+    COMPASS_H = 44
     COMPASS_PATH = "/compass/compass_scroll.bmp"
-   
     #h_bar
-    h_x = 15
-    h_y = 480
-    h_w = 150
-    h_h = 30
+    HEALTH_X = 15
+    HEALTH_Y = 480
+    HEALTH_W = 150
+    HEALTH_H = 30
     #cross_hair
-    cross_size = 6
-    cross_spacing = 0
-    cross_color = "hot pink"
+    CROSS_SIZE = 6
+    CROSS_SPACING = 0
+    CROSS_COLOR = "hot pink"
     #a_bar
-    a_x = 15
-    a_y = 515
-    a_w = 150
-    a_h = 30
-    delta_a_y = 35
-    a_filled = (200, 200, 0)
-    MAG_INDEX = 1
-    AMMO_INDEX = 2
-    MAP_INDEX = 4
-    #font
-    pygame.font.init()
-    FONT = pygame.font.SysFont('Comic Sans MS', 30)
+    AMMO_X = 15
+    AMMO_Y = 515
+    AMMO_W = 150
+    AMMO_H = 30
+    AMMO_DELTA_Y = 35
+    AMMO_FILLED = (200, 200, 0)
+    MAG_INDEX = 2
+    AMMO_INDEX = 3
+    
     
     def __init__ (self, internal_screen :pygame.Surface, map : map.Map, player : player.Player):
         self.phase = utils.Ptr(player.ang)
-        super().__init__(internal_screen, draw_background= False)
+        super().__init__(internal_screen, map, player, draw_background= False, map_x=self.MAP_X, map_y=self.MAP_Y,   trav_x=self.DEFAULT_X_TRAV, trav_y=self.DEFAULT_Y_TRAV, cell_w=20)
         # add in all ui elements
-        self.elements.append(ui.Bar(self.h_x, self.h_y, self.h_w, self.h_h, internal_screen, player.h))
+        self.elements.append(ui.Bar(self.HEALTH_X, self.HEALTH_Y, self.HEALTH_W, self.HEALTH_H, internal_screen, player.h))
         state = player.get_weapon_state()
-        self.elements.append(ui.Bar(self.a_x, self.a_y, self.a_w, self.a_h, internal_screen, state[0], filled_color=self.a_filled))
-        self.elements.append(ui.Bar(self.a_x, self.a_y + self.delta_a_y, self.a_w, self.a_h, internal_screen, state[1], filled_color = self.a_filled))
-        self.elements.append(ui.Rolling_Image(self.COMPASS_X, self.COMPASS_Y, self.COMPASS_W, self.COMPASS_H, internal_screen, self.COMPASS_PATH, self.phase, phase=math.pi, draw_border = True, border_width= 5))
-        self.elements.append(ui.Map_Display(self.MAP_X, self.MAP_Y, internal_screen, map, player))
-        self.elements.append(ui.Mouse_Cursor(0,0,self.cross_size,self.cross_spacing,internal_screen, color = self.cross_color))
+        self.elements.append(ui.Bar(self.AMMO_X, self.AMMO_Y, self.AMMO_W, self.AMMO_H, internal_screen, state[0], filled_color=self.AMMO_FILLED))
+        self.elements.append(ui.Bar(self.AMMO_X, self.AMMO_Y + self.AMMO_DELTA_Y, self.AMMO_W, self.AMMO_H, internal_screen, state[1], filled_color = self.AMMO_FILLED))
+        self.elements.append(ui.Rolling_Image(self.COMPASS_X, self.COMPASS_Y, self.COMPASS_W, self.COMPASS_H, internal_screen, self.COMPASS_PATH, self.phase, phase=math.pi, draw_border = True, border_width= 2))
+        self.elements.append(ui.Mouse_Cursor(0,0,self.CROSS_SIZE,self.CROSS_SPACING,internal_screen, color = self.CROSS_COLOR))
         self.player = player
         self.cur_wep = ""
         
-    
     def __update_weapons__ (self):
          state = self.player.get_weapon_state()
          if self.player.weapon != None:
@@ -58,22 +80,9 @@ class HUD(ui.UI_Composite):
              self.cur_wep = ""
 
     def update(self, mouse : utils.Mouse_Manager, keys):
-         self.__render_ch__ = mouse.alive
          self.__update_weapons__()
-         self.phase.value = self.player.ang
          super().update(mouse, keys)
         
-
-    def map_zoom_out(self):
-        self.elements[self.MAP_INDEX].map_zoom_out()
-
-    def map_zoom_in(self):
-        self.elements[self.MAP_INDEX].map_zoom_in()
-
-       
-
-
-
 class Main_Menu (ui.UI_Composite):
     def action(self):
         self.control.game_state = self.control.GAME_STATES.FPS

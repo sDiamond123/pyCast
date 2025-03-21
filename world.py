@@ -6,7 +6,7 @@ class World:
     STATE_H = 9
     LINES_PER_OBJ = 6
     OBJ_W = 2
-    GAME_STATES = enum.Enum('State', [('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4)])
+    GAME_STATES = enum.Enum('State', [('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
 
     state = None
     state_data = []
@@ -39,10 +39,12 @@ class World:
         self.internal_w = i_w
         self.internal_h = i_h
         self.internal_display = pygame.Surface((i_w, i_h))
+        self.UI = {}
         # load into our game state
         self.load_state(entry_state)
         #change_latter
-        self.menu = ui_implementation.Main_Menu(self.internal_display, self)
+        self.UI[self.GAME_STATES.MENU.value] = ui_implementation.Main_Menu(self.internal_display, self)
+        
 
     def load_state(self, state):
         self.state = state
@@ -77,10 +79,17 @@ class World:
         self.c = camera.Camera(self.m, self.p, self.internal_w, self.internal_h, 
                                self.state_data[5][0], math.radians(self.state_data[6][0]), 
                                self.state_data[6][1], self.state_objects)
-        self.hud = ui_implementation.HUD(self.internal_display, self.m, self.p)
+        self.UI[self.GAME_STATES.FPS.value] =ui_implementation.HUD(self.internal_display, self.m, self.p)
+        self.UI[self.GAME_STATES.MAP.value] = ui_implementation.Map_Screen(self.internal_display,self.m, self.p)
         self.p.load_inv(self.state_data[8][0])
         # print state
         print("Successfully loaded state: " + self.state)
+
+    def __map_controls__ (self, keys, mouse):
+        if keys[utils.Key.M_ZOOM_OUT]:
+           self.UI[self.GAME_STATES.MAP.value].map_zoom_out()
+        elif keys[utils.Key.M_ZOOM_IN]:
+            self.UI[self.GAME_STATES.MAP.value].map_zoom_in()
 
     def __fps_controls__ (self, keys, mouse):
         player = self.p
@@ -103,9 +112,9 @@ class World:
         if keys[utils.Key.RELOAD]:
             self.p.reload()
         if keys[utils.Key.M_ZOOM_OUT]:
-           self.hud.map_zoom_out()
+           self.UI[self.GAME_STATES.FPS.value].map_zoom_out()
         elif keys[utils.Key.M_ZOOM_IN]:
-            self.hud.map_zoom_in()
+            self.UI[self.GAME_STATES.FPS.value].map_zoom_in()
         if keys[utils.Key.CYCLE_NEXT]:
             self.p.cycle_next()
         elif keys[utils.Key.CYCLE_PREV]:
@@ -116,9 +125,6 @@ class World:
             player.z = -50
         else:
             player.z = 0 
-        if keys[utils.Key.FREE_LOOK]:
-            mouse.toggle()
-
         # update mouse
         if (mouse.alive):
             player.turn(mouse.poll_delta()[0])
@@ -127,6 +133,8 @@ class World:
         # update keys
         if keys[utils.Key.EXIT]:
             return False
+        if keys[utils.Key.FREE_LOOK]:
+            mouse.toggle()
         mouse.update()
         self.mouse = mouse
         return True
@@ -137,7 +145,6 @@ class World:
             return check
         if self.game_state == self.GAME_STATES.FPS:
             self.__fps_controls__(keys, mouse)
-            self.hud.update(mouse, keys)
             self.p.update()
             to_pop = []
             #update objects
@@ -150,14 +157,21 @@ class World:
             #reap dead objects
             for dead in reversed(to_pop):
                 self.state_objects.pop(dead)
-        elif self.game_state == self.GAME_STATES.MENU:
-            self.menu.update(mouse, keys)
+        elif self.game_state == self.GAME_STATES.MAP:
+            self.__map_controls__(keys, mouse)
 
+        # update UI
+        if self.game_state.value in self.UI and self.UI[self.game_state.value] != None:
+            self.UI[self.game_state.value].update(mouse, keys)
 
-        if (keys[112]):
+        if (keys[105]):
             if not mouse.alive:
                 mouse.toggle()
             self.game_state = self.GAME_STATES.FPS
+        if (keys[112]):
+            if mouse.alive:
+                mouse.toggle()
+            self.game_state = self.GAME_STATES.MAP
         elif (keys[111]):
             if mouse.alive:
                 mouse.toggle()
@@ -170,11 +184,10 @@ class World:
             self.c.render()
             #push camera's display onto main display
             self.internal_display.blit(self.c.external_surface)
-            # render hud
-            self.hud.render()
-            
-        elif self.game_state == self.GAME_STATES.MENU:
-            self.menu.render()
+
+        # render UI
+        if self.game_state.value in self.UI and self.UI[self.game_state.value] != None:
+            self.UI[self.game_state.value].render()
 
 
         # output rendered frame (push to external display)
