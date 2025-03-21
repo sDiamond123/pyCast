@@ -74,6 +74,9 @@ class Game_Object:
                         sprites[key] = World_Sprite(obj + self.SPRITE_PATH + sprite_data[i][2])
                         #print ("Successfully loaded sprite: " +key)
         self.sprites = sprites
+        self.is_projectile = False
+        self.is_enemy = False
+        self.is_NPC = False
         #print("Successfully placed a " + self.name + " <" + self.state + ", " + str(self.health())+ " HP> at " + str(self.pos))
         #print("\tattr: " +  str(self.attr))
 
@@ -189,6 +192,10 @@ class Game_Object:
 
 
 class Projectile(Game_Object):
+    def __init__ (self, x, y, ang, obj, sprites, state, health):
+        super().__init__(x,y,ang,obj,sprites,state,health)
+        self.is_projectile = True
+
     def update(self, player, objects, map: map.Map):
         super().update(player,objects, map)
         if self.check_collision_player(player):
@@ -199,14 +206,17 @@ class Projectile(Game_Object):
             if self.health() < 0:
                 break
             if (self.check_collision_object(obj)):
-                if (self.name != obj.name or self.state != "SCATTER"):
+                if (not obj.is_projectile):
                     self.change_health(-self.attr["d_s"])
                     obj.change_health(-self.attr["d_o"])
                     print(self.name + " hit obj " + obj.name + " for " + str(self.attr["d_o"]) + " dmg with " + str(self.attr["d_s"]) + " decay")
 
 class Melee(Game_Object):
      COOL_DOWN = 2500
-
+     def __init__ (self, x, y, ang, obj, sprites, state, health):
+        super().__init__(x,y,ang,obj,sprites,state,health)
+        self.is_enemy = True
+        
      def __init__ (self, x, y, ang, obj, sprites, state, health):
          self.timer = utils.Timed_Toggle(self.COOL_DOWN)
          super().__init__(x,y,ang,obj,sprites,state,health)

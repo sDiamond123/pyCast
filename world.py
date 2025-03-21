@@ -1,11 +1,4 @@
-import pygame
-import utils
-import map
-import camera
-import math
-import hud
-import game_object
-import player
+import pygame,utils,map,camera,math,hud,game_object,player, ui, enum
 
 class World:
     PATH = "data/state/"
@@ -13,6 +6,7 @@ class World:
     STATE_H = 9
     LINES_PER_OBJ = 6
     OBJ_W = 2
+    GAME_STATES = enum.Enum('State', [('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4)])
 
     state = None
     state_data = []
@@ -37,6 +31,7 @@ class World:
     
 
     def __init__(self, out_display, w, h, i_w, i_h, entry_state):
+        self.game_state = self.GAME_STATES.FPS
         # set up internal display and external screen
         self.out_display = out_display
         self.ext_w = w
@@ -47,6 +42,7 @@ class World:
         # load into our game state
         self.load_state(entry_state)
         #change_latter
+        self.menu = ui.Main_Menu(self.internal_display, self)
 
     def load_state(self, state):
         self.state = state
@@ -86,9 +82,7 @@ class World:
         # print state
         print("Successfully loaded state: " + self.state)
 
-    def __controls__ (self, keys, mouse):
-
-        # update keys
+    def __fps_controls__ (self, keys, mouse):
         player = self.p
         world = self.m
         if keys[utils.Key.FORWARD]:
@@ -103,8 +97,6 @@ class World:
             player.turn(-0.04)
         if keys[utils.Key.TURN_R]:
             player.turn(0.04)
-        if keys[utils.Key.EXIT]:
-            return False
         if keys[utils.Key.SHOOT]:
             z = (0.5 - (mouse.poll_rel()[1])) * mouse.sensetivity[1]
             self.p.shoot(self.state_objects,self.base_sprites, self.m, z)
@@ -127,43 +119,63 @@ class World:
         if keys[utils.Key.FREE_LOOK]:
             mouse.toggle()
 
-        mouse.update()
+        # update mouse
         if (mouse.alive):
             player.turn(mouse.poll_delta()[0])
-        self.mouse = mouse
 
-        
+    def __general_controls__ (self, keys, mouse):
+        # update keys
+        if keys[utils.Key.EXIT]:
+            return False
+        mouse.update()
+        self.mouse = mouse
         return True
 
-    def update (self, keys, mouse):
-        self.hud.update(mouse)
-
-        check = self.__controls__(keys, mouse)
+    def update (self, keys, mouse : utils.Mouse_Manager):
+        check = self.__general_controls__(keys, mouse)
         if not check:
             return check
-        
-        self.p.update()
+        if self.game_state == self.GAME_STATES.FPS:
+            self.__fps_controls__(keys, mouse)
+            self.hud.update(mouse)
+            self.p.update()
+            to_pop = []
+            #update objects
+            for i in range(len(self.state_objects)):
+                object = self.state_objects[i]
+                object.update(self.p, self.state_objects, self.m)
+                if object.health() <= 0:
+                    #print("reaping: " + object.name)
+                    to_pop.append(i)
+            #reap dead objects
+            for dead in reversed(to_pop):
+                self.state_objects.pop(dead)
+        elif self.game_state == self.GAME_STATES.MENU:
+            self.menu.update(mouse, keys)
 
-        to_pop = []
-        #update objects
-        for i in range(len(self.state_objects)):
-            object = self.state_objects[i]
-            object.update(self.p, self.state_objects, self.m)
-            if object.health() <= 0:
-                #print("reaping: " + object.name)
-                to_pop.append(i)
-        #reap dead objects
-        for dead in reversed(to_pop):
-            self.state_objects.pop(dead)
 
+        if (keys[112]):
+            if not mouse.alive:
+                mouse.toggle()
+            self.game_state = self.GAME_STATES.FPS
+        elif (keys[111]):
+            if mouse.alive:
+                mouse.toggle()
+            self.game_state = self.GAME_STATES.MENU
         return True
 
     def render (self):
-        # render 
-        self.c.render()
-        #push camera's display onto main display
-        self.internal_display.blit(self.c.external_surface)
-        # render hud
-        self.hud.render()
+        if self.game_state == self.GAME_STATES.FPS:
+            # render 
+            self.c.render()
+            #push camera's display onto main display
+            self.internal_display.blit(self.c.external_surface)
+            # render hud
+            self.hud.render()
+            
+        elif self.game_state == self.GAME_STATES.MENU:
+            self.menu.render()
+
+
         # output rendered frame (push to external display)
         pygame.transform.smoothscale(self.internal_display, self.out_display.size, self.out_display)

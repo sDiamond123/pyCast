@@ -1,4 +1,4 @@
-import map, math, pygame
+import enum, math, pygame
 
 class Timed_Toggle():
     def __init__(self, cool_down):
@@ -14,10 +14,18 @@ class Timed_Toggle():
             return True
         self.clock = False
         return False
+    
+class Mouse_State(enum.Enum):
+    NOT_PRESSED = 1
+    FIRST_PRESSED = 2
+    PRESSED = 3
+    RELEASED = 4
+    UNDEFINED = 5
 
 class Mouse_Manager:
     COOL_DOWN = 500
     MOUSE_FACTOR = 1000
+    MOUSE_BUTTONS = 3
 
     sensetivity = (0,0)
     alive = False
@@ -27,7 +35,7 @@ class Mouse_Manager:
     rel = (0,0)
     hold_x = 0
 
-    def __init__ (self, sensitivity, dimensions):
+    def __init__ (self, sensitivity, dimensions, buttons = MOUSE_BUTTONS):
         self.alive = True
         pygame.mouse.set_visible(not self.alive)
         pygame.event.set_grab(self.alive)
@@ -36,6 +44,9 @@ class Mouse_Manager:
         self.t_toggle = Timed_Toggle(self.COOL_DOWN)
         self.hold_x = int(self.size[0]/2)
         self.abs = (self.size[0], self.size[1])
+        self.pressed = [False] * buttons
+        self.buttons = buttons
+        self.state = [Mouse_State.UNDEFINED] * buttons
 
     def toggle(self):
         if (self.t_toggle.update()):
@@ -57,8 +68,26 @@ class Mouse_Manager:
         self.abs = pygame.mouse.get_pos()
         self.rel = (self.abs[0]/self.size[0], self.abs[1]/self.size[1])
         self.last = (raw[0] * self.sensetivity[0], raw[1] * self.sensetivity[1])
+        old_state = self.pressed
+        self.pressed = pygame.mouse.get_pressed(num_buttons=self.buttons)
+        for i in range(self.buttons):
+            if self.pressed[i] != old_state[i]:
+                if self.pressed[i]:
+                    self.state[i] = Mouse_State.FIRST_PRESSED
+                else:
+                    self.state[i] = Mouse_State.RELEASED
+            elif self.pressed[i]:
+                self.state[i] = Mouse_State.PRESSED
+            else:
+                self.state[i] = Mouse_State.NOT_PRESSED
+        
 
 class Key:
+    __MOUSE_CODE = "MOUSE_"
+    __M_R = "R"
+    __M_P = "P"
+    __F_P = "F"
+    __LEN_CODE = 9
     def get_key (file):
         # get rid of explanation line
         file.readline()
@@ -179,3 +208,16 @@ def bottomless_csv_load(csv_file):
         out.append(as_split)
     csv.close
     return out
+
+def clamp (value, max, min):
+    if value > max:
+        return max
+    elif value < min:
+        return min
+    return value
+
+def clamp_multiplication (a,b, max, min):
+    return clamp (a * b, max, min)
+
+def clamp_addition (a,b, max, min):
+    return clamp (a+b, max, min)

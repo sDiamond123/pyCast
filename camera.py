@@ -90,7 +90,9 @@ class Camera:
 
     def __apply_brightness__ (self, dist, color):
         scale = self.BRIGHTNESS_MODIFIER * (1 - dist/self.draw_dist)
-        return (min(color[0] * scale,255), min(color[1] * scale,255), min(color[2] * scale,255))
+        return (utils.clamp_multiplication(color[0], scale, 255, 0), 
+                utils.clamp_multiplication(color[1], scale, 255, 0), 
+                utils.clamp_multiplication(color[2], scale, 255, 0))
 
     def __cast__ (self, ang, ray_offset):
         ang_check = ang%(math.pi/2) > self.MARGIN_OF_ERROR
