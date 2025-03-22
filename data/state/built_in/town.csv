@@ -5,5 +5,5 @@ test_town ,MAP
     100, 0 , playe health
     275 ,RAY COUNT
     90 ,15        ,FOV AND DRAW DIST
-town_obj.csv, 6,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
-data/state/inventory.csv
+built_in/town_obj.csv, 6,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
+data/state/built_in/inventory.csv

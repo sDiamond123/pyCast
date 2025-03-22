@@ -98,11 +98,11 @@ class Map :
     def get_skybox(self):
         return (self.skybox, self.skybox_phase)
     
-    def rendermap(self, screen, Player, fill_w, fill_h, x0, y0, w, h):
+    def rendermap(self, screen, Player, fill_w, fill_h, x0, y0, w, h, x_off = 0, y_off = 0):
             w = math.floor(w)
             h = math.floor(h)
-            center_x = Player.x
-            center_y = Player.y
+            center_x = Player.x + x_off
+            center_y = Player.y + y_off
             ang = Player.ang
             # fill map grid
             x0 += fill_w * w
@@ -125,6 +125,6 @@ class Map :
             for dx in range(-fill_w + 1, fill_w + 1):
                 pygame.draw.line(screen, "black", (x0 + dx * w, y0 -fill_h * h ), (x0 + dx * w, y0 + (fill_h + 1) * h))
             # draw player
-            point =  pygame.Vector2(x0+ w*(center_x-int(center_x)), y0 + h*(center_y-int(center_y)))
+            point =  pygame.Vector2(x0+ w*(Player.x-int(center_x)), y0 + h*(Player.y-int(center_y)))
             pygame.draw.circle(screen, "green",point, w/4)
             pygame.draw.line(screen, "green", point, (point.x + w/2 * math.cos(ang), point.y + w/2 * math.sin(ang)), 2)

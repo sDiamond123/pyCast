@@ -1,0 +1,17 @@
+ID, Name, Path, Description
+0, Mansion, built_in/basic_mansion.csv, enter a forgotten crypt
+1, Town, built_in/town.csv, explore a deserted village. get chased down by a pack of monsters. Do other things which take up space in a text box 
+2, Maze, built_in/default.csv, do the 3rd option I guess
+3, Mansion 2, built_in/basic_mansion.csv, Repeated to test loader
+4, Mansion 3, built_in/basic_mansion.csv, Repeated to test loader
+5, Mansion 4, built_in/basic_mansion.csv, Repeated to test loader
+6, Mansion 5, built_in/basic_mansion.csv, Repeated to test loader
+7, Mansion 6, built_in/basic_mansion.csv, Repeated to test loader
+8, Mansion 7, built_in/basic_mansion.csv, Repeated to test loader
+9, Mansion 8, built_in/basic_mansion.csv, Repeated to test loader
+10, Mansion 9, built_in/asic_mansion.csv, Repeated to test loader
+11, Mansion 10, built_in/basic_mansion.csv, Repeated to test loader
+12, Mansion 11, built_in/basic_mansion.csv, Repeated to test loader
+13, Mansion 12, built_in/basic_mansion.csv, Repeated to test loader
+14, Mansion 13, built_in/basic_mansion.csv, Repeated to test loader
+15, Mansion 14, built_in/basic_mansion.csv, Repeated to test loader

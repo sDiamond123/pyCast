@@ -18,7 +18,7 @@ class Element():
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         pass
 
-    def Render(self):
+    def render(self):
         pygame.draw.rect(self.ext_display, self.color, (self.x, self.y, self.w, self.h))
 
 class Interactable_Element(Element):
@@ -125,26 +125,34 @@ class Map_Display(Element):
         self.map_trav_h = trav_h
         self.map_cool_down = cool_down
         self.map_t = utils.Timed_Toggle(self.map_cool_down)
+        self.x_off = 0
+        self.y_off = 0
+
+    def __perform_z_in__ (self):
+        old_w = self.map_trav_w
+        old_h = self.map_trav_h
+        if (old_w > 0):
+            self.map_trav_w -= 1
+            self.map_w = self.map_w * (old_w * 2 + 1)/(self.map_trav_w * 2 + 1)
+        if (old_h > 0):
+            self.map_trav_h -= 1
+            self.map_h = self.map_h * (old_h * 2 + 1)/(self.map_trav_h * 2 + 1)      
+
+    def __perform_z_out__ (self):
+         old_w = self.map_trav_w
+         old_h = self.map_trav_h
+         self.map_trav_w += 1
+         self.map_trav_h += 1
+         self.map_w = self.map_w * (old_w * 2 + 1)/(self.map_trav_w * 2 + 1)
+         self.map_h = self.map_h * (old_h * 2 + 1)/(self.map_trav_h * 2 + 1)
 
     def map_zoom_in(self):
         if (self.map_t.clock):
-                old_w = self.map_trav_w
-                old_h = self.map_trav_h
-                if (old_w > 0):
-                    self.map_trav_w -= 1
-                    self.map_w = self.map_w * (old_w * 2 + 1)/(self.map_trav_w * 2 + 1)
-                if (old_h > 0):
-                    self.map_trav_h -= 1
-                    self.map_h = self.map_h * (old_h * 2 + 1)/(self.map_trav_h * 2 + 1)
+            self.__perform_z_in__()    
 
     def map_zoom_out(self):
         if (self.map_t.clock):
-                    old_w = self.map_trav_w
-                    old_h = self.map_trav_h
-                    self.map_trav_w += 1
-                    self.map_trav_h += 1
-                    self.map_w = self.map_w * (old_w * 2 + 1)/(self.map_trav_w * 2 + 1)
-                    self.map_h = self.map_h * (old_h * 2 + 1)/(self.map_trav_h * 2 + 1)
+            self.__perform_z_out__()   
 
 
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
@@ -152,7 +160,7 @@ class Map_Display(Element):
 
     def render (self):
          # render minimap
-        self.map.rendermap (self.ext_display, self.player, self.map_trav_w, self.map_trav_h, self.x, self.y, self.map_w, self.map_h)
+        self.map.rendermap (self.ext_display, self.player, self.map_trav_w, self.map_trav_h, self.x, self.y, self.map_w, self.map_h, self.x_off, self.y_off)
 
 class Button(Interactable_Element):
      def __init__ (self, x, y, w, h, ext_display: pygame.surface, action : callable, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
@@ -222,15 +230,17 @@ class UI_Composite ():
         self.elements = []
         self.has_back = draw_background
         self.back_color = background_color
+        self.exit = False
+        self.want_mouse = True
 
     def update(self, mouse : utils.Mouse_Manager, keys):
         coor = mouse.poll_rel()
         size = self.display.size
         m_x = coor[0] * size[0]
         m_y = coor[1] * size[1]
-        print(coor)
         for element in self.elements:
             element.update(m_x, m_y, mouse, keys)
+        return False
 
     def render(self):
         if self.has_back:

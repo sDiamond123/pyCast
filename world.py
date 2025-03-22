@@ -6,7 +6,7 @@ class World:
     STATE_H = 9
     LINES_PER_OBJ = 6
     OBJ_W = 2
-    GAME_STATES = enum.Enum('State', [('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
+    GAME_STATES = enum.Enum('State', [('LOAD', 8), ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
 
     state = None
     state_data = []
@@ -40,12 +40,15 @@ class World:
         self.internal_w = i_w
         self.internal_h = i_h
         self.internal_display = pygame.Surface((i_w, i_h))
+        self.prev_states = []
         self.UI = {}
         # load into our game state
         self.load_state(entry_state)
         #change_latter
         self.UI[self.GAME_STATES.MENU.value] = ui_implementation.Main_Menu(self.internal_display, self)
         self.UI[self.GAME_STATES.SPLASH_SCREEN.value] = ui_implementation.Splash_Screen(self.internal_display, self)
+        self.UI[self.GAME_STATES.PAUSE_MENU.value] = ui_implementation.Pause(self.internal_display, self)
+        self.UI[self.GAME_STATES.LOAD.value] = ui_implementation.Load(self.internal_display,self)
 
     def load_state(self, state):
         self.state = state
@@ -81,17 +84,29 @@ class World:
                                self.state_data[5][0], math.radians(self.state_data[6][0]), 
                                self.state_data[6][1], self.state_objects)
         self.UI[self.GAME_STATES.FPS.value] =ui_implementation.HUD(self.internal_display, self.m, self.p)
-        self.UI[self.GAME_STATES.MAP.value] = ui_implementation.Map_Screen(self.internal_display,self.m, self.p)
+        self.UI[self.GAME_STATES.MAP.value] = ui_implementation.Map_Screen(self.internal_display,self.m, self.p, has_buttons=True)
         self.p.load_inv(self.state_data[8][0])
         # print state
-        print("Successfully loaded state: " + self.state)
+        print("Successfully loaded save: " + self.state)
 
     def __map_controls__ (self, keys, mouse):
         if keys[utils.Key.M_ZOOM_OUT]:
            self.UI[self.GAME_STATES.MAP.value].map_zoom_out()
         elif keys[utils.Key.M_ZOOM_IN]:
             self.UI[self.GAME_STATES.MAP.value].map_zoom_in()
-
+        if keys[utils.Key.INTERACT]:
+            self.last_state()
+        if keys[utils.Key.FORWARD]:
+           self.UI[self.GAME_STATES.MAP.value].__move_up__()
+        if keys[utils.Key.BACK]:
+            self.UI[self.GAME_STATES.MAP.value].__move_down__()
+        if keys[utils.Key.S_RIGHT]:
+             self.UI[self.GAME_STATES.MAP.value].__move_right__()
+        if keys[utils.Key.S_LEFT]:
+             self.UI[self.GAME_STATES.MAP.value].__move_left__()
+        if keys[utils.Key.PAUSE]:
+            self.update_game_state(self.GAME_STATES.PAUSE_MENU)
+            
     def __fps_controls__ (self, keys, mouse):
         player = self.p
         world = self.m
@@ -124,8 +139,12 @@ class World:
             player.z = 50
         elif keys[utils.Key.CROUCH]:
             player.z = -50
+        elif keys[utils.Key.MAP]:
+            self.update_game_state(self.GAME_STATES.MAP)
         else:
             player.z = 0 
+        if keys[utils.Key.PAUSE]:
+            self.update_game_state(self.GAME_STATES.PAUSE_MENU)
         # update mouse
         if (mouse.alive):
             player.turn(mouse.poll_delta()[0])
@@ -145,6 +164,13 @@ class World:
         if not check:
             return check
         if self.game_state == self.GAME_STATES.FPS:
+            # check if your dead
+            if self.p.health() <= 0:
+                self.update_game_state(self.GAME_STATES.MENU)
+                # autoload last save
+                self.load_state(self.state)
+                return True
+            # update controls
             self.__fps_controls__(keys, mouse)
             self.p.update()
             to_pop = []
@@ -163,20 +189,10 @@ class World:
 
         # update UI
         if self.game_state.value in self.UI and self.UI[self.game_state.value] != None:
-            self.UI[self.game_state.value].update(mouse, keys)
-
-        if (keys[105]):
-            if not mouse.alive:
-                mouse.toggle()
-            self.game_state = self.GAME_STATES.FPS
-        if (keys[112]):
-            if mouse.alive:
-                mouse.toggle()
-            self.game_state = self.GAME_STATES.MAP
-        elif (keys[111]):
-            if mouse.alive:
-                mouse.toggle()
-            self.game_state = self.GAME_STATES.MENU
+            if (self.UI[self.game_state.value].update(mouse, keys)):
+                self.last_state()
+            if (self.UI[self.game_state.value].exit):
+                return False
         return True
 
     def render (self):
@@ -193,3 +209,29 @@ class World:
 
         # output rendered frame (push to external display)
         pygame.transform.smoothscale(self.internal_display, self.out_display.size, self.out_display)
+
+    MAX_SAVED_STATES = 10
+
+    def update_game_state (self, new_state):
+        self.prev_states.append(self.game_state)
+        self.game_state = new_state
+        print("switching state to: " + self.game_state.name)
+        if len(self.prev_states) > self.MAX_SAVED_STATES:
+            self.prev_states.pop(0)
+        if self.UI[self.game_state.value].want_mouse:
+            if self.mouse.alive:
+                self.mouse.toggle()
+        elif not self.mouse.alive:
+            self.mouse.toggle()
+
+    def last_state(self):
+        if len(self.prev_states) > 0:
+            self.game_state = self.prev_states.pop()
+        else:
+            self.game_state = self.GAME_STATES.MENU
+        print("reverting state to: " + self.game_state.name)
+        if self.UI[self.game_state.value].want_mouse:
+            if self.mouse.alive:
+                self.mouse.toggle()
+        elif not self.mouse.alive:
+            self.mouse.toggle()

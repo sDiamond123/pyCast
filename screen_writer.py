@@ -27,16 +27,18 @@ class Text_Button (ui.Button):
     def __init__ (self, x, y, w, h, ext_display: pygame.surface,
                    text : utils.Ptr, size: utils.Ptr, writer: Screen_Writer = DEFAULT_WRITER, action : callable = None,
                    color:tuple = ui.Element.DEFAULT_GREY, border_width : int = ui.Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1):
+                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, x_offset = 0, y_offset = 0):
         super().__init__ (x, y, w, h, ext_display, action, color, border_width, 
                   p_button, draw_border , activation_key)
         self.text = text
         self.size = size
         self.writer = writer
+        self.x_offset = x_offset + 2 * self.b_w 
+        self.y_offset = y_offset + 2 * self.b_w 
 
     def render(self):
         super().render()
-        self.ext_display.blit(self.writer.render(self.text.value, self.size.value),(self.x,self.y))
+        self.ext_display.blit(self.writer.render(self.text.value, self.size.value),(self.x + self.x_offset,self.y + self.y_offset))
 
 class Text_Box (Text_Button):
     ABS_BREAK_CHARS = ["\r\n", "\n", "\r"]
@@ -105,19 +107,15 @@ class Text_Box (Text_Button):
         self.max_lines = max_lines
         self.cursor = cursor
         self.refresh = update_text
-        
-        
         super().__init__ (x, y, w, h, ext_display, text , size, writer, action, color, border_width, 
-                  p_button, draw_border, activation_key )
-        self.x_offset = x_offset + 2 * self.b_w 
-        self.y_offset = y_offset + 2 * self.b_w 
+                  p_button, draw_border, activation_key , x_offset=x_offset, y_offset=y_offset)
         self.__parse_text__()
     
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         super(Text_Button, self).update(m_x, m_y, mouse, keys)
         if self.state == utils.Mouse_State.NOT_PRESSED:
             if mouse.mw != 0:
-                self.cursor.value = utils.clamp_addition(self.cursor.value, -mouse.mw, len(self.lines), 0)
+                self.cursor.value = utils.clamp_addition(self.cursor.value, -mouse.mw, len(self.lines) - 1, 0)
         if self.refresh.value:
             self.refresh.value = False
             self.__parse_text__()

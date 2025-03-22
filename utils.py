@@ -118,6 +118,8 @@ class Key:
     M_ZOOM_IN = get_key(binds)
     M_ZOOM_OUT = get_key(binds)
     INTERACT = get_key(binds)
+    MAP = get_key(binds)
+    PAUSE = get_key(binds)
     binds.close()
     print("Successfully loaded key binds")
 
