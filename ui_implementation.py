@@ -308,4 +308,3 @@ class Load (ui.UI_Composite):
                 self.name.append(self.DEFAULT_NAME)
             self.elements.append(screen_writer.Text_Box(self.BOX_X0, self.BOX_Y0 + self.BOX_DELTA * i, self.NAME_W, self.NAME_H, display,self.name[i],self.NAME_SIZE,utils.Ptr(0),self.DESC_CHAR, 1 ,color=self.NAME_COLOR, border_width= 0, update_text=self.update_name[i], action=functions[i], activation_key= 49 + i))
             self.elements.append(screen_writer.Text_Box(self.BOX_X0, self.BOX_Y0 + self.BOX_DELTA * i + self.NAME_H,self.DESC_W, self.DESC_H, display,self.text[i],self.DESC_SIZE,utils.Ptr(0),self.DESC_CHAR, self.DESC_W, color=self.DESC_COLOR, update_text=self.update_txt[i], action=functions[i], activation_key= 49 + i))
-        print(self.lines)

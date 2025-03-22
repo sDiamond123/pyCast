@@ -43,7 +43,7 @@ class World:
         self.prev_states = []
         self.UI = {}
         # load into our game state
-        self.load_state(entry_state)
+        self.state = entry_state
         #change_latter
         self.UI[self.GAME_STATES.MENU.value] = ui_implementation.Main_Menu(self.internal_display, self)
         self.UI[self.GAME_STATES.SPLASH_SCREEN.value] = ui_implementation.Splash_Screen(self.internal_display, self)
@@ -106,7 +106,7 @@ class World:
              self.UI[self.GAME_STATES.MAP.value].__move_left__()
         if keys[utils.Key.PAUSE]:
             self.update_game_state(self.GAME_STATES.PAUSE_MENU)
-            
+
     def __fps_controls__ (self, keys, mouse):
         player = self.p
         world = self.m
