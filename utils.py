@@ -81,13 +81,10 @@ class Mouse_Manager:
             else:
                 self.state[i] = Mouse_State.NOT_PRESSED
         
+    def set_mouse_wheel(self, value):
+        self.mw = value
 
 class Key:
-    __MOUSE_CODE = "MOUSE_"
-    __M_R = "R"
-    __M_P = "P"
-    __F_P = "F"
-    __LEN_CODE = 9
     def get_key (file):
         # get rid of explanation line
         file.readline()

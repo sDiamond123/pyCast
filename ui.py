@@ -28,7 +28,7 @@ class Interactable_Element(Element):
     DEFAULT_MB = 0
 
     def __init__ (self, x, y, w, h, ext_display: pygame.surface, color:tuple = Element.DEFAULT_GREY, border_width : int = DEFAULT_BORDER_W, 
-                  p_button = DEFAULT_MB, draw_border = True, activation_key = ''):
+                  p_button = DEFAULT_MB, draw_border = True, activation_key = -1):
         super().__init__(x,y,w,h, ext_display, color)
         self.b_w = border_width
         self.state = utils.Mouse_State.UNDEFINED
@@ -75,7 +75,7 @@ class Still_Image (Interactable_Element):
     DEFAULT_MB = -1
 
     def __init__ (self, x, y, w, h, ext_display : pygame.surface, image,
-                  p_button = DEFAULT_MB, draw_border = False, color = Element.DEFAULT_GREY, border_width = 0, activation_key = ''):
+                  p_button = DEFAULT_MB, draw_border = False, color = Element.DEFAULT_GREY, border_width = 0, activation_key = -1):
         super().__init__(x,y,w,h,ext_display, p_button=p_button, draw_border=draw_border, 
                          color=color, border_width=border_width, activation_key=activation_key)
         if isinstance(image, str):
@@ -99,7 +99,7 @@ class Rolling_Image (Still_Image):
     DEFAULT_PHASE = 0
     DEFAULT_FOV = math.pi
     def __init__ (self, x, y, w, h, ext_display : pygame.surface, image,phase_ptr:utils.Ptr,
-                  p_button = Still_Image.DEFAULT_MB, draw_border = False, color = Element.DEFAULT_GREY, border_width = 0, activation_key = '', phase = DEFAULT_PHASE, fov = DEFAULT_FOV):
+                  p_button = Still_Image.DEFAULT_MB, draw_border = False, color = Element.DEFAULT_GREY, border_width = 0, activation_key = -1, phase = DEFAULT_PHASE, fov = DEFAULT_FOV):
         if isinstance(image, str):
             image = texture.RollingTexture(image, phase, fov, w - 2 * border_width, h - 2 * border_width)
         super().__init__(x,y,w,h,ext_display, image, p_button=p_button, draw_border=draw_border, 
@@ -156,13 +156,13 @@ class Map_Display(Element):
 
 class Button(Interactable_Element):
      def __init__ (self, x, y, w, h, ext_display: pygame.surface, action : callable, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = '', text = None):
+                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1):
          self.action = action
          super().__init__(x,y,w,h,ext_display,color,border_width,p_button,draw_border,activation_key=activation_key)
 
      def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         super().update(m_x, m_y, mouse, keys)
-        if (self.state == utils.Mouse_State.RELEASED):
+        if (self.state == utils.Mouse_State.RELEASED or (self.activation_key != -1 and keys[self.activation_key])) and self.action != None:
             self.action()
 
 class Mouse_Cursor(Interactable_Element):

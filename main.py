@@ -1,7 +1,6 @@
 import pygame
-import world, utils
-
-
+from pygame.locals import MOUSEWHEEL
+import world, utils, screen_writer
 
 if __name__ == "__main__":
     # pygame setup
@@ -54,10 +53,14 @@ if __name__ == "__main__":
     while running:
         
         # poll for events
+        mouse.set_mouse_wheel(0)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        
+            else:
+                if event.type == MOUSEWHEEL:
+                    mouse.set_mouse_wheel(event.y)
+                    
         # run a frame of the game
         if running:
             keys = pygame.key.get_pressed()

@@ -1,4 +1,4 @@
-import utils, map, pygame, player, texture, math, ui
+import utils, map, pygame, player, math, ui, screen_writer
 
 class Map_Screen(ui.UI_Composite):
      MAP_INDEX = 0
@@ -94,3 +94,9 @@ class Main_Menu (ui.UI_Composite):
         self.elements.append(ui.Interactable_Element(70,50,50,40,display, border_width= 15, color= (123, 89, 20)))
         self.elements.append(ui.Interactable_Element(70,135,100,100,display,draw_border=False, color = (255,230,15)))
         self.elements.append(ui.Button(400,200,30,30,display,self.action))
+        test = open("data/config/letter.txt")
+        text = utils.Ptr(test.readlines())
+        test.close()
+        size = utils.Ptr(12)
+        cursor = utils.Ptr(2)
+        self.elements.append(screen_writer.Text_Box(200,450,100,100,self.display,text,size,cursor,13,4,action = self.action, activation_key=49))
