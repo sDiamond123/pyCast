@@ -82,7 +82,7 @@ class HUD(Map_Screen):
     def update(self, mouse : utils.Mouse_Manager, keys):
          self.__update_weapons__()
          super().update(mouse, keys)
-        
+
 class Main_Menu (ui.UI_Composite):
     def action(self):
         self.control.game_state = self.control.GAME_STATES.FPS
@@ -100,3 +100,30 @@ class Main_Menu (ui.UI_Composite):
         size = utils.Ptr(12)
         cursor = utils.Ptr(2)
         self.elements.append(screen_writer.Text_Box(200,450,100,100,self.display,text,size,cursor,13,4,action = self.action, activation_key=49))
+
+class Splash_Screen (ui.UI_Composite):
+    BASE_MESSAGE = "Press '" + chr(utils.Key.INTERACT) + "' or click here to start"
+    CHICK = "data/config/little_bird_games.png"
+
+    def action(self):
+        self.control.game_state = self.control.GAME_STATES.MENU
+
+    def image_clicked(self):
+        self.refresh.value = True
+        self.text.value = self.CHEAP
+
+
+    def __init__ (self, display, control):
+        super().__init__(display, background_color="antiquewhite1")
+        self.control = control
+        self.text = utils.Ptr(self.BASE_MESSAGE)
+        size = utils.Ptr(24)
+        cursor = utils.Ptr(0)
+        self.refresh = utils.Ptr(False)
+        self.elements.append(screen_writer.Text_Box(180,490,440,75,self.display,self.text,size,cursor,45,4,action = self.action, activation_key=utils.Key.INTERACT,update_text=self.refresh, color = (200,180,110), y_offset=-2, x_offset=35, border_width= 10))
+        small_size = utils.Ptr(8)
+        version = open("data/config/info.txt")
+        info = utils.Ptr(version.readlines())
+        version.close()
+        self.elements.append(screen_writer.Text_Box(15,15,1,1,self.display,info,small_size,cursor,60,4,color = pygame.Color("antiquewhite2"),draw_border=False))
+        self.elements.append(ui.Still_Image(100,25,600,450,self.display,self.CHICK))

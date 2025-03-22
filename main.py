@@ -1,5 +1,5 @@
 import pygame
-from pygame.locals import MOUSEWHEEL
+from pygame.locals import *
 import world, utils, screen_writer
 
 if __name__ == "__main__":
@@ -60,6 +60,8 @@ if __name__ == "__main__":
             else:
                 if event.type == MOUSEWHEEL:
                     mouse.set_mouse_wheel(event.y)
+                elif event.type == VIDEORESIZE:
+                    mouse.resize(screen.size)
                     
         # run a frame of the game
         if running:

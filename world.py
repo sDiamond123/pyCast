@@ -6,7 +6,7 @@ class World:
     STATE_H = 9
     LINES_PER_OBJ = 6
     OBJ_W = 2
-    GAME_STATES = enum.Enum('State', [('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
+    GAME_STATES = enum.Enum('State', [('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
 
     state = None
     state_data = []
@@ -31,7 +31,8 @@ class World:
     
 
     def __init__(self, out_display, w, h, i_w, i_h, entry_state):
-        self.game_state = self.GAME_STATES.FPS
+        #set entry state
+        self.game_state = self.GAME_STATES.SPLASH_SCREEN
         # set up internal display and external screen
         self.out_display = out_display
         self.ext_w = w
@@ -44,7 +45,7 @@ class World:
         self.load_state(entry_state)
         #change_latter
         self.UI[self.GAME_STATES.MENU.value] = ui_implementation.Main_Menu(self.internal_display, self)
-        
+        self.UI[self.GAME_STATES.SPLASH_SCREEN.value] = ui_implementation.Splash_Screen(self.internal_display, self)
 
     def load_state(self, state):
         self.state = state

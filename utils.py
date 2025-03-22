@@ -36,7 +36,7 @@ class Mouse_Manager:
     hold_x = 0
 
     def __init__ (self, sensitivity, dimensions, buttons = MOUSE_BUTTONS):
-        self.alive = True
+        self.alive = False
         pygame.mouse.set_visible(not self.alive)
         pygame.event.set_grab(self.alive)
         self.sensetivity = (sensitivity[0]/self.MOUSE_FACTOR, sensitivity[1]/self.MOUSE_FACTOR)
@@ -62,6 +62,9 @@ class Mouse_Manager:
     
     def poll_rel(self):
         return self.rel
+
+    def resize(self, dimensions):
+        self.size = dimensions
 
     def update(self):
         raw = pygame.mouse.get_rel()
@@ -114,6 +117,7 @@ class Key:
     CYCLE_PREV = get_key(binds)
     M_ZOOM_IN = get_key(binds)
     M_ZOOM_OUT = get_key(binds)
+    INTERACT = get_key(binds)
     binds.close()
     print("Successfully loaded key binds")
 
@@ -147,6 +151,7 @@ class Obj_Vector:
         self.ang = ang
         self.h = Partial(max_health, current=h)
         self.no_clip = False
+        self.z = 0
 
     def health(self, delta = 0):
         self.h.update(delta)

@@ -2,7 +2,7 @@ import pygame, ui, utils
 
 FONT_PATH = "data/fonts"
 DEFAULT_FONT = "/Open_Sans/static/OpenSans-Regular.ttf"
-DEFAULT_SIZES = [16,12,20,24,36,50]
+DEFAULT_SIZES = [6,8,16,12,20,24,36,50]
 
 if not pygame.font.get_init():
     pygame.font.init()
@@ -17,7 +17,7 @@ class Screen_Writer:
             self.fonts[size] = pygame.font.Font(font, size)
         print("Succesfully loaded font: " + font)
 
-    def render (self, text : str, size : int = default_size, color = "black", antialias = False):
+    def render (self, text : str, size : int = default_size, color = "black", antialias = True):
         font = self.fonts[size]
         return font.render(text, antialias = antialias, color = color)
     
@@ -48,9 +48,8 @@ class Text_Box (Text_Button):
         if isinstance(self.text.value, str):
             self.__parse_line__(self.text.value, line, length)
         elif isinstance(self.text.value, list):
-            first = True
             for row in self.text.value:
-                self.__parse_line__(row+"\n", line, length)
+                self.__parse_line__(row, line, length)
 
     def __end_on_word__ (self, word, line: utils.Ptr, length:utils.Ptr):
         if len(word) < self.max_c_per_line:
@@ -101,13 +100,17 @@ class Text_Box (Text_Button):
                     max_char_per_line, max_lines, update_text: utils.Ptr = utils.Ptr(False),
                     writer: Screen_Writer = DEFAULT_WRITER, action : callable = None,
                    color:tuple = ui.Element.DEFAULT_GREY, border_width : int = ui.Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1):
+                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, x_offset = 0, y_offset = 0):
         self.max_c_per_line = max_char_per_line
         self.max_lines = max_lines
         self.cursor = cursor
         self.refresh = update_text
+        
+        
         super().__init__ (x, y, w, h, ext_display, text , size, writer, action, color, border_width, 
                   p_button, draw_border, activation_key )
+        self.x_offset = x_offset + 2 * self.b_w 
+        self.y_offset = y_offset + 2 * self.b_w 
         self.__parse_text__()
     
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
@@ -118,12 +121,13 @@ class Text_Box (Text_Button):
         if self.refresh.value:
             self.refresh.value = False
             self.__parse_text__()
+        
 
 
     def render (self):
          # call button's render
          super(Text_Button, self).render()
-         draw_y = self.y + 2 * self.b_w
+         draw_y = self.y + self.y_offset
          for line in range(self.max_lines):
              line_count = line + self.cursor.value
              if line_count < 0:
@@ -132,7 +136,7 @@ class Text_Box (Text_Button):
                  break
              rendered =  (self.writer.render(self.lines[line_count], self.size.value))
              delta_y = rendered.size[1]
-             self.ext_display.blit(rendered,(self.x + 2 * self.b_w, draw_y))
+             self.ext_display.blit(rendered,(self.x_offset + self.x, draw_y))
              draw_y += delta_y
 
     

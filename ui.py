@@ -38,7 +38,7 @@ class Interactable_Element(Element):
 
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         super().update(m_x, m_y, mouse, keys)
-        if m_x >= self.x and m_x < self.x + self.w and m_y >= self.h and m_y <= self.y + self.h:
+        if m_x >= self.x and m_x < self.x + self.w and m_y >= self.y and m_y < self.y + self.h:
             self.state = mouse.state[self.activation_button]
         else:
             self.state = utils.Mouse_State.UNDEFINED
@@ -166,6 +166,11 @@ class Button(Interactable_Element):
             self.action()
 
 class Mouse_Cursor(Interactable_Element):
+    def __init__ (self, x, y, w, h, ext_display: pygame.surface, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
+                    p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1):
+            self.alive = False
+            super().__init__(x,y,w,h,ext_display,color,border_width,p_button,draw_border,activation_key=activation_key)
+
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         self.x = m_x
         self.y = m_y
@@ -223,6 +228,7 @@ class UI_Composite ():
         size = self.display.size
         m_x = coor[0] * size[0]
         m_y = coor[1] * size[1]
+        print(coor)
         for element in self.elements:
             element.update(m_x, m_y, mouse, keys)
 
