@@ -342,7 +342,7 @@ class Binds_Menu (ui.UI_Sub_Screen):
         self.__changed_UI__()
 
     def __increment_y__(self, delta):
-        options.CONFIG.contents[options.CONFIG.Y_SENSE].value = utils.clamp_addition(options.CONFIG.contents[options.CONFIG.Y_SENSE].value, delta, utils.Mouse_Manager.MOUSE_FACTO,0)
+        options.CONFIG.contents[options.CONFIG.Y_SENSE].value = utils.clamp_addition(options.CONFIG.contents[options.CONFIG.Y_SENSE].value, delta, utils.Mouse_Manager.MOUSE_FACTOR,0)
         self.__changed_UI__()
 
     def __init__ (self, x, y, ext_display: pygame.surface):
