@@ -1,6 +1,7 @@
 import pygame
 import utils
 import math
+import functools
 
 class Texture:
     PATH = "data/textures/"
@@ -65,7 +66,7 @@ class AnimatedTexture:
     def get_slice(self, request):
         self.update()
         return self.textures[self.current][0].get_slice(request)
-    
+
 class RollingTexture:
     PATH = "data/textures/rolling/"
 
@@ -89,6 +90,7 @@ class RollingTexture:
         self.scale = self.width/(2 * math.pi)
         self.internal_screen = pygame.Surface((fov * self.scale, self.height))
 
+    #@functools.lru_cache
     def render (self, phase):
         ang = phase - self.phase
         lower = utils.normalize_angle(ang - self.fov/2) * self.scale

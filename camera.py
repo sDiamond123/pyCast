@@ -3,6 +3,7 @@ import math
 import texture
 import pygame
 import utils
+import functools
 
 class Camera:
     # camera constants
@@ -88,12 +89,14 @@ class Camera:
     def __distance__ (self,x, y, x1, y1):
         return math.dist((x,y), (x1,y1))
 
+    #@functools.cache
     def __apply_brightness__ (self, dist, color):
         scale = self.BRIGHTNESS_MODIFIER * (1 - dist/self.draw_dist)
         return (utils.clamp_multiplication(color[0], scale, 255, 0), 
                 utils.clamp_multiplication(color[1], scale, 255, 0), 
                 utils.clamp_multiplication(color[2], scale, 255, 0))
 
+    #@functools.cache
     def __cast__ (self, ang, ray_offset):
         ang_check = ang%(math.pi/2) > self.MARGIN_OF_ERROR
         if (ang_check):
