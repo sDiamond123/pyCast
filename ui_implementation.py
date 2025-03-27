@@ -179,13 +179,14 @@ class Splash_Screen (ui.UI_Composite):
         self.text = utils.Ptr(self.BASE_MESSAGE)
         size = utils.Ptr(24)
         self.refresh = utils.Ptr(False)
+        self.elements.append(ui.Still_Image(0,0,800,600,self.display,self.CHICK))
         self.elements.append(screen_writer.Text_Box(180,490,440,75,self.display,self.text,size,utils.Ptr(0),45,1,action = self.action, activation_key=utils.Key.INTERACT,update_text=self.refresh, color = (200,180,110), y_offset=-2, x_offset=35, border_width= 10))
         small_size = utils.Ptr(8)
         version = open(self.VERSION)
         info = utils.Ptr(version.readlines())
         version.close()
         self.elements.append(screen_writer.Text_Box(15,15,1,1,self.display,info,small_size,utils.Ptr(0),60,2,color = pygame.Color("antiquewhite2"),draw_border=False))
-        self.elements.append(ui.Still_Image(100,25,600,450,self.display,self.CHICK))
+        
 
 class Pause (ui.UI_Composite):
     def continue_play (self):
