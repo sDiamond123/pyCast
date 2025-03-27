@@ -224,7 +224,22 @@ class Bar(Element):
             pygame.draw.rect(self.ext_display, self.dead, (self.x,self.y,self.w,self.h))
 
 
+class UI_Sub_Screen(Element):
+    def __init__ (self, x, y, w, h, ext_display: pygame.surface, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
+                    p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, render = False):
+            self.render_elements = render
+            self.elements = []
+            super().__init__(x,y,w,h,ext_display,color,border_width,p_button,draw_border,activation_key=activation_key)
 
+    def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
+        if self.render_elements:
+            for element in self.elements:
+                element.update(m_x, m_y, mouse, keys)
+
+    def render(self):
+         if self.render_elements:
+            for element in self.elements:
+                element.render()
 
 class UI_Composite ():
     DEFAULT_BACK = (100,100,200)
@@ -251,5 +266,31 @@ class UI_Composite ():
             self.display.fill(self.back_color)
         for element in self.elements:
             element.render()
+
+class UI_Heirarchy(UI_Composite):
+    def __init__(self, ext_disp : pygame.Surface, draw_background = True, background_color = UI_Composite.DEFAULT_BACK):
+        super().__init__(ext_disp,draw_background,background_color)
+        self.sub_composites = []
+
+    def focus(self,id):
+        for i in range (len(self.sub_composites)):
+            if i != id:
+                self.sub_composites[i].render_elements = False
+            else:
+                self.sub_composites[i].render_elements = True
+
+    def update(self, mouse, keys):
+        coor = mouse.poll_rel()
+        size = self.display.size
+        m_x = coor[0] * size[0]
+        m_y = coor[1] * size[1]
+        for screen in self.sub_composites:
+            screen.update(m_x, m_y, mouse, keys)
+        return super().update(mouse, keys)
+    
+    def render(self):
+        for screen in self.sub_composites:
+            screen.render()
+        super().render()
 
 

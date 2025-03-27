@@ -3,7 +3,5 @@ throwback ,MAP
       12 ,567       ,PLAYER X
       6 ,5         ,PLAYER Y
       100, 0 , playe health
-    275 ,RAY COUNT
-    90 ,15        ,FOV AND DRAW DIST
 built_in/town_obj.csv, 6,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
 data/state/built_in/inventory.csv, item inventory

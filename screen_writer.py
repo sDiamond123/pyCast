@@ -1,4 +1,4 @@
-import pygame, ui, utils
+import pygame, ui, utils, clock
 
 FONT_PATH = "data/fonts"
 DEFAULT_FONT = "/Open_Sans/static/OpenSans-Regular.ttf"
@@ -39,6 +39,22 @@ class Text_Button (ui.Button):
     def render(self):
         super().render()
         self.ext_display.blit(self.writer.render(self.text.value, self.size.value),(self.x + self.x_offset,self.y + self.y_offset))
+
+class FPS_UI (ui.Button):
+    FPS_LEN = 4
+
+    def __init__ (self, x, y, w, h, ext_display: pygame.surface, size: utils.Ptr, writer: Screen_Writer = DEFAULT_WRITER,
+                   color:tuple = ui.Element.DEFAULT_GREY, border_width : int = ui.Interactable_Element.DEFAULT_BORDER_W, 
+                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, x_offset = 0, y_offset = 0):
+        super().__init__ (x, y, w, h, ext_display, None, color, border_width, 
+                  p_button, draw_border)
+        self.size = size
+        self.writer = writer
+        self.x_offset = x_offset + 2 * self.b_w 
+        self.y_offset = y_offset + 2 * self.b_w 
+
+    def render(self):
+        self.ext_display.blit(self.writer.render(str(clock.CLOCK.get_fps())[:self.FPS_LEN], self.size.value),(self.x + self.x_offset,self.y + self.y_offset))
 
 class Text_Box (Text_Button):
     ABS_BREAK_CHARS = ["\r\n", "\n", "\r"]

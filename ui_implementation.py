@@ -98,6 +98,7 @@ class HUD(Map_Screen):
         self.elements.append(ui.Bar(self.AMMO_X, self.AMMO_Y + self.AMMO_DELTA_Y, self.AMMO_W, self.AMMO_H, internal_screen, state[1], filled_color = self.AMMO_FILLED))
         self.elements.append(ui.Rolling_Image(self.COMPASS_X, self.COMPASS_Y, self.COMPASS_W, self.COMPASS_H, internal_screen, self.COMPASS_PATH, self.phase, phase=math.pi, draw_border = True, border_width= 2))
         self.elements.append(ui.Mouse_Cursor(0,0,self.CROSS_SIZE,self.CROSS_SPACING,internal_screen, color = self.CROSS_COLOR))
+        self.elements.append(screen_writer.FPS_UI(5,5,10,10,internal_screen, utils.Ptr(12)))
         self.player = player
         self.cur_wep = ""
         self.want_mouse = False

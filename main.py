@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-import world, utils, screen_writer
+import world, utils, clock
 
 if __name__ == "__main__":
     # pygame setup
@@ -47,7 +47,6 @@ if __name__ == "__main__":
         screen = pygame.display.set_mode((w, h), pygame.RESIZABLE)
     else:
         screen = pygame.display.set_mode((w, h), pygame.FULLSCREEN)
-    clock = pygame.time.Clock()
     running = True
     dt = 0
 
@@ -84,7 +83,7 @@ if __name__ == "__main__":
             pygame.display.flip()
 
             # limits FPS
-            dt = clock.tick(fps) / 1000
+            dt = clock.CLOCK.tick(fps) / 1000
             #print(clock.get_fps())
     print(name + " Succesfully Exited")
     pygame.quit()
