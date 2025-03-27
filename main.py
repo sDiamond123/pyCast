@@ -1,41 +1,25 @@
 import pygame
 from pygame.locals import *
-import world, utils, clock
+import world, utils, clock, options
 
 if __name__ == "__main__":
     # pygame setup
     pygame.init()
-    # read in config file and set w/h
-    # should probably move to it's own class, but whatever
-    config = open("data/config/config.txt", "r")
-    config.readline()
-    name = config.readline().strip()
+    config = options.CONFIG
+    name = config.contents[config.WINDOW_NAME]
     pygame.display.set_caption(name)
-    config.readline()
-    pygame.display.set_icon(pygame.image.load(config.readline()[:-1]))
-    config.readline()
-    fullscreen = "true" == (config.readline().strip().lower())
-    config.readline()
-    w = int(config.readline())
-    config.readline()
-    h = int(config.readline())
-    config.readline()
-    fps = int(config.readline())
-    config.readline()
-    i_w = int(config.readline())
-    config.readline()
-    i_h = int(config.readline())
-    config.readline()
-    x_sense = int(config.readline())
-    config.readline()
-    y_sense = int(config.readline())
-    config.readline()
-    fov = int(config.readline())
-    config.readline()
-    rays = int(config.readline())
-    config.readline()
-    draw_dist = int(config.readline())
-    config.close()
+    pygame.display.set_icon(pygame.image.load(config.contents[config.ICON]))
+    fullscreen = config.contents[config.FULLSCREEN]
+    w = config.contents[config.W]
+    h = config.contents[config.H]
+    fps = config.contents[config.FPS]
+    i_w = config.contents[config.I_W]
+    i_h = config.contents[config.I_H]
+    x_sense = config.contents[config.X_SENSE]
+    y_sense = config.contents[config.Y_SENSE]
+    fov = config.contents[config.FOV]
+    rays = config.contents[config.RAYS]
+    draw_dist = config.contents[config.DRAW_DIST]
 
 
     #print out config to terminal
@@ -83,7 +67,7 @@ if __name__ == "__main__":
             pygame.display.flip()
 
             # limits FPS
-            dt = clock.CLOCK.tick(fps) / 1000
+            dt = clock.CLOCK.tick(fps.value) / 1000
             #print(clock.get_fps())
     print(name + " Succesfully Exited")
     pygame.quit()

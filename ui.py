@@ -1,4 +1,4 @@
-import pygame, utils, texture, math, map, player
+import pygame, utils, texture, math, map, player, clock
 
 class Element():
     DEFAULT_GREY = (155,155,155)
@@ -177,6 +177,13 @@ class Button(Interactable_Element):
             else:
                 self.action(self.args)
 
+class Sticky(Button):
+     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
+         super().update(m_x, m_y, mouse, keys)
+         if (self.state == utils.Mouse_State.PRESSED):
+             self.x = m_x - self.w/2
+             self.y = m_y - self.h/2
+
 class Mouse_Cursor(Interactable_Element):
     def __init__ (self, x, y, w, h, ext_display: pygame.surface, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
                     p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1):
@@ -225,11 +232,11 @@ class Bar(Element):
 
 
 class UI_Sub_Screen(Element):
-    def __init__ (self, x, y, w, h, ext_display: pygame.surface, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
-                    p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, render = False):
+    def __init__ (self, x, y, w, h, ext_display: pygame.surface, color:tuple = Element.DEFAULT_GREY, render = False, draw_background = False):
             self.render_elements = render
             self.elements = []
-            super().__init__(x,y,w,h,ext_display,color,border_width,p_button,draw_border,activation_key=activation_key)
+            self.has_back = draw_background
+            super().__init__(x,y,w,h,ext_display,color)
 
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         if self.render_elements:
@@ -238,6 +245,8 @@ class UI_Sub_Screen(Element):
 
     def render(self):
          if self.render_elements:
+            if self.has_back:
+                super().render()
             for element in self.elements:
                 element.render()
 
@@ -289,8 +298,9 @@ class UI_Heirarchy(UI_Composite):
         return super().update(mouse, keys)
     
     def render(self):
+        super().render()
         for screen in self.sub_composites:
             screen.render()
-        super().render()
+        
 
 

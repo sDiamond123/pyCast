@@ -6,7 +6,7 @@ class World:
     STATE_H = 7
     LINES_PER_OBJ = 6
     OBJ_W = 2
-    GAME_STATES = enum.Enum('State', [('LOAD', 8), ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
+    GAME_STATES = enum.Enum('State', [('OPTIONS', 9),('LOAD', 8), ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
 
     state = None
     state_data = []
@@ -52,6 +52,7 @@ class World:
         self.UI[self.GAME_STATES.SPLASH_SCREEN.value] = ui_implementation.Splash_Screen(self.internal_display, self)
         self.UI[self.GAME_STATES.PAUSE_MENU.value] = ui_implementation.Pause(self.internal_display, self)
         self.UI[self.GAME_STATES.LOAD.value] = ui_implementation.Load(self.internal_display,self)
+        self.UI[self.game_state.OPTIONS.value] = ui_implementation.Options(self.internal_display, self)
 
     def load_state(self, state):
         self.state = state
@@ -84,8 +85,8 @@ class World:
             self.base_sprites = {}
          # load camera
         self.c = camera.Camera(self.m, self.p, self.internal_w, self.internal_h, 
-                               self.fps_rays, math.radians(self.fps_fov), 
-                               self.draw_dist, self.state_objects)
+                               self.fps_rays.value, math.radians(self.fps_fov.value), 
+                               self.draw_dist.value, self.state_objects)
         self.UI[self.GAME_STATES.FPS.value] =ui_implementation.HUD(self.internal_display, self.m, self.p)
         self.UI[self.GAME_STATES.MAP.value] = ui_implementation.Map_Screen(self.internal_display,self.m, self.p, has_buttons=True)
         self.p.load_inv(self.state_data[6][0])

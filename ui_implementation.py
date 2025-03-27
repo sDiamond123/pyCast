@@ -1,4 +1,4 @@
-import utils, map, pygame, player, math, ui, screen_writer
+import utils, map, pygame, player, math, ui, screen_writer, options
 
 class Map_Screen(ui.UI_Composite):
      MAP_INDEX = 0
@@ -136,6 +136,9 @@ class Main_Menu (ui.UI_Composite):
     def cursor_down(self):
         self.cursor.value += 1
 
+    def options(self):
+        self.control.update_game_state(self.control.GAME_STATES.OPTIONS)
+
     def __init__ (self, display, control):
         super().__init__(display, draw_background=False)
         self.control = control
@@ -154,8 +157,8 @@ class Main_Menu (ui.UI_Composite):
         self.elements.append(screen_writer.Text_Button(605,340,175,40,display,utils.Ptr("1. New"),utils.Ptr(20), color = (155,130,15), activation_key=49))
         self.elements.append(screen_writer.Text_Button(605,390,175,40,display,utils.Ptr("2. Continue"),utils.Ptr(20), color = (155,130,15), activation_key=50, action = self.reload_last_save))
         self.elements.append(screen_writer.Text_Button(605,440,175,40,display,utils.Ptr("3. Load"),utils.Ptr(20), color = (155,130,15), activation_key=51,action=self.load))
-        self.elements.append(screen_writer.Text_Button(605,490,175,40,display,utils.Ptr("4. Options"),utils.Ptr(20), color = (155,130,15), activation_key=52))
-        self.elements.append(screen_writer.Text_Button(605,540,175,40,display,utils.Ptr("5. Exit Game"),utils.Ptr(20), color = (155,130,15), activation_key=53, action = exit))
+        self.elements.append(screen_writer.Text_Button(605,490,175,40,display,utils.Ptr("4. Options"),utils.Ptr(20), color = (155,130,15), activation_key=52, action = self.options))
+        self.elements.append(screen_writer.Text_Button(605,540,175,40,display,utils.Ptr("5. Exit Game"),utils.Ptr(20), color = (155,130,15), activation_key=53, action = self.exit_game))
 
     def update(self, mouse : utils.Mouse_Manager, keys):
          self.phase.value += self.ANG_DELTA
@@ -195,6 +198,9 @@ class Pause (ui.UI_Composite):
     def load(self):
         self.control.update_game_state(self.control.GAME_STATES.LOAD)
 
+    def options(self):
+        self.control.update_game_state(self.control.GAME_STATES.OPTIONS)
+
     def exit_game(self):
         self.exit = True
 
@@ -208,7 +214,7 @@ class Pause (ui.UI_Composite):
         self.elements.append(screen_writer.Text_Button(50,200,175,40,display,utils.Ptr("2. Reload Save"),utils.Ptr(20), activation_key=50, action = self.reload_last_save))
         self.elements.append(screen_writer.Text_Button(50,250,175,40,display,utils.Ptr("3. Load"),utils.Ptr(20), activation_key=51,action=self.load))
         self.elements.append(screen_writer.Text_Button(50,300,175,40,display,utils.Ptr("4. Save"),utils.Ptr(20), activation_key=52))
-        self.elements.append(screen_writer.Text_Button(50,350,175,40,display,utils.Ptr("5. Options"),utils.Ptr(20), activation_key=53))
+        self.elements.append(screen_writer.Text_Button(50,350,175,40,display,utils.Ptr("5. Options"),utils.Ptr(20), activation_key=53, action = self.options))
         self.elements.append(screen_writer.Text_Button(50,400,175,40,display,utils.Ptr("6. Main Menu"),utils.Ptr(20), activation_key=54,action=self.menu))
         self.elements.append(screen_writer.Text_Button(50,450,175,40,display,utils.Ptr("7. Exit Game"),utils.Ptr(20), activation_key=55, action=self.exit_game))
         self.exit = False
@@ -301,3 +307,91 @@ class Load (ui.UI_Composite):
                 self.name.append(self.DEFAULT_NAME)
             self.elements.append(screen_writer.Text_Box(self.BOX_X0, self.BOX_Y0 + self.BOX_DELTA * i, self.NAME_W, self.NAME_H, display,self.name[i],self.NAME_SIZE,utils.Ptr(0),self.DESC_CHAR, 1 ,color=self.NAME_COLOR, border_width= 0, update_text=self.update_name[i], action=self.__load__, activation_key= 49 + i, args = i))
             self.elements.append(screen_writer.Text_Box(self.BOX_X0, self.BOX_Y0 + self.BOX_DELTA * i + self.NAME_H,self.DESC_W, self.DESC_H, display,self.text[i],self.DESC_SIZE,utils.Ptr(0),self.DESC_CHAR, self.DESC_W, color=self.DESC_COLOR, update_text=self.update_txt[i], action=self.__load__, activation_key= 49 + i, args = i))
+
+class Options(ui.UI_Heirarchy):
+    def return_play (self):
+        self.control.last_state()
+    
+    CONFIG_ID = 0
+    BINDS_ID = 1
+
+    def __init__(self, ext_disp : pygame.Surface, control):
+        super().__init__(ext_disp,True,pygame.Color("bisque3"))
+        self.control = control
+        self.sub_composites.append(Config_Menu(125,25,ext_disp))
+        self.sub_composites.append(Binds_Menu(125,25,ext_disp))
+        self.elements.append(screen_writer.Text_Button(10,10,110,40,ext_disp,utils.Ptr("'"+chr(utils.Key.MAP) + "'. Back"),utils.Ptr(20), activation_key=utils.Key.MAP, action = self.return_play))
+        self.elements.append(screen_writer.Text_Button(10,60,110,40,ext_disp,utils.Ptr("GRAPHICS"),utils.Ptr(20), action = self.focus, args=self.CONFIG_ID))
+        self.elements.append(screen_writer.Text_Button(10,110,110,40,ext_disp,utils.Ptr("BINDS"),utils.Ptr(20),  action = self.focus,args=self.BINDS_ID))
+        
+
+class Binds_Menu (ui.UI_Sub_Screen):
+    WIDTH = 650
+    HEIGHT = 550
+    TEXT_SIZE = utils.Ptr(12)
+    TITLE_SIZE = utils.Ptr(20)
+    BUTTON_W = 70
+    BUTTON_H = 50
+    RED = (150,0,0)
+
+    def __changed_UI__ (self):
+        options.CONFIG.contents[options.CONFIG.PROF_NAME].value = "CUSTOM"
+
+    def __increment_x__(self, delta):
+        options.CONFIG.contents[options.CONFIG.X_SENSE].value = utils.clamp_addition(options.CONFIG.contents[options.CONFIG.X_SENSE].value, delta, utils.Mouse_Manager.MOUSE_FACTOR,0)
+        self.__changed_UI__()
+
+    def __increment_y__(self, delta):
+        options.CONFIG.contents[options.CONFIG.Y_SENSE].value = utils.clamp_addition(options.CONFIG.contents[options.CONFIG.Y_SENSE].value, delta, utils.Mouse_Manager.MOUSE_FACTO,0)
+        self.__changed_UI__()
+
+    def __init__ (self, x, y, ext_display: pygame.surface):
+        super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),False,True)
+        self.elements.append(screen_writer.Text_Button(self.x + 250,self.y,0, 0, ext_display,utils.Ptr("MOUSE Sensitivity"),self.TITLE_SIZE,y_offset=-5))
+        self.elements.append(screen_writer.Text_Button(self.x + 20,self.y + 30,0, 0, ext_display,utils.Ptr("X"),self.TITLE_SIZE, text_color=self.RED))
+        self.elements.append(screen_writer.Text_Button(self.x + 20,self.y+ 90,0, 0, ext_display,utils.Ptr("Y"),self.TITLE_SIZE, text_color=self.RED))
+        self.elements.append(screen_writer.Text_Button(self.x + 310,self.y + 30,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.X_SENSE],self.TITLE_SIZE))
+        self.elements.append(screen_writer.Text_Button(self.x + 70,self.y + 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-10"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = -10))
+        self.elements.append(screen_writer.Text_Button(self.x + 150,self.y + 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-5"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = -5))
+        self.elements.append(screen_writer.Text_Button(self.x + 230,self.y + 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-1"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = -1))
+        self.elements.append(screen_writer.Text_Button(self.x + 390,self.y + 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+1"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = 1))
+        self.elements.append(screen_writer.Text_Button(self.x + 470,self.y + 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+5"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = 5))
+        self.elements.append(screen_writer.Text_Button(self.x + 550,self.y + 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+10"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = 10))
+        self.elements.append(screen_writer.Text_Button(self.x + 310,self.y + 90,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.Y_SENSE],self.TITLE_SIZE))
+        self.elements.append(screen_writer.Text_Button(self.x + 70,self.y + 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-10"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = -10))
+        self.elements.append(screen_writer.Text_Button(self.x + 150,self.y + 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-5"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = -5))
+        self.elements.append(screen_writer.Text_Button(self.x + 230,self.y + 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-1"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = -1))
+        self.elements.append(screen_writer.Text_Button(self.x + 390,self.y + 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+1"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = 1))
+        self.elements.append(screen_writer.Text_Button(self.x + 470,self.y + 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+5"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = 5))
+        self.elements.append(screen_writer.Text_Button(self.x + 550,self.y + 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+10"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = 10))
+        
+        # save changes
+        self.elements.append(screen_writer.Text_Button(self.x + 300,self.y + 475,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10))
+
+class Config_Menu (ui.UI_Sub_Screen):
+    WIDTH = 650
+    HEIGHT = 550
+    TEXT_SIZE = utils.Ptr(12)
+    TITLE_SIZE = utils.Ptr(20)
+    BUTTON_W = 70
+    BUTTON_H = 50
+    RED = (150,0,0)
+
+    def __changed_UI__ (self):
+        options.CONFIG.contents[options.CONFIG.PROF_NAME].value = "CUSTOM"
+
+    def __init__ (self, x, y, ext_display: pygame.surface):
+        super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),True,True)
+        # load profiles
+        self.elements.append(screen_writer.Text_Button(self.x + 5,self.y,0, 0, ext_display,utils.Ptr("PROFILE:"),self.TITLE_SIZE))
+        self.elements.append(screen_writer.Text_Button(self.x + 100,self.y,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.PROF_NAME],self.TITLE_SIZE, text_color=self.RED))
+        self.elements.append(screen_writer.Text_Button(self.x + 10,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Nasa"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.NASA))
+        self.elements.append(screen_writer.Text_Button(self.x + 90,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("High"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.HIGH))
+        self.elements.append(screen_writer.Text_Button(self.x + 170,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Medium"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.MED))
+        self.elements.append(screen_writer.Text_Button(self.x + 250,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Low"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.LOW))
+        self.elements.append(screen_writer.Text_Button(self.x + 330,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Potato"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.POTATO))
+        self.elements.append(screen_writer.Text_Button(self.x + 410,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Current"),self.TEXT_SIZE,action=options.CONFIG.load_config,x_offset=5, y_offset=10))
+        self.elements.append(screen_writer.Text_Button(self.x + 490,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Default"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.DEFAULT))
+        # save changes
+        self.elements.append(screen_writer.Text_Button(self.x + 300,self.y + 475,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10))
+        

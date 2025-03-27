@@ -1,5 +1,5 @@
 # profile
-DEFAULT
+LOW
 # name
 Long's Word
 # icon
@@ -11,7 +11,7 @@ False
 # display height
 600
 # target FPS
-60
+30
 # internal resolution (width)
 800
 # internal resolution (height)
@@ -23,6 +23,6 @@ False
 # fov
 90
 # rays
-300
+150
 # draw_dist
-15
+10

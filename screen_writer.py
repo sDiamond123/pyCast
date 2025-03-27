@@ -27,34 +27,35 @@ class Text_Button (ui.Button):
     def __init__ (self, x, y, w, h, ext_display: pygame.surface,
                    text : utils.Ptr, size: utils.Ptr, writer: Screen_Writer = DEFAULT_WRITER, action : callable = None,
                    color:tuple = ui.Element.DEFAULT_GREY, border_width : int = ui.Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, x_offset = 0, y_offset = 0, args = None):
+                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, x_offset = 0, y_offset = 0, args = None, text_color = pygame.Color("black")):
         super().__init__ (x, y, w, h, ext_display, action, color, border_width, 
                   p_button, draw_border , activation_key, args = args)
         self.text = text
         self.size = size
+        self.text_color = text_color
         self.writer = writer
         self.x_offset = x_offset + 2 * self.b_w 
         self.y_offset = y_offset + 2 * self.b_w 
 
     def render(self):
         super().render()
-        self.ext_display.blit(self.writer.render(self.text.value, self.size.value),(self.x + self.x_offset,self.y + self.y_offset))
+        self.ext_display.blit(self.writer.render(str(self.text.value), self.size.value, color=self.text_color),(self.x + self.x_offset,self.y + self.y_offset))
 
 class FPS_UI (ui.Button):
     FPS_LEN = 4
 
     def __init__ (self, x, y, w, h, ext_display: pygame.surface, size: utils.Ptr, writer: Screen_Writer = DEFAULT_WRITER,
                    color:tuple = ui.Element.DEFAULT_GREY, border_width : int = ui.Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, x_offset = 0, y_offset = 0):
+                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, x_offset = 0, y_offset = 0, text_color = pygame.Color("black")):
         super().__init__ (x, y, w, h, ext_display, None, color, border_width, 
                   p_button, draw_border)
         self.size = size
         self.writer = writer
         self.x_offset = x_offset + 2 * self.b_w 
         self.y_offset = y_offset + 2 * self.b_w 
-
+        self.text_color = text_color
     def render(self):
-        self.ext_display.blit(self.writer.render(str(clock.CLOCK.get_fps())[:self.FPS_LEN], self.size.value),(self.x + self.x_offset,self.y + self.y_offset))
+        self.ext_display.blit(self.writer.render(str(clock.CLOCK.get_fps())[:self.FPS_LEN], self.size.value,color =self.text_color),(self.x + self.x_offset,self.y + self.y_offset))
 
 class Text_Box (Text_Button):
     ABS_BREAK_CHARS = ["\r\n", "\n", "\r"]
@@ -118,13 +119,14 @@ class Text_Box (Text_Button):
                     max_char_per_line, max_lines, update_text: utils.Ptr = utils.Ptr(False),
                     writer: Screen_Writer = DEFAULT_WRITER, action : callable = None,
                    color:tuple = ui.Element.DEFAULT_GREY, border_width : int = ui.Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, x_offset = 0, y_offset = 0, args = None):
+                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, x_offset = 0, y_offset = 0,
+                    args = None, text_color = pygame.Color("black")):
         self.max_c_per_line = max_char_per_line
         self.max_lines = max_lines
         self.cursor = cursor
         self.refresh = update_text
         super().__init__ (x, y, w, h, ext_display, text , size, writer, action, color, border_width, 
-                  p_button, draw_border, activation_key , x_offset=x_offset, y_offset=y_offset,args = args)
+                  p_button, draw_border, activation_key , x_offset=x_offset, y_offset=y_offset,args = args, text_color=text_color)
         self.__parse_text__()
     
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
@@ -148,7 +150,7 @@ class Text_Box (Text_Button):
                  continue
              if line_count >= len(self.lines):
                  break
-             rendered =  (self.writer.render(self.lines[line_count], self.size.value))
+             rendered =  (self.writer.render(self.lines[line_count], self.size.value,self.text_color))
              delta_y = rendered.size[1]
              self.ext_display.blit(rendered,(self.x_offset + self.x, draw_y))
              draw_y += delta_y

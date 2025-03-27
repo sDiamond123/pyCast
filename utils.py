@@ -39,7 +39,9 @@ class Mouse_Manager:
         self.alive = False
         pygame.mouse.set_visible(not self.alive)
         pygame.event.set_grab(self.alive)
-        self.sensetivity = (sensitivity[0]/self.MOUSE_FACTOR, sensitivity[1]/self.MOUSE_FACTOR)
+        self.__ptr = sensitivity
+        self.__old_val = [self.__ptr[0].value, self.__ptr[1].value]
+        self.sensetivity = (self.__ptr[0].value/self.MOUSE_FACTOR, self.__ptr[1].value/self.MOUSE_FACTOR)
         self.size = dimensions
         self.t_toggle = Timed_Toggle(self.COOL_DOWN)
         self.hold_x = int(self.size[0]/2)
@@ -67,6 +69,10 @@ class Mouse_Manager:
         self.size = dimensions
 
     def update(self):
+        if self.__old_val[0] != self.__ptr[0].value or self.__old_val[1] != self.__ptr[1].value:
+            self.__old_val[0] = self.__ptr[0].value
+            self.__old_val[1] = self.__ptr[1].value
+            self.sensetivity = (self.__ptr[0].value/self.MOUSE_FACTOR, self.__ptr[1].value/self.MOUSE_FACTOR)
         raw = pygame.mouse.get_rel()
         self.abs = pygame.mouse.get_pos()
         self.rel = (self.abs[0]/self.size[0], self.abs[1]/self.size[1])
@@ -126,6 +132,9 @@ class Key:
 class Ptr():
     def __init__ (self, value):
         self.value = value
+
+    def __str__(self):
+        return str(self.value)
 
 class Partial ():
     def __init__(self, max = 1, min = 0, current = 1):
