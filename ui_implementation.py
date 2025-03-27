@@ -167,14 +167,14 @@ class Main_Menu (ui.UI_Composite):
         
 class Splash_Screen (ui.UI_Composite):
     BASE_MESSAGE = "Press '" + chr(utils.Key.INTERACT) + "' or click here to start \n CHEAP CHEAP goes the Chick"
-    CHICK = "data/config/little_bird_games.png"
+    CHICK = "data/config/little_bird.png"
     VERSION = "data/config/info.txt"
 
     def action(self):
         self.control.update_game_state(self.control.GAME_STATES.MENU)
 
     def __init__ (self, display, control):
-        super().__init__(display, background_color="antiquewhite1")
+        super().__init__(display, draw_background=False)
         self.control = control
         self.text = utils.Ptr(self.BASE_MESSAGE)
         size = utils.Ptr(24)
