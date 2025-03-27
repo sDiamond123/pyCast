@@ -164,14 +164,18 @@ class Map_Display(Element):
 
 class Button(Interactable_Element):
      def __init__ (self, x, y, w, h, ext_display: pygame.surface, action : callable, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1):
+                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None):
          self.action = action
+         self.args = args
          super().__init__(x,y,w,h,ext_display,color,border_width,p_button,draw_border,activation_key=activation_key)
 
      def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         super().update(m_x, m_y, mouse, keys)
         if (self.state == utils.Mouse_State.RELEASED or (self.activation_key != -1 and keys[self.activation_key])) and self.action != None:
-            self.action()
+            if self.args == None:
+                self.action()
+            else:
+                self.action(self.args)
 
 class Mouse_Cursor(Interactable_Element):
     def __init__ (self, x, y, w, h, ext_display: pygame.surface, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 

@@ -274,13 +274,6 @@ class Load (ui.UI_Composite):
     def load(self):
         self.__load__(0)
 
-    # not sure of a better way to do this
-    def __load_1__(self):
-        self.__load__(1)
-    
-    def __load_2__(self):
-        self.__load__(2)
-
     def __init__ (self, display, control, path = BUILT_IN, max_display = MAX):
         super().__init__(display, background_color=(59,54,48))
         self.lines = []
@@ -291,7 +284,6 @@ class Load (ui.UI_Composite):
         self.max = max_display
         self.update_txt = []
         self.update_name = []
-        functions = [self.load, self.__load_1__, self.__load_2__]
         self.lines = utils.bottomless_csv_load(path)
         self.elements.append(screen_writer.Text_Button(15,15,175,40,display,utils.Ptr("'"+chr(utils.Key.MAP) + "'. Back"),utils.Ptr(20), activation_key=utils.Key.MAP, action = self.return_play))
         self.elements.append(screen_writer.Text_Button(600,300,175,40,display,utils.Ptr("'"+chr(utils.Key.BACK) + "'. Down"),utils.Ptr(20), activation_key=utils.Key.BACK, action = self.down))
@@ -306,5 +298,5 @@ class Load (ui.UI_Composite):
             else:
                 self.text.append(self.DEFAULT_TEXT)
                 self.name.append(self.DEFAULT_NAME)
-            self.elements.append(screen_writer.Text_Box(self.BOX_X0, self.BOX_Y0 + self.BOX_DELTA * i, self.NAME_W, self.NAME_H, display,self.name[i],self.NAME_SIZE,utils.Ptr(0),self.DESC_CHAR, 1 ,color=self.NAME_COLOR, border_width= 0, update_text=self.update_name[i], action=functions[i], activation_key= 49 + i))
-            self.elements.append(screen_writer.Text_Box(self.BOX_X0, self.BOX_Y0 + self.BOX_DELTA * i + self.NAME_H,self.DESC_W, self.DESC_H, display,self.text[i],self.DESC_SIZE,utils.Ptr(0),self.DESC_CHAR, self.DESC_W, color=self.DESC_COLOR, update_text=self.update_txt[i], action=functions[i], activation_key= 49 + i))
+            self.elements.append(screen_writer.Text_Box(self.BOX_X0, self.BOX_Y0 + self.BOX_DELTA * i, self.NAME_W, self.NAME_H, display,self.name[i],self.NAME_SIZE,utils.Ptr(0),self.DESC_CHAR, 1 ,color=self.NAME_COLOR, border_width= 0, update_text=self.update_name[i], action=self.__load__, activation_key= 49 + i, args = i))
+            self.elements.append(screen_writer.Text_Box(self.BOX_X0, self.BOX_Y0 + self.BOX_DELTA * i + self.NAME_H,self.DESC_W, self.DESC_H, display,self.text[i],self.DESC_SIZE,utils.Ptr(0),self.DESC_CHAR, self.DESC_W, color=self.DESC_COLOR, update_text=self.update_txt[i], action=self.__load__, activation_key= 49 + i, args = i))
