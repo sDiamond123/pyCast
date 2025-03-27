@@ -18,3 +18,9 @@ False
 10
 # y sensitivity
 50
+# fov
+90
+# rays
+250
+# draw_dist
+15

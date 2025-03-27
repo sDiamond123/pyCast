@@ -29,7 +29,14 @@ if __name__ == "__main__":
     x_sense = int(config.readline())
     config.readline()
     y_sense = int(config.readline())
+    config.readline()
+    fov = int(config.readline())
+    config.readline()
+    rays = int(config.readline())
+    config.readline()
+    draw_dist = int(config.readline())
     config.close()
+
 
     #print out config to terminal
     print ("Started: "+name+"\nWindow: " + str(w) + " by " + str(h) +"\nFullscreen: "+str(fullscreen)+
@@ -46,7 +53,7 @@ if __name__ == "__main__":
 
     mouse = utils.Mouse_Manager((x_sense,y_sense),(w,h))
     #manager = world.World(screen,w,h,i_w, i_h, "basic_mansion.csv")
-    manager = world.World(screen, w,h,i_w,i_h,"built_in/town.csv")
+    manager = world.World(screen, w,h,i_w,i_h,"built_in/town.csv",(fov,rays,draw_dist))
     #manager = world.World(screen, w, h, i_w, i_h, "default.csv")
     print("Game Start!")
     # main loop

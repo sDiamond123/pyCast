@@ -3,7 +3,7 @@ import pygame,utils,map,camera,math,ui_implementation,game_object,player, ui, en
 class World:
     PATH = "data/state/"
     STATE_W = 2
-    STATE_H = 9
+    STATE_H = 7
     LINES_PER_OBJ = 6
     OBJ_W = 2
     GAME_STATES = enum.Enum('State', [('LOAD', 8), ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
@@ -30,7 +30,7 @@ class World:
 
     
 
-    def __init__(self, out_display, w, h, i_w, i_h, entry_state):
+    def __init__(self, out_display, w, h, i_w, i_h, entry_state, cam_settings):
         #set entry state
         self.game_state = self.GAME_STATES.SPLASH_SCREEN
         # set up internal display and external screen
@@ -42,6 +42,9 @@ class World:
         self.internal_display = pygame.Surface((i_w, i_h))
         self.prev_states = []
         self.UI = {}
+        self.fps_fov = cam_settings[0]
+        self.fps_rays = cam_settings[1]
+        self.draw_dist = cam_settings[2]
         # load into our game state
         self.state = entry_state
         #change_latter
@@ -63,10 +66,10 @@ class World:
         print("Successfully spawned player: " + str(self.p))
         
         #load game objects
-        self.object_count = self.state_data[7][1]
+        self.object_count = self.state_data[5][1]
         if self.object_count > 0:
-            self.state_objects = [None] * self.state_data[7][1]
-            objects = utils.csv_load(self.PATH + self.state_data[7][0], self.OBJ_W, self.LINES_PER_OBJ * self.object_count)
+            self.state_objects = [None] * self.state_data[5][1]
+            objects = utils.csv_load(self.PATH + self.state_data[5][0], self.OBJ_W, self.LINES_PER_OBJ * self.object_count)
             line = 0
             for i in range (self.object_count):
                 x = utils.convert_csv_to_float(objects, line)
@@ -81,11 +84,11 @@ class World:
             self.base_sprites = {}
          # load camera
         self.c = camera.Camera(self.m, self.p, self.internal_w, self.internal_h, 
-                               self.state_data[5][0], math.radians(self.state_data[6][0]), 
-                               self.state_data[6][1], self.state_objects)
+                               self.fps_rays, math.radians(self.fps_fov), 
+                               self.draw_dist, self.state_objects)
         self.UI[self.GAME_STATES.FPS.value] =ui_implementation.HUD(self.internal_display, self.m, self.p)
         self.UI[self.GAME_STATES.MAP.value] = ui_implementation.Map_Screen(self.internal_display,self.m, self.p, has_buttons=True)
-        self.p.load_inv(self.state_data[8][0])
+        self.p.load_inv(self.state_data[6][0])
         # print state
         print("Successfully loaded save: " + self.state)
 
