@@ -1,4 +1,4 @@
-import pygame, utils, texture, math, map, player, clock
+import pygame, utils, texture, math, map, player, math
 
 class Element():
     DEFAULT_GREY = (155,155,155)
@@ -53,7 +53,10 @@ class Interactable_Element(Element):
     
     def __draw_border(self):
         # draw border
-        pygame.draw.rect(self.ext_display, self.__get_border_color(), (self.x, self.y, self.w, self.h))
+        pygame.draw.rect(self.ext_display, self.__get_border_color(), (self.x, self.y, self.w, self.b_w))
+        pygame.draw.rect(self.ext_display, self.__get_border_color(), (self.x, self.y + self.b_w, self.b_w, self.h - 2 * self.b_w))
+        pygame.draw.rect(self.ext_display, self.__get_border_color(), (self.x + self.w - self.b_w , self.y + self.b_w, self.b_w, self.h - 2 * self.b_w))
+        pygame.draw.rect(self.ext_display, self.__get_border_color(), (self.x, self.y + self.h - self.b_w , self.w, self.b_w))
 
     def render (self):
         color_adjustment = 0
@@ -163,26 +166,154 @@ class Map_Display(Element):
         self.map.rendermap (self.ext_display, self.player, self.map_trav_w, self.map_trav_h, self.x, self.y, self.map_w, self.map_h, self.x_off, self.y_off)
 
 class Button(Interactable_Element):
-     def __init__ (self, x, y, w, h, ext_display: pygame.surface, action : callable, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
+     def __init__ (self, x, y, w, h, ext_display: pygame.surface, action : callable = None, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
                   p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None):
          self.action = action
          self.args = args
          super().__init__(x,y,w,h,ext_display,color,border_width,p_button,draw_border,activation_key=activation_key)
 
-     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
-        super().update(m_x, m_y, mouse, keys)
-        if (self.state == utils.Mouse_State.RELEASED or (self.activation_key != -1 and keys[self.activation_key])) and self.action != None:
+     def activate (self):
+         if self.action != None:
             if self.args == None:
-                self.action()
+                    self.action()
             else:
                 self.action(self.args)
 
-class Sticky(Button):
      def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
+        super().update(m_x, m_y, mouse, keys)
+        if (self.state == utils.Mouse_State.RELEASED or (self.activation_key != -1 and keys[self.activation_key])):
+            self.activate()
+
+class Sticky(Button):
+     def __init__ (self, x, y, w, h, ext_display: pygame.surface, action : callable = None, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
+                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None, lock_x = False, lock_y = False, lock_all = False, phantom_dist = 0):
+            super().__init__(x,y,w,h,ext_display,action,color,border_width,p_button,draw_border,activation_key,args)
+            self.lock_x = lock_x
+            self.lock_y = lock_y
+            self.lock_all = lock_all
+            self.moved = False
+            self.phantom_dist = phantom_dist
+            self.m_x_delta = self.w/2
+            self.m_y_delta = self.h/2
+            self.hold_lock = True
+
+     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
+         prev_state = self.state
          super().update(m_x, m_y, mouse, keys)
-         if (self.state == utils.Mouse_State.PRESSED):
-             self.x = m_x - self.w/2
-             self.y = m_y - self.h/2
+         if (mouse.alive):
+            return
+         self.moved = False
+         if (self.state == utils.Mouse_State.FIRST_PRESSED):
+             self.m_x_delta = self.x - m_x
+             self.m_y_delta = self.y - m_y
+             self.hold_lock = False
+         elif (self.state == utils.Mouse_State.UNDEFINED and self.state != prev_state):
+             if prev_state == utils.Mouse_State.PRESSED and (self.phantom_dist != 0  and math.dist((m_x, m_y), (self.x - self.w/2, self.y - self.h/2)) < self.phantom_dist):
+                    self.state = utils.Mouse_State.PRESSED
+         if self.state == utils.Mouse_State.RELEASED:
+                  self.hold_lock = True
+         if (self.state == utils.Mouse_State.PRESSED and not self.lock_all and not self.hold_lock):
+             if not self.lock_x:
+                 self.x = m_x  + self.m_x_delta
+                 self.moved = True
+             if not self.lock_y:
+                 self.y = m_y + self.m_y_delta
+                 self.moved = True
+
+class Swtich(Button):
+    DEFAULT_ON = (10,120,10)
+    DEFAULT_OFF = (120,10,10)
+    toggle = False
+    def __init__ (self, x, y, w, h, ext_display: pygame.surface, action : callable = None, color_off:tuple = DEFAULT_OFF, color_on:tuple = DEFAULT_ON, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
+                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None, start_state = False):
+            color = color_off
+            if (start_state):
+                color = color_on
+            self.color_on = color_on
+            self.color_off = color_off
+            super().__init__(x,y,w,h,ext_display,action,color,border_width,p_button,draw_border,activation_key,args)
+            self.toggle = start_state
+
+    def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
+        super().update(m_x,m_y,mouse,keys)
+        if (self.state == utils.Mouse_State.RELEASED):
+            self.toggle = not self.toggle
+            if self.toggle:
+                self.color = self.color_on
+            else:
+                self.color= self.color_off
+        if self.toggle:
+            super().activate()
+
+
+class Resizable(Sticky):
+    DEFAULT_CORNER = 10
+    BOX_DIST = 60
+    DEFAULT_CORNER_COLOR = (180,180,250)
+    MIN_W = 10
+    MIN_H = 10
+
+    def __init__ (self, x, y, w, h, ext_display: pygame.surface, action : callable = None, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
+                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None, lock_x = False, lock_y = False, corner_w = DEFAULT_CORNER, 
+                  corner_color = DEFAULT_CORNER_COLOR, render_corner = True, lock_all = False, render_show = True, has_show = True, force_render:utils.Ptr = utils.FALSE_PTR):
+            super().__init__(x,y,w,h,ext_display,action,color,border_width,p_button,draw_border,activation_key,args, lock_x, lock_y, lock_all, phantom_dist=4 * self.BOX_DIST)
+            self.corner = Sticky(x+w-corner_w,y+h,corner_w, corner_w,ext_display, color=corner_color, phantom_dist=self.BOX_DIST)
+            if has_show:
+                self.show = Swtich(x,y - corner_w,corner_w, corner_w, ext_display, start_state= True)
+            self.render_show = render_show
+            self.__has_show = has_show
+            self.render_corner = render_corner
+            self.__mouse_check = True
+            self.force_render = force_render
+
+    def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
+         exit = False
+         if self.__has_show and not self.lock_all:
+             self.show.update(m_x,m_y,mouse,keys)
+             if not self.show.toggle:
+                 exit = True
+         super().update(m_x, m_y, mouse, keys)
+         if (mouse.alive):
+            self.__mouse_check = False
+            exit = True
+         else:
+             self.__mouse_check = True
+         if exit:
+             return
+         self.corner.lock_all = (self.corner.state != utils.Mouse_State.PRESSED) and self.lock_all
+         self.corner.update(m_x,m_y,mouse,keys)
+         if (not self.lock_all and not self.corner.lock_all and not self.moved):
+            self.w =  self.corner.x - self.x + self.corner.w
+            self.h =  self.corner.y - self.y
+            if (self.w < self.MIN_W):
+                self.w = self.MIN_W
+                self.moved = True
+            if (self.h < self.MIN_H):
+                self.h = self.MIN_H
+                self.moved = True
+                
+         if self.moved:
+             self.corner.x = self.x + self.w - self.corner.w
+             self.corner.y = self.y + self.h
+             if self.__has_show:
+                 self.show.x = self.x
+                 self.show.y = self.y - self.show.w
+             
+
+    def render_UI(self):
+        if self.force_render.value or (self.__mouse_check and not self.lock_all):
+            if self.render_corner and (not self.__has_show or self.show.toggle):
+                self.corner.render()
+            if self.__has_show and self.render_show:
+                self.show.render()
+
+    def render_body(self):
+            super().render()
+
+    def render(self):
+        if self.force_render.value or not self.__has_show or self.show.toggle:
+            self.render_body()
+        self.render_UI()
 
 class Mouse_Cursor(Interactable_Element):
     def __init__ (self, x, y, w, h, ext_display: pygame.surface, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
@@ -222,6 +353,7 @@ class Bar(Element):
         
 
     def render (self):
+        
           # render health
         if self.data.current >= 0:
             fill_ratio = self.w * self.data.ratio
@@ -302,5 +434,45 @@ class UI_Heirarchy(UI_Composite):
         for screen in self.sub_composites:
             screen.render()
         
+class UI_Internal_Window(Resizable):
+    
+    DEFAULT_MB = 2
+    def __init__ (self, x, y, w, h, i_w, i_h, ext_display: pygame.surface, has_background = False, background:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
+                  corner_w = Resizable.DEFAULT_CORNER, corner_color = Resizable.DEFAULT_CORNER_COLOR, render_corner = True, lock_all = False, render_show = True, has_show = True, p_button = DEFAULT_MB):
+        super().__init__(x,y,w,h,ext_display, color=background, corner_w=corner_w, corner_color=corner_color,render_corner=render_corner,lock_all=lock_all, render_show=render_show,has_show=has_show, p_button=p_button)
+        self.elements = []
+        self.has_background = has_background
+        self.back_color = background
+        self.border_width = border_width
+        self.int_screen = pygame.Surface((i_w,i_h))
+        self.i_w = i_w
+        self.i_h = i_h
+        self.__update_scale()
+        
+    def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
+        old_w = self.w
+        old_h = self.h
+        super().update(m_x, m_y, mouse, keys)
+        if self.w != old_w or self.h != old_h:
+            self.__update_scale()
+        image_x = (m_x - self.x - self.b_w) * self.mouse_scale_facor_x
+        image_y = (m_y - self.y - self.b_w) * self.mouse_scale_factor_y
+        for element in self.elements:
+            element.update(image_x, image_y, mouse, keys)
 
+    def __update_scale(self):
+        self.scale_w = self.w - self.b_w * 2
+        self.scale_h = self.h - self.b_w * 2
+        self.mouse_scale_facor_x = self.i_w/self.scale_w
+        self.mouse_scale_factor_y = self.i_h/self.scale_h
+        self.ext_screen = pygame.Surface((self.scale_w, self.scale_h))
+        self.scaled = False
 
+    def render_body(self):
+        self._Interactable_Element__draw_border()
+        if (self.has_background):
+            self.int_screen.fill(self.back_color)
+        for element in self.elements:
+            element.render()
+        pygame.transform.scale(self.int_screen, (self.scale_w, self.scale_h), self.ext_screen)
+        self.ext_display.blit(self.ext_screen, (self.x + self.b_w, self.y + self.b_w))

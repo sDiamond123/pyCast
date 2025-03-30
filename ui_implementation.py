@@ -1,4 +1,4 @@
-import utils, map, pygame, player, math, ui, screen_writer, options
+import utils, map, pygame, player, math, ui, screen_writer, options, sheet
 
 class Map_Screen(ui.UI_Composite):
      MAP_INDEX = 0
@@ -149,7 +149,7 @@ class Main_Menu (ui.UI_Composite):
         self.cursor = utils.Ptr(3)
         self.phase = utils.Ptr(0)
         self.elements.append(ui.Rolling_Image(0,0,display.size[0], display.size[1],display, "/menu/main_menu.png",self.phase,fov = math.pi ))
-        self.elements.append(screen_writer.Text_Button(15,15,300,80,display,utils.Ptr("Long's Word"),utils.Ptr(50),draw_border=False, color = (239,228,176)))
+        self.elements.append(screen_writer.Text_Button(15,15,0,0,display,utils.Ptr("Long's Word"),utils.Ptr(50),draw_border=False, text_color = (0, 70, 20)))
         self.elements.append(screen_writer.Text_Box(10,450,400,140,self.display,text,size,self.cursor,68,7))
         self.elements.append(ui.Button(420,450,30,30,display,self.cursor_up))
         self.elements.append(ui.Button(420,500,30,30,display,self.cursor_down))
@@ -186,6 +186,7 @@ class Splash_Screen (ui.UI_Composite):
         info = utils.Ptr(version.readlines())
         version.close()
         self.elements.append(screen_writer.Text_Box(15,15,1,1,self.display,info,small_size,utils.Ptr(0),60,2,color = pygame.Color("antiquewhite2"),draw_border=False))
+        self.elements.append(sheet.char_sheet(100,100,300,300,display))
         
 
 class Pause (ui.UI_Composite):

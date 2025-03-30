@@ -46,7 +46,7 @@ class FPS_UI (ui.Button):
 
     def __init__ (self, x, y, w, h, ext_display: pygame.surface, size: utils.Ptr, writer: Screen_Writer = DEFAULT_WRITER,
                    color:tuple = ui.Element.DEFAULT_GREY, border_width : int = ui.Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, x_offset = 0, y_offset = 0, text_color = pygame.Color("black")):
+                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, x_offset = 0, y_offset = 0, text_color = pygame.Color("hotpink")):
         super().__init__ (x, y, w, h, ext_display, None, color, border_width, 
                   p_button, draw_border)
         self.size = size

@@ -263,3 +263,5 @@ def clamp_addition (a,b, max, min):
     return clamp (a+b, max, min)
 
 
+FALSE_PTR = Ptr(False)
+TRUE_PTR = Ptr(True)
