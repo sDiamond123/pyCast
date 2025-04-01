@@ -90,6 +90,8 @@ class Map :
         return result
     
     def get_height(self, x, y):
+        if (not self.is_valid(x,y)):
+            return 0
         return self.map[int(y)][int(x)]
     
     def get_text(self, x, y, off):

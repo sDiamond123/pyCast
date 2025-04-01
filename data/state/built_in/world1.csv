@@ -1,8 +1,9 @@
-singleton/test_town , MAP
+data/maps/overworld/world1.csv
       2 ,67        ,PLAYER FACING
       12 ,567       ,PLAYER X
       6 ,5         ,PLAYER Y
     100, 0 , playe health
-built_in/town_obj.csv, 6,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
+built_in/town_obj.csv, 0,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
 data/state/built_in/inventory.csv
-false
+True,
+1, 0

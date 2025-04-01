@@ -283,6 +283,18 @@ class Load (ui.UI_Composite):
     def load(self):
         self.__load__(0)
 
+    def update(self, mouse, keys):
+        super().update(mouse, keys)
+        for element in self.elements:
+            if element.state != utils.Mouse_State.UNDEFINED:
+                return False
+        if (mouse.mw < 0):
+            self.down()
+        elif (mouse.mw > 0):
+            self.up()
+        return False
+        
+
     def __init__ (self, display, control, path = BUILT_IN, max_display = MAX):
         super().__init__(display, background_color=(59,54,48))
         self.lines = []

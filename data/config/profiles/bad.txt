@@ -25,4 +25,4 @@ False
 # rays
 250
 # draw_dist
-15
+12

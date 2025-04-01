@@ -1,9 +1,10 @@
-import pygame,utils,map,camera,math,ui_implementation,game_object,player, ui, enum
+import pygame,utils,map,camera,math,ui_implementation,game_object,player, enum
+from map_chunk import OVER_MAP as overworld
 
 class World:
     PATH = "data/state/"
     STATE_W = 2
-    STATE_H = 7
+    STATE_H = 9
     LINES_PER_OBJ = 6
     OBJ_W = 2
     GAME_STATES = enum.Enum('State', [('OPTIONS', 9),('LOAD', 8), ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
@@ -26,7 +27,6 @@ class World:
     c = None
     compass = None
     move_speed = 0.1
-    truen_speed = 0.4
 
     
 
@@ -45,6 +45,7 @@ class World:
         self.fps_fov = cam_settings[0]
         self.fps_rays = cam_settings[1]
         self.draw_dist = cam_settings[2]
+        self.is_overworld = False
         # load into our game state
         self.state = entry_state
         #change_latter
@@ -57,13 +58,19 @@ class World:
     def load_state(self, state):
         self.state = state
         self.state_data = utils.csv_load(self.PATH+state, self.STATE_W, self.STATE_H)
-        # load map
-        self.m = map.Map(self.state_data[0][0])
         # load player
         self.p = player.Player(utils.convert_csv_to_float(self.state_data,2), 
                               utils.convert_csv_to_float(self.state_data,3),
                               utils.convert_csv_to_float(self.state_data,1),
                               utils.convert_csv_to_float(self.state_data,4))
+        # load map
+        if (self.state_data[7][0].strip().lower() != "true"):
+            self.m = map.Map(self.state_data[0][0])
+            self.is_overworld = False
+        else:
+            self.m = overworld.load(self.state_data[0][0], self.state_data[8][0], self.state_data[8][1])
+            self.is_overworld = True
+        
         print("Successfully spawned player: " + str(self.p))
         
         #load game objects
@@ -177,6 +184,10 @@ class World:
             # update controls
             self.__fps_controls__(keys, mouse)
             self.p.update()
+            # update over_world (if needed)
+            if (self.is_overworld):
+                self.m = overworld.update(self.p)
+
             to_pop = []
             #update objects
             for i in range(len(self.state_objects)):
