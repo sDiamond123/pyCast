@@ -116,7 +116,7 @@ class Text_Box (Text_Button):
 
     def __init__ (self, x, y, w, h, ext_display: pygame.surface,
                    text : utils.Ptr, size: utils.Ptr, cursor: utils.Ptr,
-                    max_char_per_line, max_lines, update_text: utils.Ptr = utils.Ptr(False),
+                    max_char_per_line, max_lines, update_text: utils.Ptr = utils.FALSE_PTR,
                     writer: Screen_Writer = DEFAULT_WRITER, action : callable = None,
                    color:tuple = ui.Element.DEFAULT_GREY, border_width : int = ui.Interactable_Element.DEFAULT_BORDER_W, 
                   p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, x_offset = 0, y_offset = 0,

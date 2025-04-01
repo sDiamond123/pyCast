@@ -36,3 +36,5 @@ f
 m
 # pause
 p
+# bring up UI
+x
