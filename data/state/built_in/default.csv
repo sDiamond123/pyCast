@@ -6,3 +6,4 @@ singleton/default , MAP
 def_obg.csv, 0,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE (0 loads nothing)
 data/state/built_in/inventory.csv
 false
+0,0

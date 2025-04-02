@@ -6,3 +6,4 @@ chunks/town_square_chunk, MAP
 built_in/town_obj.csv, 0,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
 data/state/built_in/inventory.csv, item inventory
 false
+0,0

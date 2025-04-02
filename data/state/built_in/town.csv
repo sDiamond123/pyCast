@@ -6,3 +6,4 @@ singleton/test_town , MAP
 built_in/town_obj.csv, 6,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
 data/state/built_in/inventory.csv
 false
+0,0

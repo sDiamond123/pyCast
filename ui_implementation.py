@@ -148,7 +148,7 @@ class Main_Menu (ui.UI_Composite):
         size = utils.Ptr(12)
         self.cursor = utils.Ptr(3)
         self.phase = utils.Ptr(0)
-        self.elements.append(ui.Rolling_Image(0,0,display.size[0], display.size[1],display, "/menu/main_menu.png",self.phase,fov = math.pi ))
+        self.elements.append(ui.Rolling_Image(0,0,display.size[0], display.size[1],display, "/menu/blacksburg.png",self.phase,fov = math.pi ))
         self.elements.append(screen_writer.Text_Button(15,15,0,0,display,utils.Ptr("Long's Word"),utils.Ptr(50),draw_border=False, text_color = (0, 70, 20)))
         self.elements.append(screen_writer.Text_Box(10,450,400,140,self.display,text,size,self.cursor,68,7))
         self.elements.append(ui.Button(420,450,30,30,display,self.cursor_up))
