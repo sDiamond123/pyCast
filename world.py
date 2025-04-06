@@ -1,4 +1,4 @@
-import pygame,utils,map,camera,math,ui_implementation,game_object,player, enum
+import pygame,utils,map,camera,math,ui_implementation,game_object,player, enum, dialouge
 from map_chunk import OVER_MAP as overworld
 
 class World:
@@ -54,6 +54,7 @@ class World:
         self.UI[self.GAME_STATES.PAUSE_MENU.value] = ui_implementation.Pause(self.internal_display, self)
         self.UI[self.GAME_STATES.LOAD.value] = ui_implementation.Load(self.internal_display,self)
         self.UI[self.game_state.OPTIONS.value] = ui_implementation.Options(self.internal_display, self)
+        self.UI[self.game_state.DIALOUGE.value] = dialouge.Dialouge_Window(self.internal_display)
 
     def load_state(self, state):
         self.state = state
@@ -250,3 +251,6 @@ class World:
                 self.mouse.toggle()
         elif not self.mouse.alive:
             self.mouse.toggle()
+
+    def set_dialouge_entry_point(self, point):
+        self.UI[self.game_state.DIALOUGE.value].load(point)

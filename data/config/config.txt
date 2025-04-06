@@ -1,5 +1,5 @@
 # profile
-MEDIUM
+Custom
 # name
 Long's Word
 # icon
@@ -23,6 +23,6 @@ False
 # fov
 90
 # rays
-350
+500
 # draw_dist
 15

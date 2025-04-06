@@ -83,7 +83,7 @@ class Camera:
         # render sprites
         self.__render_objects__()
         # scale picture for output
-        pygame.transform.smoothscale(self.internal_surface, (self.ext_w,self.ext_h), self.external_surface)
+        pygame.transform.scale(self.internal_surface, (self.ext_w,self.ext_h), self.external_surface)
         
 
     def __distance__ (self,x, y, x1, y1):

@@ -127,6 +127,10 @@ class Main_Menu (ui.UI_Composite):
         self.control.load_state(self.control.state)
         self.control.update_game_state(self.control.GAME_STATES.FPS)
 
+    def new_game(self):
+        self.control.update_game_state(self.control.GAME_STATES.DIALOUGE)
+        self.control. set_dialouge_entry_point(0)
+
     def exit_game(self):
         self.exit = True
 
@@ -148,13 +152,13 @@ class Main_Menu (ui.UI_Composite):
         size = utils.Ptr(12)
         self.cursor = utils.Ptr(3)
         self.phase = utils.Ptr(0)
-        self.elements.append(ui.Rolling_Image(0,0,display.size[0], display.size[1],display, "/menu/blacksburg.png",self.phase,fov = math.pi ))
+        self.elements.append(ui.Rolling_Image(0,0,display.size[0], display.size[1],display, "/menu/main_menu.png",self.phase,fov = math.pi ))
         self.elements.append(screen_writer.Text_Button(15,15,0,0,display,utils.Ptr("Long's Word"),utils.Ptr(50),draw_border=False, text_color = (0, 70, 20)))
         self.elements.append(screen_writer.Text_Box(10,450,400,140,self.display,text,size,self.cursor,68,7))
         self.elements.append(ui.Button(420,450,30,30,display,self.cursor_up))
         self.elements.append(ui.Button(420,500,30,30,display,self.cursor_down))
         self.elements.append(ui.Element(595,330,195,260,display, color=ui.UI_Composite.DEFAULT_BACK))
-        self.elements.append(screen_writer.Text_Button(605,340,175,40,display,utils.Ptr("1. New"),utils.Ptr(20), color = (155,130,15), activation_key=49))
+        self.elements.append(screen_writer.Text_Button(605,340,175,40,display,utils.Ptr("1. New"),utils.Ptr(20), color = (155,130,15), activation_key=49, action = self.new_game))
         self.elements.append(screen_writer.Text_Button(605,390,175,40,display,utils.Ptr("2. Continue"),utils.Ptr(20), color = (155,130,15), activation_key=50, action = self.reload_last_save))
         self.elements.append(screen_writer.Text_Button(605,440,175,40,display,utils.Ptr("3. Load"),utils.Ptr(20), color = (155,130,15), activation_key=51,action=self.load))
         self.elements.append(screen_writer.Text_Button(605,490,175,40,display,utils.Ptr("4. Options"),utils.Ptr(20), color = (155,130,15), activation_key=52, action = self.options))

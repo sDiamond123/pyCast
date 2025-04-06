@@ -87,6 +87,9 @@ class Still_Image (Interactable_Element):
         else:
             self.image = image
     
+    def load(self, new_img):
+        self.image = pygame.image.load(new_img)
+
     def __get_border_color(self):
         if self.activation_button == self.DEFAULT_MB:
             return self.color
