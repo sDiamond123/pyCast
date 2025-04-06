@@ -155,6 +155,72 @@ class Text_Box (Text_Button):
              self.ext_display.blit(rendered,(self.x_offset + self.x, draw_y))
              draw_y += delta_y
 
-    
+class Text_Menu (ui.UI_Sub_Screen):
+
+    DESC_SIZE = 16
+    DEFAULT_TEXT = utils.Ptr("---")
+    DESC_COLOR = pygame.Color("bisque3")
+    MAX = 3
+
+    def update_text(self):
+        for i in range (self.max):
+            self.update_txt[i].value = True
+            text = ""
+            if self.draw_numbers:
+                text = str(i) + " . "
+            if i + self.cursor < len(self.lines) and self.cursor >= 0:
+                  text += str(self.lines[i + self.cursor ])
+            else:
+                text = self.DEFAULT_TEXT.value
+            self.text[i].value = text
+
+    def down(self):
+        self.cursor = utils.clamp_addition(self.cursor, 1, len(self.lines) - 1,0)
+        self.update_text()
+
+    def up(self):
+        self.cursor = utils.clamp_addition(self.cursor, -1, len(self.lines) - 1,0)
+        self.update_text()
+
+    def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
+        super().update(m_x, m_y, mouse, keys)
+        for element in self.elements:
+            if element.state != utils.Mouse_State.UNDEFINED:
+                return False
+        if (mouse.mw < 0):
+            self.down()
+        elif (mouse.mw > 0):
+            self.up()
+        return False
+        
+
+    def __init__ (self,x, y, w, h, ext_display: pygame.surface, lines, action:callable = None, max_display = MAX, 
+                  color:tuple=(59,54,48), render = True, draw_background = True, x_off = 0, y_off = 0, size = DESC_SIZE, 
+                  box_w = -1, box_spacing = 10, box_h = -1, cap_w = 10, draw_cur = True, char_per_line = 100, lines_per_box = 2):
+        super().__init__(x,y,w,h,ext_display, color,render,draw_background)
+        self.lines = lines
+        self.text = []
+        self.cursor = 0
+        self.max = max_display
+        self.update_txt = []
+        self.draw_numbers = draw_cur
+        if box_w == -1:
+            box_w = w - x_off- cap_w
+        if box_h == -1:
+            box_h = (h-y_off)/max_display - box_spacing
+        box_delta = box_h + box_spacing
+        for i in range(self.max):
+            self.update_txt.append(utils.Ptr(False))
+            header = str(i) + " . "
+            if (not draw_cur):
+                header = ""
+            if i + self.cursor < len(self.lines) and self.cursor >= 0:
+                  self.text.append(utils.Ptr(header + str(self.lines[i + self.cursor])))
+            else:
+                self.text.append(self.DEFAULT_TEXT)
+            self.elements.append(Text_Box(x + x_off, y+y_off + box_delta * i,box_w, box_h, ext_display,self.text[i],
+                                          utils.Ptr(size),utils.Ptr(0),char_per_line,lines_per_box, color=self.DESC_COLOR, 
+                                          update_text=self.update_txt[i], action=action, activation_key= 49 + i, args = i))
+
 
     

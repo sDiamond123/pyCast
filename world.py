@@ -1,4 +1,4 @@
-import pygame,utils,map,camera,math,ui_implementation,game_object,player, enum, dialouge
+import pygame,utils,map,camera,math,ui_implementation,game_object,player, enum, dialogue
 from map_chunk import OVER_MAP as overworld
 
 class World:
@@ -54,7 +54,7 @@ class World:
         self.UI[self.GAME_STATES.PAUSE_MENU.value] = ui_implementation.Pause(self.internal_display, self)
         self.UI[self.GAME_STATES.LOAD.value] = ui_implementation.Load(self.internal_display,self)
         self.UI[self.game_state.OPTIONS.value] = ui_implementation.Options(self.internal_display, self)
-        self.UI[self.game_state.DIALOUGE.value] = dialouge.Dialouge_Window(self.internal_display)
+        self.UI[self.game_state.DIALOUGE.value] = dialogue.Dialogue_Window(self.internal_display, self)
 
     def load_state(self, state):
         self.state = state
@@ -116,8 +116,6 @@ class World:
              self.UI[self.GAME_STATES.MAP.value].__move_right__()
         if keys[utils.Key.S_LEFT]:
              self.UI[self.GAME_STATES.MAP.value].__move_left__()
-        if keys[utils.Key.PAUSE]:
-            self.update_game_state(self.GAME_STATES.PAUSE_MENU)
 
     def __fps_controls__ (self, keys, mouse):
         player = self.p
@@ -155,8 +153,6 @@ class World:
             self.update_game_state(self.GAME_STATES.MAP)
         else:
             player.z = 0 
-        if keys[utils.Key.PAUSE]:
-            self.update_game_state(self.GAME_STATES.PAUSE_MENU)
         # update mouse
         if (mouse.alive):
             player.turn(mouse.poll_delta()[0])
@@ -167,6 +163,8 @@ class World:
             return False
         if keys[utils.Key.FREE_LOOK]:
             mouse.toggle()
+        if keys[utils.Key.PAUSE] and self.game_state != self.GAME_STATES.PAUSE_MENU and self.game_state != self.GAME_STATES.MENU and self.game_state != self.GAME_STATES.SPLASH_SCREEN:
+            self.update_game_state(self.GAME_STATES.PAUSE_MENU)
         mouse.update()
         self.mouse = mouse
         return True

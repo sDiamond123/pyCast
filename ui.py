@@ -280,7 +280,7 @@ class Resizable(Sticky):
             exit = True
          else:
              self.__mouse_check = True
-         if exit and not self.force_render.value:
+         if exit:
              return
          super().update(m_x, m_y, mouse, keys)
          self.corner.lock_all = (self.corner.state != utils.Mouse_State.PRESSED) and self.lock_all
@@ -304,9 +304,14 @@ class Resizable(Sticky):
              
 
     def render_UI(self):
-        if self.force_render.value or (self.__mouse_check and not self.lock_all):
-            if self.force_render or (self.render_corner and (not self.__has_show or self.show.toggle)):
-                self.corner.render()
+        if self.__mouse_check and (self.force_render.value or not self.lock_all):
+            if self.render_corner:
+                if self.force_render:
+                    if self.__has_show:
+                        if self.show.toggle:
+                            self.corner.render()
+                    else:
+                        self.corner.render()
             if self.__has_show and self.render_show:
                 self.show.render()
 
