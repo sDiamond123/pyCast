@@ -173,6 +173,7 @@ class Button(Interactable_Element):
                   p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None):
          self.action = action
          self.args = args
+         self.key_lock = False
          super().__init__(x,y,w,h,ext_display,color,border_width,p_button,draw_border,activation_key=activation_key)
 
      def activate (self):
@@ -184,7 +185,7 @@ class Button(Interactable_Element):
 
      def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         super().update(m_x, m_y, mouse, keys)
-        if (self.state == utils.Mouse_State.RELEASED or (self.activation_key != -1 and keys[self.activation_key])):
+        if (self.state == utils.Mouse_State.RELEASED or (self.activation_key != -1 and keys[self.activation_key] and not self.key_lock)):
             self.activate()
 
 class Sticky(Button):

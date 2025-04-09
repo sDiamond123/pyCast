@@ -44,11 +44,9 @@ class Talking_Head(ui.Still_Image):
     def get_img_id(self):
         img_n = self.DEFAULT_IMG
         for line in self.img_metadata:
-            print(line)
             if self.sentiment > line[self.CUTOFF_INDEX]:
                 break
             img_n = self.img_folder + "/" + line[self.IMG_INDEX]
-        print(img_n)
         return img_n
     
     def set_e_p (self):
@@ -57,9 +55,7 @@ class Talking_Head(ui.Still_Image):
                 self.current_point = line["entry_point"]
 
     def update_sentiment(self, delta):
-        print(str(self.sentiment) + " + " + str(delta))
         self.sentiment = utils.clamp_addition(self.sentiment, delta,self.MAX_SENTIMENT, self.MIN_SENTIMENT)
-        print(self.sentiment)
         new_id = self.get_img_id()
         if (new_id != self.img_name):
             self.img_name = new_id
@@ -127,7 +123,7 @@ class Dialogue_Window (ui.UI_Heirarchy):
 
     def __apply_attr(self, i):
         for attr in self.set_on_click[i]:
-            print(attr)
+            #print(attr)
             if (attr["type"] == "sentiment"):
                 self.elements[1].update_sentiment(attr["value"])
 

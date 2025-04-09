@@ -163,7 +163,7 @@ class World:
             return False
         if keys[utils.Key.FREE_LOOK]:
             mouse.toggle()
-        if keys[utils.Key.PAUSE] and self.game_state != self.GAME_STATES.PAUSE_MENU and self.game_state != self.GAME_STATES.MENU and self.game_state != self.GAME_STATES.SPLASH_SCREEN:
+        if keys[utils.Key.PAUSE] and self.game_state != self.GAME_STATES.PAUSE_MENU and self.game_state != self.GAME_STATES.MENU and self.game_state != self.GAME_STATES.SPLASH_SCREEN and self.game_state != self.GAME_STATES.OPTIONS:
             self.update_game_state(self.GAME_STATES.PAUSE_MENU)
         mouse.update()
         self.mouse = mouse

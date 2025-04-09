@@ -332,16 +332,26 @@ class Options(ui.UI_Heirarchy):
     
     CONFIG_ID = 0
     BINDS_ID = 1
+    CONSOLE_ID = 2
 
     def __init__(self, ext_disp : pygame.Surface, control):
         super().__init__(ext_disp,True,pygame.Color("bisque3"))
         self.control = control
         self.sub_composites.append(Config_Menu(125,25,ext_disp))
         self.sub_composites.append(Binds_Menu(125,25,ext_disp))
+        self.sub_composites.append(Console(125,25,ext_disp))
         self.elements.append(screen_writer.Text_Button(10,10,110,40,ext_disp,utils.Ptr("'"+chr(utils.Key.MAP) + "'. Back"),utils.Ptr(20), activation_key=utils.Key.MAP, action = self.return_play))
         self.elements.append(screen_writer.Text_Button(10,60,110,40,ext_disp,utils.Ptr("GRAPHICS"),utils.Ptr(20), action = self.focus, args=self.CONFIG_ID))
         self.elements.append(screen_writer.Text_Button(10,110,110,40,ext_disp,utils.Ptr("BINDS"),utils.Ptr(20),  action = self.focus,args=self.BINDS_ID))
+        self.elements.append(screen_writer.Text_Button(10,160,110,40,ext_disp,utils.Ptr("CONSOLE"),utils.Ptr(20),  action = self.focus,args=self.CONSOLE_ID))
         
+
+    def update(self, mouse, keys):
+        if self.sub_composites[self.CONSOLE_ID].render_elements:
+            self.elements[0].key_lock = True
+        elif self.elements[0].key_lock:
+            self.elements[0].key_lock = False
+        return super().update(mouse, keys)
 
 class Binds_Menu (ui.UI_Sub_Screen):
     WIDTH = 650
@@ -413,3 +423,17 @@ class Config_Menu (ui.UI_Sub_Screen):
         # save changes
         self.elements.append(screen_writer.Text_Button(self.x + 300,self.y + 475,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10))
         
+class Console (ui.UI_Sub_Screen):
+    WIDTH = 650
+    HEIGHT = 550
+    TEXT_SIZE = utils.Ptr(12)
+    TITLE_SIZE = utils.Ptr(20)
+    BUTTON_W = 70
+    BUTTON_H = 50
+
+    def __init__ (self, x, y, ext_display: pygame.surface):
+        super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),True,True)
+        kb = screen_writer.Keyboard(self.x + 10, self.y + 200, self.w-20, self.h-220,ext_display, self.TEXT_SIZE)
+        self.elements.append(kb)
+        self.cursor = utils.Ptr(0)
+        self.elements.append(screen_writer.Text_Box(self.x + 10, self.y + 10, self.w-20, 190,ext_display,kb.c_text,self.TITLE_SIZE,kb.cursor,40,5,kb.has_text))
