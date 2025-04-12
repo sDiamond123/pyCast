@@ -1,23 +1,3 @@
-Successfully loaded key binds 
-
-Config loaded (data/config/config.txt) 
-
-Succesfully loaded font: data/fonts/Open_Sans/static/OpenSans-Regular.ttf 
-
-Succesfully loaded font: data/fonts/Jacquard_12/Jacquard12-Regular.ttf 
-
-Succesfully loaded font: data/fonts/Playwrite_MX_Guides/PlaywriteMXGuides-Regular.ttf 
-
-Loaded Chunks (data/maps/overworld/chunks.csv) 
-
-Successfully loaded map: data/maps/chunks/empty_chunk 
-
-Started: Long's Word 
- Window: 800 by 600 
- Fullscreen: False 
- Internal Resolution: 800 by 600 
- Targeting 60 FPS 
-
 USER: help 
 
  
@@ -33,13 +13,7 @@ USER: help
  prev_stage - reload last stage 
  set <VAR> <VAL> - set VAR to VAL ('set help' for list of variables) 
 
-SELECT * FROM npc WHERE id = 0 
-
-Game Start! 
-
-switching stage to: MENU 
-
-switching stage to: OPTIONS 
+USER: exit 
 
 Long's Word Succesfully Exited 
 

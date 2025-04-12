@@ -400,7 +400,7 @@ class Binds_Menu (ui.UI_Sub_Screen):
         self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 550,self.y +normalize.SCALE_FACTOR_Y * 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+10"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = 10,scale = False))
         
         # save changes
-        self.elements.append(screen_writer.Text_Button(self.x + 300,self.y + 475,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *300,self.y + normalize.SCALE_FACTOR_Y *475,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10,scale = False))
 
 class Config_Menu (ui.UI_Sub_Screen):
     WIDTH = 650
@@ -427,7 +427,7 @@ class Config_Menu (ui.UI_Sub_Screen):
         self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 410,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Current"),self.TEXT_SIZE,action=options.CONFIG.load_config,x_offset=5, y_offset=10,scale = False))
         self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 490,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Default"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.DEFAULT,scale = False))
         # save changes
-        self.elements.append(screen_writer.Text_Button(self.x + 300,self.y + 475,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *300,self.y + normalize.SCALE_FACTOR_Y *475,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10,scale = False))
         
 class Console (ui.UI_Sub_Screen):
     WIDTH = 650
