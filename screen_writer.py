@@ -28,9 +28,10 @@ class Text_Button (ui.Button):
     def __init__ (self, x, y, w, h, ext_display: pygame.surface,
                    text : utils.Ptr, size: utils.Ptr, writer: Screen_Writer = DEFAULT_WRITER, action : callable = None,
                    color:tuple = ui.Element.DEFAULT_GREY, border_width : int = ui.Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, x_offset = 0, y_offset = 0, args = None, text_color = pygame.Color("black")):
+                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, x_offset = 0, y_offset = 0,
+                    args = None, text_color = pygame.Color("black"), scale = True):
         super().__init__ (x, y, w, h, ext_display, action, color, border_width, 
-                  p_button, draw_border , activation_key, args = args)
+                  p_button, draw_border , activation_key, args = args, scale=scale)
         self.text = text
         self.size = size
         self.text_color = text_color
@@ -47,9 +48,9 @@ class FPS_UI (ui.Button):
 
     def __init__ (self, x, y, w, h, ext_display: pygame.surface, size: utils.Ptr, writer: Screen_Writer = DEFAULT_WRITER,
                    color:tuple = ui.Element.DEFAULT_GREY, border_width : int = ui.Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, x_offset = 0, y_offset = 0, text_color = pygame.Color("hotpink")):
+                  p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, x_offset = 0, y_offset = 0, text_color = pygame.Color("hotpink"), scale = True):
         super().__init__ (x, y, w, h, ext_display, None, color, border_width, 
-                  p_button, draw_border)
+                  p_button, draw_border,scale = scale)
         self.size = size
         self.writer = writer
         self.x_offset = x_offset + 2 * self.b_w 
@@ -127,13 +128,13 @@ class Text_Box (Text_Button):
                     writer: Screen_Writer = DEFAULT_WRITER, action : callable = None,
                    color:tuple = ui.Element.DEFAULT_GREY, border_width : int = ui.Interactable_Element.DEFAULT_BORDER_W, 
                   p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, x_offset = 0, y_offset = 0,
-                    args = None, text_color = pygame.Color("black")):
+                    args = None, text_color = pygame.Color("black"), scale = True):
         self.max_c_per_line = max_char_per_line
         self.max_lines = max_lines
         self.cursor = cursor
         self.refresh = update_text
         super().__init__ (x, y, w, h, ext_display, text , size, writer, action, color, border_width, 
-                  p_button, draw_border, activation_key , x_offset=x_offset, y_offset=y_offset,args = args, text_color=text_color)
+                  p_button, draw_border, activation_key , x_offset=x_offset, y_offset=y_offset,args = args, text_color=text_color, scale = scale)
         self.__parse_text__()
     
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
@@ -203,8 +204,8 @@ class Text_Menu (ui.UI_Sub_Screen):
 
     def __init__ (self,x, y, w, h, ext_display: pygame.surface, lines, action:callable = None, max_display = MAX, 
                   color:tuple=(59,54,48), render = True, draw_background = True, x_off = 0, y_off = 0, size = DESC_SIZE, 
-                  box_w = -1, box_spacing = 10, box_h = -1, cap_w = 10, draw_cur = True, char_per_line = 100, lines_per_box = 2):
-        super().__init__(x,y,w,h,ext_display, color,render,draw_background)
+                  box_w = -1, box_spacing = 10, box_h = -1, cap_w = 10, draw_cur = True, char_per_line = 100, lines_per_box = 2, scale = True):
+        super().__init__(x,y,w,h,ext_display, color,render,draw_background, scale = scale)
         self.lines = lines
         self.text = []
         self.cursor = 0
@@ -231,9 +232,9 @@ class Text_Menu (ui.UI_Sub_Screen):
 
 
 class Log(Text_Button):
-    def __init__(self, x, y, w, h, ext_display, text, size, writer = DEFAULT_WRITER, action = None, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, p_button=ui.Interactable_Element.DEFAULT_MB, draw_border=True, activation_key=-1, x_offset=0, y_offset=0, args=None, text_color=pygame.Color("black")):
-        super().__init__(x, y, w, h, ext_display, text, size, writer, action, color, border_width, p_button, draw_border, activation_key, x_offset, y_offset, args, text_color)
-        
+    def __init__(self, x, y, w, h, ext_display, text, size, writer = DEFAULT_WRITER, action = None, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, p_button=ui.Interactable_Element.DEFAULT_MB, draw_border=True, activation_key=-1, x_offset=0, y_offset=0, args=None, text_color=pygame.Color("black"), scale = True):
+        super().__init__(x, y, w, h, ext_display, text, size, writer, action, color, border_width, p_button, draw_border, activation_key, x_offset, y_offset, args, text_color, scale)
+
 class Keyboard(ui.Button):
     BUTTONS_PER_ROW = 10
     KEY_SIZE = utils.Ptr(20)
@@ -248,7 +249,7 @@ class Keyboard(ui.Button):
         self.has_text.value = True
         self.c_text.value = self.nc_text
 
-    def __init__(self, x, y, w, h, ext_display, size, writer = DEFAULT_WRITER, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, p_button=ui.Interactable_Element.DEFAULT_MB, draw_border=True, x_offset=0, y_offset=0, args=None, text_color=pygame.Color("black"), back_color = pygame.Color("bisque2")):
+    def __init__(self, x, y, w, h, ext_display, size, writer = DEFAULT_WRITER, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, p_button=ui.Interactable_Element.DEFAULT_MB, draw_border=True, x_offset=0, y_offset=0, args=None, text_color=pygame.Color("black"), back_color = pygame.Color("bisque2"), scale = True):
         self.keyboard = []
         self.keys = []
         self.w = w
@@ -275,7 +276,7 @@ class Keyboard(ui.Button):
             if j > self.BUTTONS_PER_ROW:
                 j = 0
                 k+=1
-        super().__init__(x,y,w,h,ext_display,None,back_color,border_width,p_button=1)
+        super().__init__(x,y,w,h,ext_display,None,back_color,border_width,p_button=1,scale=scale)
         
 
     def update(self, m_x, m_y, mouse, keys):

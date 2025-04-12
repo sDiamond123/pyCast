@@ -2,11 +2,16 @@ import pygame, utils, texture, math, map, player, math, normalize
 
 class Element():
     DEFAULT_GREY = (155,155,155)
-    def __init__ (self, x, y, w, h, ext_display : pygame.Surface, color : tuple = DEFAULT_GREY):
-        self.x = x * normalize.SCALE_FACTOR_X
-        self.y = y * normalize.SCALE_FACTOR_Y
-        self.w = w * normalize.SCALE_FACTOR_X
-        self.h = h * normalize.SCALE_FACTOR_Y
+    def __init__ (self, x, y, w, h, ext_display : pygame.Surface, color : tuple = DEFAULT_GREY, scale = True):
+        self.y = y
+        self.w = w
+        self.h = h
+        self.x = x
+        if scale:
+            self.y *= normalize.SCALE_FACTOR_Y
+            self.w *= normalize.SCALE_FACTOR_X
+            self.h *= normalize.SCALE_FACTOR_Y
+            self.x *= normalize.SCALE_FACTOR_X
         self.color = color
         self.ext_display = ext_display
     
@@ -28,8 +33,8 @@ class Interactable_Element(Element):
     DEFAULT_MB = 0
 
     def __init__ (self, x, y, w, h, ext_display: pygame.surface, color:tuple = Element.DEFAULT_GREY, border_width : int = DEFAULT_BORDER_W, 
-                  p_button = DEFAULT_MB, draw_border = True, activation_key = -1):
-        super().__init__(x,y,w,h, ext_display, color)
+                  p_button = DEFAULT_MB, draw_border = True, activation_key = -1, scale = True):
+        super().__init__(x,y,w,h, ext_display, color, scale)
         self.b_w = border_width
         self.state = utils.Mouse_State.UNDEFINED
         self.activation_button = p_button
@@ -78,9 +83,9 @@ class Still_Image (Interactable_Element):
     DEFAULT_MB = -1
 
     def __init__ (self, x, y, w, h, ext_display : pygame.surface, image,
-                  p_button = DEFAULT_MB, draw_border = False, color = Element.DEFAULT_GREY, border_width = 0, activation_key = -1):
+                  p_button = DEFAULT_MB, draw_border = False, color = Element.DEFAULT_GREY, border_width = 0, activation_key = -1, scale = True):
         super().__init__(x,y,w,h,ext_display, p_button=p_button, draw_border=draw_border, 
-                         color=color, border_width=border_width, activation_key=activation_key)
+                         color=color, border_width=border_width, activation_key=activation_key, scale = scale)
         if isinstance(image, str):
             image = pygame.image.load(image)
             self.image = pygame.transform.scale(image, (self.w - 2 * self.b_w,self.h - 2 * self.b_w))
@@ -105,11 +110,12 @@ class Rolling_Image (Still_Image):
     DEFAULT_PHASE = 0
     DEFAULT_FOV = math.pi
     def __init__ (self, x, y, w, h, ext_display : pygame.surface, image,phase_ptr:utils.Ptr,
-                  p_button = Still_Image.DEFAULT_MB, draw_border = False, color = Element.DEFAULT_GREY, border_width = 0, activation_key = -1, phase = DEFAULT_PHASE, fov = DEFAULT_FOV):
+                  p_button = Still_Image.DEFAULT_MB, draw_border = False, color = Element.DEFAULT_GREY, border_width = 0, 
+                  activation_key = -1, phase = DEFAULT_PHASE, fov = DEFAULT_FOV, scale = True):
         if isinstance(image, str):
             image = texture.RollingTexture(image, phase, fov, w - 2 * border_width, h - 2 * border_width)
         super().__init__(x,y,w,h,ext_display, image, p_button=p_button, draw_border=draw_border, 
-                         color=color, border_width=border_width, activation_key=activation_key)
+                         color=color, border_width=border_width, activation_key=activation_key, scale = scale)
         self.phase_ptr = phase_ptr
 
     def render (self):
@@ -121,8 +127,9 @@ class Rolling_Image (Still_Image):
 
 class Map_Display(Element):
 
-    def __init__ (self, x, y, ext_display : pygame.Surface, map:map.Map, player:player.Player, cell_w = 20, cell_h = 20, trav_w = 4, trav_h = 3, cool_down = 100):
-        super().__init__(x,y,0,0,ext_display)
+    def __init__ (self, x, y, ext_display : pygame.Surface, map:map.Map, player:player.Player, cell_w = 20, cell_h = 20, trav_w = 4, trav_h = 3, 
+                  cool_down = 100, scale = True):
+        super().__init__(x,y,0,0,ext_display, scale)
         self.map = map
         self.player = player
         self.map_w = cell_w
@@ -133,6 +140,9 @@ class Map_Display(Element):
         self.map_t = utils.Timed_Toggle(self.map_cool_down)
         self.x_off = 0
         self.y_off = 0
+        if scale:
+            self.map_w *= normalize.SCALE_FACTOR_X
+            self.map_h *= normalize.SCALE_FACTOR_Y
 
     def __perform_z_in__ (self):
         old_w = self.map_trav_w
@@ -170,11 +180,11 @@ class Map_Display(Element):
 
 class Button(Interactable_Element):
      def __init__ (self, x, y, w, h, ext_display: pygame.surface, action : callable = None, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None):
+                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None, scale = True):
          self.action = action
          self.args = args
          self.key_lock = False
-         super().__init__(x,y,w,h,ext_display,color,border_width,p_button,draw_border,activation_key=activation_key)
+         super().__init__(x,y,w,h,ext_display,color,border_width,p_button,draw_border,activation_key=activation_key, scale = scale)
 
      def activate (self):
          if self.action != None:
@@ -190,8 +200,8 @@ class Button(Interactable_Element):
 
 class Sticky(Button):
      def __init__ (self, x, y, w, h, ext_display: pygame.surface, action : callable = None, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None, lock_x = False, lock_y = False, lock_all = False, phantom_dist = 0):
-            super().__init__(x,y,w,h,ext_display,action,color,border_width,p_button,draw_border,activation_key,args)
+                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None, lock_x = False, lock_y = False, lock_all = False, phantom_dist = 0, scale = True):
+            super().__init__(x,y,w,h,ext_display,action,color,border_width,p_button,draw_border,activation_key,args, scale = scale)
             self.lock_x = lock_x
             self.lock_y = lock_y
             self.lock_all = lock_all
@@ -229,13 +239,13 @@ class Swtich(Button):
     DEFAULT_OFF = (120,10,10)
     toggle = False
     def __init__ (self, x, y, w, h, ext_display: pygame.surface, action : callable = None, color_off:tuple = DEFAULT_OFF, color_on:tuple = DEFAULT_ON, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
-                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None, start_state = False):
+                  p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None, start_state = False, scale = True):
             color = color_off
             if (start_state):
                 color = color_on
             self.color_on = color_on
             self.color_off = color_off
-            super().__init__(x,y,w,h,ext_display,action,color,border_width,p_button,draw_border,activation_key,args)
+            super().__init__(x,y,w,h,ext_display,action,color,border_width,p_button,draw_border,activation_key,args, scale = scale)
             self.toggle = start_state
 
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
@@ -259,11 +269,11 @@ class Resizable(Sticky):
 
     def __init__ (self, x, y, w, h, ext_display: pygame.surface, action : callable = None, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
                   p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, args = None, lock_x = False, lock_y = False, corner_w = DEFAULT_CORNER, 
-                  corner_color = DEFAULT_CORNER_COLOR, render_corner = True, lock_all = False, render_show = True, has_show = True, force_render:utils.Ptr = utils.FALSE_PTR):
-            super().__init__(x,y,w,h,ext_display,action,color,border_width,p_button,draw_border,activation_key,args, lock_x, lock_y, lock_all, phantom_dist=4 * self.BOX_DIST)
-            self.corner = Sticky(x+w-corner_w,y+h,corner_w, corner_w,ext_display, color=corner_color, phantom_dist=self.BOX_DIST)
+                  corner_color = DEFAULT_CORNER_COLOR, render_corner = True, lock_all = False, render_show = True, has_show = True, force_render:utils.Ptr = utils.FALSE_PTR, scale = True):
+            super().__init__(x,y,w,h,ext_display,action,color,border_width,p_button,draw_border,activation_key,args, lock_x, lock_y, lock_all, phantom_dist=4 * self.BOX_DIST, scale = scale)
+            self.corner = Sticky(x+w-corner_w,y+h,corner_w, corner_w,ext_display, color=corner_color, phantom_dist=self.BOX_DIST, scale = scale)
             if has_show:
-                self.show = Swtich(x,y - corner_w,corner_w, corner_w, ext_display, start_state= True)
+                self.show = Swtich(x,y - corner_w,corner_w, corner_w, ext_display, start_state= True, scale = scale)
             self.render_show = render_show
             self.__has_show = has_show
             self.render_corner = render_corner
@@ -326,9 +336,9 @@ class Resizable(Sticky):
 
 class Mouse_Cursor(Interactable_Element):
     def __init__ (self, x, y, w, h, ext_display: pygame.surface, color:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
-                    p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1):
+                    p_button = Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, scale = True):
             self.alive = False
-            super().__init__(x,y,w,h,ext_display,color,border_width,p_button,draw_border,activation_key=activation_key)
+            super().__init__(x,y,w,h,ext_display,color,border_width,p_button,draw_border,activation_key=activation_key, scale = scale)
 
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         self.x = m_x
@@ -353,8 +363,8 @@ class Bar(Element):
     DEFAULT_EMPTY = (120, 120, 120)
     DEFAULT_DEAD = (0,0,0)
 
-    def __init__ (self, x, y, w, h, ext_display : pygame.Surface, data : utils.Partial, filled_color : tuple = DEFAULT_FILLED, empty_color : tuple = DEFAULT_EMPTY, dead_color : tuple = DEFAULT_DEAD):
-        super().__init__(x,y,w,h,ext_display)
+    def __init__ (self, x, y, w, h, ext_display : pygame.Surface, data : utils.Partial, filled_color : tuple = DEFAULT_FILLED, empty_color : tuple = DEFAULT_EMPTY, dead_color : tuple = DEFAULT_DEAD, scale = True):
+        super().__init__(x,y,w,h,ext_display, scale)
         self.filled = filled_color
         self.empty = empty_color
         self.dead = dead_color
@@ -373,11 +383,11 @@ class Bar(Element):
 
 
 class UI_Sub_Screen(Element):
-    def __init__ (self, x, y, w, h, ext_display: pygame.surface, color:tuple = Element.DEFAULT_GREY, render = False, draw_background = False):
+    def __init__ (self, x, y, w, h, ext_display: pygame.surface, color:tuple = Element.DEFAULT_GREY, render = False, draw_background = False, scale = True):
             self.render_elements = render
             self.elements = []
             self.has_back = draw_background
-            super().__init__(x,y,w,h,ext_display,color)
+            super().__init__(x,y,w,h,ext_display,color, scale)
 
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         if self.render_elements:
@@ -447,8 +457,8 @@ class UI_Internal_Window(Resizable):
     
     DEFAULT_MB = 2
     def __init__ (self, x, y, w, h, i_w, i_h, ext_display: pygame.surface, has_background = False, background:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
-                  corner_w = Resizable.DEFAULT_CORNER, corner_color = Resizable.DEFAULT_CORNER_COLOR, render_corner = True, lock_all = False, render_show = True, has_show = True, p_button = DEFAULT_MB):
-        super().__init__(x,y,w,h,ext_display, color=background, corner_w=corner_w, corner_color=corner_color,render_corner=render_corner,lock_all=lock_all, render_show=render_show,has_show=has_show, p_button=p_button)
+                  corner_w = Resizable.DEFAULT_CORNER, corner_color = Resizable.DEFAULT_CORNER_COLOR, render_corner = True, lock_all = False, render_show = True, has_show = True, p_button = DEFAULT_MB, scale = True):
+        super().__init__(x,y,w,h,ext_display, color=background, corner_w=corner_w, corner_color=corner_color,render_corner=render_corner,lock_all=lock_all, render_show=render_show,has_show=has_show, p_button=p_button, scale= scale)
         self.elements = []
         self.has_background = has_background
         self.back_color = background
