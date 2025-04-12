@@ -1,12 +1,12 @@
-import pygame, utils, texture, math, map, player, math
+import pygame, utils, texture, math, map, player, math, normalize
 
 class Element():
     DEFAULT_GREY = (155,155,155)
     def __init__ (self, x, y, w, h, ext_display : pygame.Surface, color : tuple = DEFAULT_GREY):
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
+        self.x = x * normalize.SCALE_FACTOR_X
+        self.y = y * normalize.SCALE_FACTOR_Y
+        self.w = w * normalize.SCALE_FACTOR_X
+        self.h = h * normalize.SCALE_FACTOR_Y
         self.color = color
         self.ext_display = ext_display
     
@@ -83,7 +83,7 @@ class Still_Image (Interactable_Element):
                          color=color, border_width=border_width, activation_key=activation_key)
         if isinstance(image, str):
             image = pygame.image.load(image)
-            self.image = pygame.transform.scale(image, (w - 2 * self.b_w,h - 2 * self.b_w))
+            self.image = pygame.transform.scale(image, (self.w - 2 * self.b_w,self.h - 2 * self.b_w))
         else:
             self.image = image
     
