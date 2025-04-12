@@ -39,11 +39,33 @@ Game Start!
 
 switching stage to: MENU 
 
-switching stage to: EXIT 
+Successfully loaded map: data/maps/singleton/test_town 
 
-reverting stage to: MENU 
+Successfully spawned player: (12.567,6.5,152.9797312999298) 
 
-switching stage to: EXIT 
+Set up camera at (12.567,6.5) with a 90.0 degree FOV and casting 500 rays out to 15 cells 
+
+PISTOL added to inventory 
+
+SHOTGUN added to inventory 
+
+MG added to inventory 
+
+Successfully loaded save: built_in/town.csv 
+
+switching stage to: FPS 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
 
 Long's Word Succesfully Exited 
 
