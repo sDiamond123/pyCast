@@ -1,4 +1,5 @@
 import utils, map, pygame, player, math, ui, screen_writer, options, sheet, options
+from log import LOG as log
 
 class Map_Screen(ui.UI_Composite):
      MAP_INDEX = 0
@@ -436,4 +437,5 @@ class Console (ui.UI_Sub_Screen):
         kb = screen_writer.Keyboard(self.x + 10, self.y + 200, self.w-20, self.h-220,ext_display, self.TEXT_SIZE, scale = False)
         self.elements.append(kb)
         self.cursor = utils.Ptr(0)
-        self.elements.append(screen_writer.Text_Box(self.x + 10, self.y + 10, self.w-20, 190,ext_display,kb.c_text,self.TITLE_SIZE,kb.cursor,40,5,kb.has_text, scale = False))
+        #self.elements.append(screen_writer.Text_Box(self.x + 10, self.y + 10, self.w-20, 190,ext_display,kb.c_text,self.TITLE_SIZE,kb.cursor,40,5,kb.has_text, scale = False))
+        self.elements.append(screen_writer.Log(self.x + 10, self.y + 10, self.w-20, 470,ext_display,self.TITLE_SIZE,kb.cursor,65,16,log.new, scale = False, color=(0,0,0), text_color=(50,200,50)))

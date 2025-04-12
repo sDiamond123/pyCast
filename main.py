@@ -24,8 +24,8 @@ if __name__ == "__main__":
 
 
     #print out config to terminal
-    log.write ("Started: "+name+"\nWindow: " + str(w) + " by " + str(h) +"\nFullscreen: "+str(fullscreen)+
-           "\nInternal Resolution: "+str(i_w)+" by "+ str(i_h)+"\nTargeting " + str(fps) +" FPS")
+    log.write ("Started: "+name+" \n Window: " + str(w) + " by " + str(h) +" \n Fullscreen: "+str(fullscreen)+
+           " \n Internal Resolution: "+str(i_w)+" by "+ str(i_h)+"\n Targeting " + str(fps) +" FPS")
     
     # finish pygame init
     if not fullscreen:

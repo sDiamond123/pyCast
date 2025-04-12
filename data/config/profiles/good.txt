@@ -1,5 +1,5 @@
 # profile
-Custom
+High
 # name
 Long's Word
 # icon

@@ -231,9 +231,9 @@ class Text_Menu (ui.UI_Sub_Screen):
                                           update_text=self.update_txt[i], action=action, activation_key= 49 + i, args = i))
 
 
-class Log(Text_Button):
-    def __init__(self, x, y, w, h, ext_display, text, size, writer = DEFAULT_WRITER, action = None, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, p_button=ui.Interactable_Element.DEFAULT_MB, draw_border=True, activation_key=-1, x_offset=0, y_offset=0, args=None, text_color=pygame.Color("black"), scale = True):
-        super().__init__(x, y, w, h, ext_display, text, size, writer, action, color, border_width, p_button, draw_border, activation_key, x_offset, y_offset, args, text_color, scale)
+class Log(Text_Box):
+    def __init__(self, x, y, w, h, ext_display, size, cursor, max_char_per_line, max_lines, update_text = utils.FALSE_PTR, writer = DEFAULT_WRITER, action = None, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, p_button=ui.Interactable_Element.DEFAULT_MB, draw_border=True, activation_key=-1, x_offset=0, y_offset=0, args=None, text_color=pygame.Color("black"), scale=True):
+        super().__init__(x, y, w, h, ext_display, log.log, size, cursor, max_char_per_line, max_lines, update_text, writer, action, color, border_width, p_button, draw_border, activation_key, x_offset, y_offset, args, text_color, scale)
 
 class Keyboard(ui.Button):
     BUTTONS_PER_ROW = 10

@@ -458,7 +458,7 @@ class UI_Internal_Window(Resizable):
     DEFAULT_MB = 2
     def __init__ (self, x, y, w, h, i_w, i_h, ext_display: pygame.surface, has_background = False, background:tuple = Element.DEFAULT_GREY, border_width : int = Interactable_Element.DEFAULT_BORDER_W, 
                   corner_w = Resizable.DEFAULT_CORNER, corner_color = Resizable.DEFAULT_CORNER_COLOR, render_corner = True, lock_all = False, render_show = True, has_show = True, p_button = DEFAULT_MB, scale = True):
-        super().__init__(x,y,w,h,ext_display, color=background, corner_w=corner_w, corner_color=corner_color,render_corner=render_corner,lock_all=lock_all, render_show=render_show,has_show=has_show, p_button=p_button, scale= scale)
+        super().__init__(x,y,w,h,ext_display, color=background, corner_w=corner_w, corner_color=corner_color,render_corner=render_corner,lock_all=lock_all, render_show=render_show,has_show=has_show, p_button=p_button, scale=scale)
         self.elements = []
         self.has_background = has_background
         self.back_color = background
