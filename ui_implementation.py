@@ -349,6 +349,7 @@ class Options(ui.UI_Heirarchy):
         self.elements.append(screen_writer.Text_Button(10,60,110,40,ext_disp,utils.Ptr("GRAPHICS"),utils.Ptr(20), action = self.focus, args=self.CONFIG_ID))
         self.elements.append(screen_writer.Text_Button(10,110,110,40,ext_disp,utils.Ptr("BINDS"),utils.Ptr(20),  action = self.focus,args=self.BINDS_ID))
         self.elements.append(screen_writer.Text_Button(10,160,110,40,ext_disp,utils.Ptr("CONSOLE"),utils.Ptr(20),  action = self.focus,args=self.CONSOLE_ID))
+        self.focus(self.CONFIG_ID)
         
 
     def update(self, mouse, keys):
@@ -436,8 +437,14 @@ class Console (ui.UI_Sub_Screen):
     BUTTON_W = 70
     BUTTON_H = 50
 
+    def execute(self, task):
+        self.elements[0].cursor.value += 1
+        self.control.execute(task)
+
     def __init__ (self, x, y, ext_display: pygame.surface, control):
         super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),True,True)
         self.cursor = utils.Ptr(0)
         self.elements.append(screen_writer.Log(self.x + 10, self.y + 10, self.w-20, 440,ext_display,self.TEXT_SIZE,self.cursor,140,25,log.new, scale = False, color=(0,0,0), text_color=(50,200,50)))
-        self.elements.append(screen_writer.Typewriter(self.x + 10, self.y + 450,self.w - 20, 90, ext_display,utils.Ptr("> "),self.TITLE_SIZE,utils.Ptr(0),65,3,  color=(0,0,0), text_color=(50,200,50), action=control.execute))
+        self.elements.append(screen_writer.Typewriter(self.x + 10, self.y + 450,self.w - 20, 90, ext_display,utils.Ptr("> "),self.TITLE_SIZE,utils.Ptr(0),65,3,  color=(20,20,20), text_color=(50,200,50), action=self.execute))
+        self.control = control
+        self.execute("help") 

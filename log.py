@@ -3,7 +3,7 @@ from utils import Ptr as ptr
 PRINT_TO_CONOSLE = False
 
 class __log__:
-    MAX_SIZE = 1000
+    MAX_SIZE = 256
     DUMP_FILE = "data/log.txt"
 
     def __init__(self):

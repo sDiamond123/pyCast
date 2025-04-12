@@ -240,8 +240,9 @@ class Log(Text_Box):
 
 class Typewriter(Text_Box):
     TIME = 30
+    MAX_LEN = 256
 
-    def __init__(self, x, y, w, h, ext_display, prompt, size, cursor, max_char_per_line, max_lines, update_text = utils.FALSE_PTR, writer = DEFAULT_WRITER, action = None, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, draw_border=True, x_offset=0, y_offset=0, text_color=pygame.Color("black"), scale=True):
+    def __init__(self, x, y, w, h, ext_display, prompt, size, cursor, max_char_per_line, max_lines, update_text = utils.FALSE_PTR, writer = DEFAULT_WRITER, action = None, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, draw_border=True, x_offset=0, y_offset=0, text_color=pygame.Color("black"), scale=True, max_len = MAX_LEN, verbose = False):
         self.out = utils.Ptr("")
         super().__init__(x, y, w, h, ext_display, prompt, size, cursor, max_char_per_line, max_lines, update_text, writer, action, color, border_width, -1, draw_border, -1 , x_offset, y_offset, self.out, text_color, scale)
         self.old_keys = [False * 256]
@@ -251,13 +252,15 @@ class Typewriter(Text_Box):
         self.flash = False
         self.flip = self.TIME
         self.slice = 0
+        self.max = max_len
+        self.verbose = verbose
 
     def update(self, m_x, m_y, mouse, keys):
         self.flip -= 1
         if self.flip < 0:
             self.flash = not self.flash
             self.flip = self.TIME
-        k_pressed = key_in.poll_keys(keys)
+        k_pressed = key_in.poll_keys(keys,self.verbose)
         checkEnd = False
         if k_pressed[key_in.POLL_KP]:
             arrow = k_pressed[key_in.POLL_ARROWS]
@@ -276,10 +279,11 @@ class Typewriter(Text_Box):
                 self.action(self.body)
                 self.body = ""
                 self.slice = 0
+                self.cursor.value = 0
             elif k_pressed[key_in.POLL_DEL] and len(self.body) > 0:
                 self.body= self.body[:self.slice - 1] + self.body[self.slice:]
                 self.slice-=1
-            else:
+            elif len(k_pressed[key_in.POLL_TXT]) + len(self.body) < self.MAX_LEN:
                 self.body = self.body[:self.slice] +  k_pressed[key_in.POLL_TXT] + self.body[self.slice:]
                 self.slice += len(k_pressed[key_in.POLL_TXT])
                 if "\n" in k_pressed[key_in.POLL_TXT]:
@@ -291,4 +295,4 @@ class Typewriter(Text_Box):
         self.refresh.value = True
         super().update(m_x, m_y, mouse, keys)
         if checkEnd:
-            self.cursor.value = len(self.lines) - 1
+            self.cursor.value = len(self.lines) - 2

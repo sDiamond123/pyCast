@@ -18,6 +18,18 @@ Started: Long's Word
  Internal Resolution: 800 by 600 
  Targeting 60 FPS 
 
+USER: help 
+
+ 
+ 
+  Commands 
+ -------------------- 
+ exit - exit the game 
+ stages - get a list of stages 
+ 
+ prev_stage - reload last stage 
+ set <VAR> <VAL> - set VAR to VAL ('set help' for list of variables) 
+
 SELECT * FROM npc WHERE id = 0 
 
 Game Start! 
@@ -26,7 +38,23 @@ switching state to: MENU
 
 switching state to: OPTIONS 
 
-USER: this was a triumph 
+USER: set stage EXTRAS 
+
+switching state to: EXTRAS 
+
+reverting state to: OPTIONS 
+
+USER: help 
+
+ 
+ 
+  Commands 
+ -------------------- 
+ exit - exit the game 
+ stages - get a list of stages 
+ 
+ prev_stage - reload last stage 
+ set <VAR> <VAL> - set VAR to VAL ('set help' for list of variables) 
 
 Long's Word Succesfully Exited 
 

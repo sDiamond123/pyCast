@@ -47,6 +47,7 @@ class World:
         self.fps_rays = cam_settings[1]
         self.draw_dist = cam_settings[2]
         self.is_overworld = False
+        self.exit = False
         # load into our game state
         self.state = entry_state
         #change_latter
@@ -172,6 +173,8 @@ class World:
         return True
 
     def update (self, keys, mouse : utils.Mouse_Manager):
+        if self.exit:
+            return False
         check = self.__general_controls__(keys, mouse)
         if not check:
             return check
@@ -257,4 +260,36 @@ class World:
 
     def execute (self, command):
         log.write("USER: " + command)
-        #todo : add interpreter
+        split = command.split(" ")
+        if split[0] == "help":
+            log.write(" \n \n  Commands \n -------------------- \n help - shows list of commands \n exit - exit the game \n stages - get a list of stages \n " \
+            "\n prev_stage - reload last stage \n set <VAR> <VAL> - set VAR to VAL (\'set help\' for list of variables)")
+        elif split[0] == "exit":
+            self.exit = True
+        elif split[0] == "prev_stage":
+            self.last_state()
+        elif split[0] == "stages":
+            log.write("\n \n Stages \n -------------------- \n")
+            for stage in self.GAME_STATES:
+                log.write(stage.name)
+        elif split[0] == "set":
+            if split[1] == "player_x":
+                if self.p != None:
+                    log.write("PLAYER MOVED")
+                    self.p.x = float(split[2])
+                else:
+                    log.write("SET FAILED - PLAYER NOT YET SPAWNED")
+            elif split[1] == "player_y":
+                if self.p != None:
+                    log.write("PLAYER MOVED")
+                    self.p.y = float(split[2])
+                else:
+                    log.write("SET FAILED - PLAYER NOT YET SPAWNED")
+            elif split[1] == 'dialouge':
+                self.set_dialouge_entry_point(int(split[2]))
+            elif split[1] == 'stage':
+                self.update_game_state(self.GAME_STATES[split[2]])
+            else:
+                log.write("possiple variables are: \n -------------------- \n player_x \n player_y \n dialouge \n stage")
+        else:   
+            log.write("INVALID COMMAND \n enter \'help\' for a list of commands")
