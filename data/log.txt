@@ -26,6 +26,8 @@ USER: help
  -------------------- 
  help - shows list of commands 
  exit - exit the game 
+ clear - clear the window 
+ to_file <file> - save log to specified file 
  stages - get a list of stages 
  
  prev_stage - reload last stage 
@@ -37,26 +39,6 @@ Game Start!
 
 switching stage to: MENU 
 
-switching stage to: DIALOUGE 
-
-SELECT * FROM dialogue WHERE id = 0 
-
-Succesfully loaded dialouge 0 
-
-SELECT * FROM dialogue WHERE id = 1 
-
-SELECT * FROM npc WHERE id = 1 
-
-Succesfully loaded dialouge 1 
-
-SELECT * FROM dialogue WHERE id = 2 
-
-Succesfully loaded dialouge 2 
-
-reverting stage to: MENU 
-
-SELECT * FROM npc WHERE id = 0 
-
 Successfully loaded map: data/maps/singleton/test_town 
 
 Successfully spawned player: (12.567,6.5,152.9797312999298) 
@@ -89,39 +71,19 @@ switching stage to: PAUSE_MENU
 
 switching stage to: OPTIONS 
 
+USER: set player_health -99.9999 
+
+PLAYER HEALED 
+
 reverting stage to: PAUSE_MENU 
 
 reverting stage to: FPS 
 
-switching stage to: PAUSE_MENU 
+test_object hit player for 0 dmg 
 
-switching stage to: MENU 
+test_object hit player for 15.2 dmg 
 
-switching stage to: OPTIONS 
-
-reverting stage to: MENU 
-
-switching stage to: DIALOUGE 
-
-SELECT * FROM dialogue WHERE id = 0 
-
-Succesfully loaded dialouge 0 
-
-SELECT * FROM dialogue WHERE id = 1 
-
-SELECT * FROM npc WHERE id = 1 
-
-Succesfully loaded dialouge 1 
-
-reverting stage to: MENU 
-
-SELECT * FROM npc WHERE id = 0 
-
-switching stage to: LOAD 
-
-reverting stage to: MENU 
-
-switching stage to: EXTRAS 
+switching stage to: DEAD 
 
 Successfully loaded map: data/maps/singleton/test_town 
 
@@ -136,44 +98,6 @@ SHOTGUN added to inventory
 MG added to inventory 
 
 Successfully loaded save: built_in/town.csv 
-
-switching stage to: FPS 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-switching stage to: PAUSE_MENU 
-
-reverting stage to: FPS 
-
-switching stage to: MAP 
-
-switching stage to: PAUSE_MENU 
-
-switching stage to: OPTIONS 
-
-reverting stage to: PAUSE_MENU 
-
-reverting stage to: MAP 
-
-reverting stage to: FPS 
-
-switching stage to: PAUSE_MENU 
-
-switching stage to: OPTIONS 
-
-reverting stage to: PAUSE_MENU 
-
-reverting stage to: FPS 
 
 Long's Word Succesfully Exited 
 

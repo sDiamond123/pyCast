@@ -35,8 +35,8 @@ class __log__:
     def __len__(self):
         return len(self.log.value)
     
-    def dump(self):
-        file = open(self.DUMP_FILE, "w")
+    def dump(self, file = DUMP_FILE):
+        file = open(file, "w")
         for line in self.log.value:
             file.write(line + "\n")
         file.close()

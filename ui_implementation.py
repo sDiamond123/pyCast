@@ -161,7 +161,7 @@ class Main_Menu (ui.UI_Composite):
         self.elements.append(screen_writer.Text_Box(10,450,400,140,self.display,text,size,self.cursor,68,7))
         self.elements.append(ui.Button(420,450,30,30,display,self.cursor_up))
         self.elements.append(ui.Button(420,500,30,30,display,self.cursor_down))
-        self.elements.append(ui.Element(595,280,195,310,display, color=ui.UI_Composite.DEFAULT_BACK))
+        self.elements.append(ui.Element(595,280,195,310,display, color=(20,20,20)))
         self.elements.append(screen_writer.Text_Button(605,290,175,40,display,utils.Ptr("1. New"),utils.Ptr(20), color = (155,130,15), activation_key=49, action = self.new_game,writer=screen_writer.GOTHIC))
         self.elements.append(screen_writer.Text_Button(605,340,175,40,display,utils.Ptr("2. Continue"),utils.Ptr(20), color = (155,130,15), activation_key=50, action = self.reload_last_save,writer=screen_writer.GOTHIC))
         self.elements.append(screen_writer.Text_Button(605,390,175,40,display,utils.Ptr("3. Load"),utils.Ptr(20), color = (155,130,15), activation_key=51,action=self.load,writer=screen_writer.GOTHIC))
@@ -448,3 +448,32 @@ class Console (ui.UI_Sub_Screen):
         self.elements.append(screen_writer.Typewriter(self.x + 10, self.y + 450,self.w - 20, 90, ext_display,utils.Ptr("> "),self.TITLE_SIZE,utils.Ptr(0),65,3,  color=(20,20,20), text_color=(50,200,50), action=self.execute))
         self.control = control
         self.execute("help") 
+
+class Death_Menu (ui.UI_Composite):
+
+    def load(self):
+        self.control.update_game_state(self.control.GAME_STATES.LOAD)
+
+    def reload_last_save(self):
+        self.control.load_state(self.control.state)
+        self.control.update_game_state(self.control.GAME_STATES.FPS)
+
+    def exit_game(self):
+        self.exit = True
+
+    def options(self):
+        self.control.update_game_state(self.control.GAME_STATES.OPTIONS)
+
+    def main_menu(self):
+        self.control.update_game_state(self.control.GAME_STATES.MENU)
+
+    def __init__ (self, display, control):
+        super().__init__(display, draw_background=False)
+        self.control = control
+        self.elements.append(screen_writer.Text_Button(150,80,500,50,display,utils.Ptr("YOU HAVE FALLEN"),utils.Ptr(50),draw_border=False, text_color = (20,20,20),writer=screen_writer.GOTHIC, color=pygame.Color("red"), y_offset= -5, x_offset= + 25))
+        self.elements.append(ui.Element(300,150,200,270,display, color=(30,30,30)))
+        self.elements.append(screen_writer.Text_Button(310,160,180,40,display,utils.Ptr("1. Last Save"),utils.Ptr(20), color = (155,130,15), activation_key=50, action = self.reload_last_save,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(310,210,180,40,display,utils.Ptr("2. Load"),utils.Ptr(20), color = (155,130,15), activation_key=51,action=self.load,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(310,260,180,40,display,utils.Ptr("3. Options"),utils.Ptr(20), color = (155,130,15), activation_key=52, action = self.options,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(310,310,180,40,display,utils.Ptr("4. Main Menu"),utils.Ptr(20), color = (155,130,15), activation_key=53, action = self.main_menu,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(310,360,180,40,display,utils.Ptr("5. Exit Game"),utils.Ptr(20), color = (155,130,15), activation_key=54, action = self.exit_game,writer=screen_writer.GOTHIC))

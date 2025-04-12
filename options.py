@@ -207,7 +207,7 @@ class __Terminal__():
             self.caps_lock = not self.caps_lock
         is_caps = self.caps_lock
         if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
-            is_caps = True
+            is_caps = not is_caps
         elif (keys[ord('\r')] and not self.old[ord('\r')]) or (keys[ord('\n')] and not self.old[ord('\n')]):
             self.old = keys
             return (True, True,True,"", self.P_NONE)
@@ -224,7 +224,7 @@ class __Terminal__():
             a_pressed = self.P_LEFT
         elif (keys[pygame.K_RIGHT] and not self.old[pygame.K_RIGHT]):
             a_pressed = self.P_RIGHT
-            
+
         for key in Key.PRINT_TABLE:
             if keys[key] and not self.old[key]:
                 hit = True

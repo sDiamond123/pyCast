@@ -8,7 +8,7 @@ class World:
     STATE_H = 9
     LINES_PER_OBJ = 6
     OBJ_W = 2
-    GAME_STATES = enum.Enum('State', [('EXTRAS', 10), ('OPTIONS', 9),('LOAD', 8), ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
+    GAME_STATES = enum.Enum('State', [('DEAD', 11), ('EXTRAS', 10), ('OPTIONS', 9),('LOAD', 8), ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
 
     state = None
     state_data = []
@@ -58,6 +58,7 @@ class World:
         self.UI[self.GAME_STATES.EXTRAS.value] = ui_implementation.Load(self.internal_display,self)
         self.UI[self.game_state.OPTIONS.value] = ui_implementation.Options(self.internal_display, self)
         self.UI[self.game_state.DIALOUGE.value] = dialogue.Dialogue_Window(self.internal_display, self)
+        self.UI[self.game_state.DEAD.value] = ui_implementation.Death_Menu(self.internal_display, self)
 
     def load_state(self, state):
         self.state = state
@@ -166,7 +167,7 @@ class World:
             return False
         if keys[options.Key.FREE_LOOK]:
             mouse.toggle()
-        if keys[options.Key.PAUSE] and self.game_state != self.GAME_STATES.PAUSE_MENU and self.game_state != self.GAME_STATES.MENU and self.game_state != self.GAME_STATES.SPLASH_SCREEN and self.game_state != self.GAME_STATES.OPTIONS:
+        if keys[options.Key.PAUSE] and self.game_state != self.GAME_STATES.PAUSE_MENU and self.game_state != self.GAME_STATES.DEAD and self.game_state != self.GAME_STATES.MENU and self.game_state != self.GAME_STATES.SPLASH_SCREEN and self.game_state != self.GAME_STATES.OPTIONS:
             self.update_game_state(self.GAME_STATES.PAUSE_MENU)
         mouse.update()
         self.mouse = mouse
@@ -181,7 +182,7 @@ class World:
         if self.game_state == self.GAME_STATES.FPS:
             # check if your dead
             if self.p.health() <= 0:
-                self.update_game_state(self.GAME_STATES.MENU)
+                self.update_game_state(self.GAME_STATES.DEAD)
                 # autoload last save
                 self.load_state(self.state)
                 return True
@@ -269,7 +270,7 @@ class World:
         log.write("USER: " + command)
         split = command.split(" ")
         if split[0] == "help":
-            log.write(" \n \n  Commands \n -------------------- \n help - shows list of commands \n exit - exit the game \n stages - get a list of stages \n " \
+            log.write(" \n \n  Commands \n -------------------- \n help - shows list of commands \n exit - exit the game \n clear - clear the window \n to_file <file> - save log to specified file \n stages - get a list of stages \n " \
             "\n prev_stage - reload last stage \n set <VAR> <VAL> - set VAR to VAL (\'set help\' for list of variables)")
         elif split[0] == "exit":
             self.exit = True
@@ -304,5 +305,11 @@ class World:
                 self.update_game_state(self.GAME_STATES[split[2]])
             else:
                 log.write("possiple variables are: \n -------------------- \n player_x \n player_y \n player_health \n dialouge \n stage")
+        elif split[0] == "clear":
+            log.log.value = []
+            log.cursor = 0
+            self.execute("help")
+        elif split[0] == "to_file":
+            log.dump(split[1])
         else:   
             log.write("INVALID COMMAND \n enter \'help\' for a list of commands")
