@@ -1,4 +1,4 @@
-import utils, map, pygame, player, math, ui, screen_writer, options, sheet, options
+import utils, map, pygame, player, math, ui, screen_writer, options, sheet, options, normalize
 from log import LOG as log
 
 class Map_Screen(ui.UI_Composite):
@@ -381,23 +381,23 @@ class Binds_Menu (ui.UI_Sub_Screen):
 
     def __init__ (self, x, y, ext_display: pygame.surface):
         super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),False,True)
-        self.elements.append(screen_writer.Text_Button(self.x + 250,self.y,0, 0, ext_display,utils.Ptr("MOUSE Sensitivity"),self.TITLE_SIZE,y_offset=-5,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 20,self.y + 30,0, 0, ext_display,utils.Ptr("X"),self.TITLE_SIZE, text_color=self.RED,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 20,self.y+ 90,0, 0, ext_display,utils.Ptr("Y"),self.TITLE_SIZE, text_color=self.RED,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 310,self.y + 30,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.X_SENSE],self.TITLE_SIZE,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 70,self.y + 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-10"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = -10,scale=False))
-        self.elements.append(screen_writer.Text_Button(self.x + 150,self.y + 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-5"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = -5,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 230,self.y + 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-1"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = -1,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 390,self.y + 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+1"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = 1,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 470,self.y + 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+5"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = 5,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 550,self.y + 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+10"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = 10,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 310,self.y + 90,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.Y_SENSE],self.TITLE_SIZE,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 70,self.y + 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-10"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = -10,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 150,self.y + 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-5"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = -5,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 230,self.y + 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-1"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = -1,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 390,self.y + 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+1"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = 1,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 470,self.y + 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+5"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = 5,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 550,self.y + 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+10"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = 10,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 250,self.y,0, 0, ext_display,utils.Ptr("MOUSE Sensitivity"),self.TITLE_SIZE,y_offset=-5,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 20,self.y +normalize.SCALE_FACTOR_Y * 30,0, 0, ext_display,utils.Ptr("X"),self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 20,self.y+normalize.SCALE_FACTOR_Y * 90,0, 0, ext_display,utils.Ptr("Y"),self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 310,self.y +normalize.SCALE_FACTOR_Y * 30,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.X_SENSE],self.TITLE_SIZE,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 70,self.y +normalize.SCALE_FACTOR_Y * 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-10"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = -10,scale=False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 150,self.y +normalize.SCALE_FACTOR_Y * 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-5"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = -5,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 230,self.y +normalize.SCALE_FACTOR_Y * 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-1"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = -1,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 390,self.y +normalize.SCALE_FACTOR_Y * 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+1"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = 1,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 470,self.y +normalize.SCALE_FACTOR_Y * 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+5"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = 5,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 550,self.y +normalize.SCALE_FACTOR_Y * 30,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+10"),self.TEXT_SIZE,action=self.__increment_x__,x_offset=5, y_offset=10, args = 10,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 310,self.y +normalize.SCALE_FACTOR_Y * 90,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.Y_SENSE],self.TITLE_SIZE,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 70,self.y +normalize.SCALE_FACTOR_Y * 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-10"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = -10,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 150,self.y +normalize.SCALE_FACTOR_Y * 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-5"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = -5,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 230,self.y +normalize.SCALE_FACTOR_Y * 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("-1"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = -1,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 390,self.y +normalize.SCALE_FACTOR_Y * 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+1"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = 1,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 470,self.y +normalize.SCALE_FACTOR_Y * 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+5"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = 5,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 550,self.y +normalize.SCALE_FACTOR_Y * 90,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("+10"),self.TEXT_SIZE,action=self.__increment_y__,x_offset=5, y_offset=10, args = 10,scale = False))
         
         # save changes
         self.elements.append(screen_writer.Text_Button(self.x + 300,self.y + 475,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10,scale = False))
@@ -417,15 +417,15 @@ class Config_Menu (ui.UI_Sub_Screen):
     def __init__ (self, x, y, ext_display: pygame.surface):
         super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),True,True)
         # load profiles
-        self.elements.append(screen_writer.Text_Button(self.x + 5,self.y,0, 0, ext_display,utils.Ptr("PROFILE:"),self.TITLE_SIZE,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 100,self.y,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.PROF_NAME],self.TITLE_SIZE, text_color=self.RED,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 10,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Nasa"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.NASA,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 90,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("High"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.HIGH,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 170,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Medium"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.MED,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 250,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Low"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.LOW,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 330,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Potato"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.POTATO,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 410,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Current"),self.TEXT_SIZE,action=options.CONFIG.load_config,x_offset=5, y_offset=10,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + 490,self.y + 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Default"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.DEFAULT,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 5,self.y,0, 0, ext_display,utils.Ptr("PROFILE:"),self.TITLE_SIZE,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *100,self.y,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.PROF_NAME],self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *10,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Nasa"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.NASA,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 90,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("High"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.HIGH,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 170,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Medium"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.MED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 250,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Low"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.LOW,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 330,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Potato"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.POTATO,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 410,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Current"),self.TEXT_SIZE,action=options.CONFIG.load_config,x_offset=5, y_offset=10,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 490,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Default"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.DEFAULT,scale = False))
         # save changes
         self.elements.append(screen_writer.Text_Button(self.x + 300,self.y + 475,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10,scale = False))
         
@@ -444,8 +444,8 @@ class Console (ui.UI_Sub_Screen):
     def __init__ (self, x, y, ext_display: pygame.surface, control):
         super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),True,True)
         self.cursor = utils.Ptr(0)
-        self.elements.append(screen_writer.Log(self.x + 10, self.y + 10, self.w-20, 440,ext_display,self.TEXT_SIZE,self.cursor,140,25,log.new, scale = False, color=(0,0,0), text_color=(50,200,50)))
-        self.elements.append(screen_writer.Typewriter(self.x + 10, self.y + 450,self.w - 20, 90, ext_display,utils.Ptr("> "),self.TITLE_SIZE,utils.Ptr(0),65,3,  color=(20,20,20), text_color=(50,200,50), action=self.execute))
+        self.elements.append(screen_writer.Log(self.x +normalize.SCALE_FACTOR_X * 10, self.y +normalize.SCALE_FACTOR_Y * 10, self.w/normalize.SCALE_FACTOR_X-20, 440,ext_display,self.TEXT_SIZE,self.cursor,140,25,log.new, scale = False, color=(0,0,0), text_color=(50,200,50)))
+        self.elements.append(screen_writer.Typewriter(self.x +normalize.SCALE_FACTOR_X * 10, self.y + normalize.SCALE_FACTOR_Y * 450,self.w/normalize.SCALE_FACTOR_X - 20, 90, ext_display,utils.Ptr("> "),self.TITLE_SIZE,utils.Ptr(0),65,3,  color=(20,20,20), text_color=(50,200,50), action=self.execute, scale=False))
         self.control = control
         self.execute("help") 
 

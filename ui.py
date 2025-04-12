@@ -7,10 +7,11 @@ class Element():
         self.w = w
         self.h = h
         self.x = x
+        self.w *= normalize.SCALE_FACTOR_X
+        self.h *= normalize.SCALE_FACTOR_Y
         if scale:
             self.y *= normalize.SCALE_FACTOR_Y
-            self.w *= normalize.SCALE_FACTOR_X
-            self.h *= normalize.SCALE_FACTOR_Y
+            
             self.x *= normalize.SCALE_FACTOR_X
         self.color = color
         self.ext_display = ext_display
