@@ -137,7 +137,7 @@ class Main_Menu (ui.UI_Composite):
         self.control. set_dialouge_entry_point(0)
 
     def exit_game(self):
-        self.exit = True
+        self.control.update_game_state(self.control.GAME_STATES.EXIT)
 
     def cursor_up(self):
         self.cursor.value -= 1
@@ -213,7 +213,7 @@ class Pause (ui.UI_Composite):
         self.control.update_game_state(self.control.GAME_STATES.OPTIONS)
 
     def exit_game(self):
-        self.exit = True
+        self.control.update_game_state(self.control.GAME_STATES.EXIT)
 
     def menu(self):
         self.control.update_game_state(self.control.GAME_STATES.MENU)
@@ -459,7 +459,7 @@ class Death_Menu (ui.UI_Composite):
         self.control.update_game_state(self.control.GAME_STATES.FPS)
 
     def exit_game(self):
-        self.exit = True
+        self.control.update_game_state(self.control.GAME_STATES.EXIT)
 
     def options(self):
         self.control.update_game_state(self.control.GAME_STATES.OPTIONS)
@@ -477,3 +477,19 @@ class Death_Menu (ui.UI_Composite):
         self.elements.append(screen_writer.Text_Button(310,260,180,40,display,utils.Ptr("3. Options"),utils.Ptr(20), color = (155,130,15), activation_key=52, action = self.options,writer=screen_writer.GOTHIC))
         self.elements.append(screen_writer.Text_Button(310,310,180,40,display,utils.Ptr("4. Main Menu"),utils.Ptr(20), color = (155,130,15), activation_key=53, action = self.main_menu,writer=screen_writer.GOTHIC))
         self.elements.append(screen_writer.Text_Button(310,360,180,40,display,utils.Ptr("5. Exit Game"),utils.Ptr(20), color = (155,130,15), activation_key=54, action = self.exit_game,writer=screen_writer.GOTHIC))
+
+class Exit_Popup (ui.UI_Composite):
+    def continue_play (self):
+        self.control.last_state()
+
+    def exit_game(self):
+        self.exit = True
+
+    def __init__ (self, display, control):
+        super().__init__(display, draw_background=False)
+        self.control = control
+        self.elements.append(screen_writer.Text_Button(350,200,100,50,display,utils.Ptr("Quit"),utils.Ptr(50),draw_border=False, color = (30,30,30),text_color = (155,130,15), y_offset= -5, x_offset= -2, writer=screen_writer.GOTHIC))
+        self.elements.append(ui.Element(350,250,100,110,display, color=(30,30,30)))
+        self.elements.append(screen_writer.Text_Button(360,260,80,40,display,utils.Ptr("\'Y\'es"),utils.Ptr(20), color = pygame.Color("red"), activation_key=ord('y'), action = self.exit_game,writer=screen_writer.GOTHIC, x_offset= 8))
+        self.elements.append(screen_writer.Text_Button(360,310,80,40,display,utils.Ptr("\'N\'o"),utils.Ptr(20), color = pygame.Color("green"), activation_key=ord('n'), action = self.continue_play,writer=screen_writer.GOTHIC, x_offset= 15))
+        self.exit = False

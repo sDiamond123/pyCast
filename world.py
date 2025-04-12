@@ -8,7 +8,7 @@ class World:
     STATE_H = 9
     LINES_PER_OBJ = 6
     OBJ_W = 2
-    GAME_STATES = enum.Enum('State', [('DEAD', 11), ('EXTRAS', 10), ('OPTIONS', 9),('LOAD', 8), ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
+    GAME_STATES = enum.Enum('State', [('EXIT', 12), ('DEAD', 11), ('EXTRAS', 10), ('OPTIONS', 9),('LOAD', 8), ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
 
     state = None
     state_data = []
@@ -59,6 +59,7 @@ class World:
         self.UI[self.game_state.OPTIONS.value] = ui_implementation.Options(self.internal_display, self)
         self.UI[self.game_state.DIALOUGE.value] = dialogue.Dialogue_Window(self.internal_display, self)
         self.UI[self.game_state.DEAD.value] = ui_implementation.Death_Menu(self.internal_display, self)
+        self.UI[self.game_state.EXIT.value] = ui_implementation.Exit_Popup(self.internal_display, self)
 
     def load_state(self, state):
         self.state = state
@@ -163,8 +164,8 @@ class World:
 
     def __general_controls__ (self, keys, mouse):
         # update keys
-        if keys[options.Key.EXIT]:
-            return False
+        if keys[options.Key.EXIT] and self.game_state != self.GAME_STATES.EXIT:
+            self.update_game_state(self.GAME_STATES.EXIT)
         if keys[options.Key.FREE_LOOK]:
             mouse.toggle()
         if keys[options.Key.PAUSE] and self.game_state != self.GAME_STATES.PAUSE_MENU and self.game_state != self.GAME_STATES.DEAD and self.game_state != self.GAME_STATES.MENU and self.game_state != self.GAME_STATES.SPLASH_SCREEN and self.game_state != self.GAME_STATES.OPTIONS:
