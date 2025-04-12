@@ -103,6 +103,7 @@ class HUD(Map_Screen):
         self.player = player
         self.cur_wep = ""
         self.want_mouse = False
+        self.elements.append(sheet.char_sheet(100,100,300,300,internal_screen))
         
     def __update_weapons__ (self):
          state = self.player.get_weapon_state()
@@ -195,7 +196,6 @@ class Splash_Screen (ui.UI_Composite):
         info = utils.Ptr(version.readlines())
         version.close()
         self.elements.append(screen_writer.Text_Box(15,15,1,1,self.display,info,small_size,utils.Ptr(0),60,2,color = pygame.Color("antiquewhite2"),draw_border=False))
-        self.elements.append(sheet.char_sheet(100,100,300,300,display))
         
 
 class Pause (ui.UI_Composite):

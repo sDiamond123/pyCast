@@ -67,37 +67,9 @@ fire_ball hit obj test_object for 0.5 dmg with 1.5 decay
 
 fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
 
-switching stage to: PAUSE_MENU 
-
-switching stage to: OPTIONS 
-
-USER: set player_health -99.9999 
-
-PLAYER HEALED 
-
-reverting stage to: PAUSE_MENU 
-
-reverting stage to: FPS 
-
-test_object hit player for 0 dmg 
-
 test_object hit player for 15.2 dmg 
 
-switching stage to: DEAD 
-
-Successfully loaded map: data/maps/singleton/test_town 
-
-Successfully spawned player: (12.567,6.5,152.9797312999298) 
-
-Set up camera at (12.567,6.5) with a 90.0 degree FOV and casting 350 rays out to 15 cells 
-
-PISTOL added to inventory 
-
-SHOTGUN added to inventory 
-
-MG added to inventory 
-
-Successfully loaded save: built_in/town.csv 
+test_object hit player for 15.2 dmg 
 
 Long's Word Succesfully Exited 
 
