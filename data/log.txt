@@ -6,6 +6,8 @@ Succesfully loaded font: data/fonts/Open_Sans/static/OpenSans-Regular.ttf
 
 Succesfully loaded font: data/fonts/Jacquard_12/Jacquard12-Regular.ttf 
 
+Succesfully loaded font: data/fonts/Playwrite_MX_Guides/PlaywriteMXGuides-Regular.ttf 
+
 Loaded Chunks (data/maps/overworld/chunks.csv) 
 
 Successfully loaded map: data/maps/chunks/empty_chunk 
@@ -22,51 +24,9 @@ Game Start!
 
 switching state to: MENU 
 
-Successfully loaded map: data/maps/singleton/test_town 
-
-Successfully spawned player: (12.567,6.5,152.9797312999298) 
-
-Set up camera at (12.567,6.5) with a 90.0 degree FOV and casting 500 rays out to 15 cells 
-
-PISTOL added to inventory 
-
-SHOTGUN added to inventory 
-
-MG added to inventory 
-
-Successfully loaded save: built_in/town.csv 
-
-switching state to: FPS 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-test_object hit player for 15.2 dmg 
-
-switching state to: MAP 
-
-reverting state to: FPS 
-
-switching state to: MAP 
-
-reverting state to: FPS 
-
-test_object hit player for 15.2 dmg 
-
-switching state to: PAUSE_MENU 
-
-switching state to: MENU 
-
 switching state to: OPTIONS 
+
+USER: this was a triumph 
 
 Long's Word Succesfully Exited 
 

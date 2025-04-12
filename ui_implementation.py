@@ -124,6 +124,9 @@ class Main_Menu (ui.UI_Composite):
     def load(self):
         self.control.update_game_state(self.control.GAME_STATES.LOAD)
 
+    def extras(self):
+        self.control.update_game_state(self.control.GAME_STATES.EXTRAS)
+
     def reload_last_save(self):
         self.control.load_state(self.control.state)
         self.control.update_game_state(self.control.GAME_STATES.FPS)
@@ -158,12 +161,13 @@ class Main_Menu (ui.UI_Composite):
         self.elements.append(screen_writer.Text_Box(10,450,400,140,self.display,text,size,self.cursor,68,7))
         self.elements.append(ui.Button(420,450,30,30,display,self.cursor_up))
         self.elements.append(ui.Button(420,500,30,30,display,self.cursor_down))
-        self.elements.append(ui.Element(595,330,195,260,display, color=ui.UI_Composite.DEFAULT_BACK))
-        self.elements.append(screen_writer.Text_Button(605,340,175,40,display,utils.Ptr("1. New"),utils.Ptr(20), color = (155,130,15), activation_key=49, action = self.new_game,writer=screen_writer.GOTHIC))
-        self.elements.append(screen_writer.Text_Button(605,390,175,40,display,utils.Ptr("2. Continue"),utils.Ptr(20), color = (155,130,15), activation_key=50, action = self.reload_last_save,writer=screen_writer.GOTHIC))
-        self.elements.append(screen_writer.Text_Button(605,440,175,40,display,utils.Ptr("3. Load"),utils.Ptr(20), color = (155,130,15), activation_key=51,action=self.load,writer=screen_writer.GOTHIC))
-        self.elements.append(screen_writer.Text_Button(605,490,175,40,display,utils.Ptr("4. Options"),utils.Ptr(20), color = (155,130,15), activation_key=52, action = self.options,writer=screen_writer.GOTHIC))
-        self.elements.append(screen_writer.Text_Button(605,540,175,40,display,utils.Ptr("5. Exit Game"),utils.Ptr(20), color = (155,130,15), activation_key=53, action = self.exit_game,writer=screen_writer.GOTHIC))
+        self.elements.append(ui.Element(595,280,195,310,display, color=ui.UI_Composite.DEFAULT_BACK))
+        self.elements.append(screen_writer.Text_Button(605,290,175,40,display,utils.Ptr("1. New"),utils.Ptr(20), color = (155,130,15), activation_key=49, action = self.new_game,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(605,340,175,40,display,utils.Ptr("2. Continue"),utils.Ptr(20), color = (155,130,15), activation_key=50, action = self.reload_last_save,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(605,390,175,40,display,utils.Ptr("3. Load"),utils.Ptr(20), color = (155,130,15), activation_key=51,action=self.load,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(605,440,175,40,display,utils.Ptr("4. Options"),utils.Ptr(20), color = (155,130,15), activation_key=52, action = self.options,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(605,490,175,40,display,utils.Ptr("5. Extras"),utils.Ptr(20), color = (155,130,15), activation_key=53, action = self.extras,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(605,540,175,40,display,utils.Ptr("6. Exit Game"),utils.Ptr(20), color = (155,130,15), activation_key=54, action = self.exit_game,writer=screen_writer.GOTHIC))
 
     def update(self, mouse : utils.Mouse_Manager, keys):
          self.phase.value += self.ANG_DELTA
@@ -340,7 +344,7 @@ class Options(ui.UI_Heirarchy):
         self.control = control
         self.sub_composites.append(Config_Menu(125,25,ext_disp))
         self.sub_composites.append(Binds_Menu(125,25,ext_disp))
-        self.sub_composites.append(Console(125,25,ext_disp))
+        self.sub_composites.append(Console(125,25,ext_disp, control))
         self.elements.append(screen_writer.Text_Button(10,10,110,40,ext_disp,utils.Ptr("'"+chr(options.Key.MAP) + "'. Back"),utils.Ptr(20), activation_key=options.Key.MAP, action = self.return_play))
         self.elements.append(screen_writer.Text_Button(10,60,110,40,ext_disp,utils.Ptr("GRAPHICS"),utils.Ptr(20), action = self.focus, args=self.CONFIG_ID))
         self.elements.append(screen_writer.Text_Button(10,110,110,40,ext_disp,utils.Ptr("BINDS"),utils.Ptr(20),  action = self.focus,args=self.BINDS_ID))
@@ -432,7 +436,8 @@ class Console (ui.UI_Sub_Screen):
     BUTTON_W = 70
     BUTTON_H = 50
 
-    def __init__ (self, x, y, ext_display: pygame.surface):
+    def __init__ (self, x, y, ext_display: pygame.surface, control):
         super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),True,True)
         self.cursor = utils.Ptr(0)
-        self.elements.append(screen_writer.Log(self.x + 10, self.y + 10, self.w-20, 470,ext_display,self.TITLE_SIZE,self.cursor,65,16,log.new, scale = False, color=(0,0,0), text_color=(50,200,50)))
+        self.elements.append(screen_writer.Log(self.x + 10, self.y + 10, self.w-20, 440,ext_display,self.TEXT_SIZE,self.cursor,140,25,log.new, scale = False, color=(0,0,0), text_color=(50,200,50)))
+        self.elements.append(screen_writer.Typewriter(self.x + 10, self.y + 450,self.w - 20, 90, ext_display,utils.Ptr("> "),self.TITLE_SIZE,utils.Ptr(0),65,3,  color=(0,0,0), text_color=(50,200,50), action=control.execute))

@@ -1,3 +1,4 @@
+import pygame
 from utils import Ptr as Ptr
 from log import LOG as log
 
@@ -136,4 +137,108 @@ class Key:
     binds.close()
     log.write("Successfully loaded key binds")
 
+    PT_LOWER = 0
+    PT_UPPER = 1
+    PT_PRINT_LOWER = 2
+    PT_PRINT_UPPER = 4
+
+    PRINT_TABLE = {pygame.K_SPACE: {PT_LOWER : ' ', PT_UPPER : ' ', PT_PRINT_LOWER : 'SPACE', PT_PRINT_UPPER : 'SPACE'}, 
+                   pygame.K_BACKSPACE : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'BCK_SP', PT_PRINT_UPPER : 'BCK_SP'}, 
+                   pygame.K_DELETE: {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'DEL', PT_PRINT_UPPER : 'DEL'},
+                   pygame.K_UP : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'UP', PT_PRINT_UPPER : 'UP'},
+                   pygame.K_DOWN : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'DOWN', PT_PRINT_UPPER : 'DOWN'},
+                   pygame.K_LEFT : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'LEFT', PT_PRINT_UPPER : 'LEFT'},
+                   pygame.K_RIGHT : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'RIGHT', PT_PRINT_UPPER : 'RIGHT'},
+                   pygame.K_CAPSLOCK : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'CAPS', PT_PRINT_UPPER : 'CAPS'},
+                   pygame.K_TAB : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'TAB', PT_PRINT_UPPER : 'TAB'},
+                   pygame.K_ESCAPE : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'ESC', PT_PRINT_UPPER : 'ESC'},
+                   pygame.K_LSHIFT : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'SHIFT', PT_PRINT_UPPER : 'SHIFT'},
+                   pygame.K_LCTRL : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'CTRL', PT_PRINT_UPPER : 'CTRL'},
+                   pygame.K_LALT : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'ALT', PT_PRINT_UPPER : 'ALT'},
+                   ord('\r') : {PT_LOWER : ' \n ', PT_UPPER : ' \n ', PT_PRINT_LOWER : 'ENTER', PT_PRINT_UPPER : 'ENTER'},
+                   ord('\n') : {PT_LOWER : ' \n ', PT_UPPER : ' \n ', PT_PRINT_LOWER : 'ENTER', PT_PRINT_UPPER : 'ENTER'},
+                   ord("`") : {PT_LOWER : '`', PT_UPPER : '~', PT_PRINT_LOWER : '`', PT_PRINT_UPPER : '~'},
+                   ord("1") : {PT_LOWER : '1', PT_UPPER : '!', PT_PRINT_LOWER : '1', PT_PRINT_UPPER : '!'},
+                   ord("2") : {PT_LOWER : '2', PT_UPPER : '@', PT_PRINT_LOWER : '2', PT_PRINT_UPPER : '@'},
+                   ord("3") : {PT_LOWER : '3', PT_UPPER : '#', PT_PRINT_LOWER : '3', PT_PRINT_UPPER : '#'},
+                   ord("4") : {PT_LOWER : '4', PT_UPPER : '$', PT_PRINT_LOWER : '4', PT_PRINT_UPPER : '$'},
+                   ord("5") : {PT_LOWER : '5', PT_UPPER : '%', PT_PRINT_LOWER : '5', PT_PRINT_UPPER : '%'},
+                   ord("6") : {PT_LOWER : '6', PT_UPPER : '^', PT_PRINT_LOWER : '6', PT_PRINT_UPPER : '^'},
+                   ord("7") : {PT_LOWER : '7', PT_UPPER : '&', PT_PRINT_LOWER : '7', PT_PRINT_UPPER : '&'},
+                   ord("8") : {PT_LOWER : '8', PT_UPPER : '*', PT_PRINT_LOWER : '8', PT_PRINT_UPPER : '*'},
+                   ord("9") : {PT_LOWER : '9', PT_UPPER : '(', PT_PRINT_LOWER : '9', PT_PRINT_UPPER : '('},
+                   ord("0") : {PT_LOWER : '0', PT_UPPER : ')', PT_PRINT_LOWER : '0', PT_PRINT_UPPER : ')'},
+                   ord("-") : {PT_LOWER : '-', PT_UPPER : '_', PT_PRINT_LOWER : '-', PT_PRINT_UPPER : '_'},
+                   ord("=") : {PT_LOWER : '=', PT_UPPER : '+', PT_PRINT_LOWER : '=', PT_PRINT_UPPER : '+'},
+                   ord('[') : {PT_LOWER : '[', PT_UPPER : '{', PT_PRINT_LOWER : '[', PT_PRINT_UPPER : '{'},
+                   ord(']') : {PT_LOWER : ']', PT_UPPER : '}', PT_PRINT_LOWER : '[', PT_PRINT_UPPER : '}'},
+                   ord('\\') : {PT_LOWER : '\\', PT_UPPER : ' | ', PT_PRINT_LOWER : '\\', PT_PRINT_UPPER : '|'},
+                   ord(';') : {PT_LOWER : ';', PT_UPPER : ':', PT_PRINT_LOWER : ';', PT_PRINT_UPPER : ':'},
+                   ord('\'') : {PT_LOWER : '\'', PT_UPPER : '\"', PT_PRINT_LOWER : '\'', PT_PRINT_UPPER : '\"'},
+                   ord(',') : {PT_LOWER : ',', PT_UPPER : '<', PT_PRINT_LOWER : ',', PT_PRINT_UPPER : '<'},
+                   ord('.') : {PT_LOWER : '.', PT_UPPER : '>', PT_PRINT_LOWER : '.', PT_PRINT_UPPER : '>'},
+                   ord('/') : {PT_LOWER : '/', PT_UPPER : '?', PT_PRINT_LOWER : '/', PT_PRINT_UPPER : '?'},}
+    for i in range (ord('a'), ord('z')):
+        PRINT_TABLE[i] = {PT_LOWER : chr(i), PT_UPPER : chr(i - 32), PT_PRINT_LOWER : chr(i), PT_PRINT_UPPER : chr(i-32)}
+
+
+class __Terminal__():
+    POLL_KP = 0
+    POLL_ENT = 1
+    POLL_DEL = 2
+    POLL_TXT = 3
+    POLL_ARROWS = 4
+    P_UP = 0
+    P_DOWN = 1
+    P_LEFT = 2
+    P_RIGHT = 3
+    P_NONE = -1
+
+    def __init__ (self):
+        self.old = {}
+        for key in Key.PRINT_TABLE:
+            self.old[key] = False
+        self.caps_lock = False
+
+    def poll_keys(self, keys, get_sanatized = False):
+        out = ""
+        hit = False
+        if keys[pygame.K_CAPSLOCK] and not self.old[pygame.K_CAPSLOCK]:
+            self.caps_lock = not self.caps_lock
+        is_caps = self.caps_lock
+        if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
+            is_caps = True
+        elif (keys[ord('\r')] and not self.old[ord('\r')]) or (keys[ord('\n')] and not self.old[ord('\n')]):
+            self.old = keys
+            return (True, True,True,"", self.P_NONE)
+        if (keys[pygame.K_BACKSPACE] and not self.old[pygame.K_BACKSPACE])  or (keys[pygame.K_DELETE] and not self.old[pygame.K_DELETE]):
+            self.old = keys
+            return (True, False, True, "", self.P_NONE)
+        
+        a_pressed = self.P_NONE
+        if (keys[pygame.K_UP] and not self.old[pygame.K_UP]):
+            a_pressed = self.P_UP
+        elif (keys[pygame.K_DOWN] and not self.old[pygame.K_DOWN]):
+            a_pressed = self.P_DOWN
+        elif (keys[pygame.K_LEFT] and not self.old[pygame.K_LEFT]):
+            a_pressed = self.P_LEFT
+        elif (keys[pygame.K_RIGHT] and not self.old[pygame.K_RIGHT]):
+            a_pressed = self.P_RIGHT
+            
+        for key in Key.PRINT_TABLE:
+            if keys[key] and not self.old[key]:
+                hit = True
+                mod = Key.PT_LOWER
+                if is_caps:
+                    if get_sanatized:
+                        mod = Key.PT_PRINT_UPPER
+                    else:
+                        mod = Key.PT_UPPER
+                elif get_sanatized:
+                    mod = Key.PT_PRINT_LOWER 
+                out += Key.PRINT_TABLE[key][mod]
+        self.old = keys
+        return (hit, False,False, out,a_pressed)
+
 CONFIG = __Options__()
+TERM = __Terminal__()

@@ -8,7 +8,7 @@ class World:
     STATE_H = 9
     LINES_PER_OBJ = 6
     OBJ_W = 2
-    GAME_STATES = enum.Enum('State', [('OPTIONS', 9),('LOAD', 8), ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
+    GAME_STATES = enum.Enum('State', [('EXTRAS', 10), ('OPTIONS', 9),('LOAD', 8), ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
 
     state = None
     state_data = []
@@ -53,7 +53,8 @@ class World:
         self.UI[self.GAME_STATES.MENU.value] = ui_implementation.Main_Menu(self.internal_display, self)
         self.UI[self.GAME_STATES.SPLASH_SCREEN.value] = ui_implementation.Splash_Screen(self.internal_display, self)
         self.UI[self.GAME_STATES.PAUSE_MENU.value] = ui_implementation.Pause(self.internal_display, self)
-        self.UI[self.GAME_STATES.LOAD.value] = ui_implementation.Load(self.internal_display,self)
+        self.UI[self.GAME_STATES.LOAD.value] = ui_implementation.Load(self.internal_display,self, path=ui_implementation.Load.CUSTOM)
+        self.UI[self.GAME_STATES.EXTRAS.value] = ui_implementation.Load(self.internal_display,self)
         self.UI[self.game_state.OPTIONS.value] = ui_implementation.Options(self.internal_display, self)
         self.UI[self.game_state.DIALOUGE.value] = dialogue.Dialogue_Window(self.internal_display, self)
 
@@ -253,3 +254,7 @@ class World:
 
     def set_dialouge_entry_point(self, point):
         self.UI[self.game_state.DIALOUGE.value].load(point)
+
+    def execute (self, command):
+        log.write("USER: " + command)
+        #todo : add interpreter

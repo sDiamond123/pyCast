@@ -1,5 +1,6 @@
 import pygame, ui, utils, clock, math
 from log import LOG as log
+from options import TERM as key_in
 
 FONT_PATH = "data/fonts"
 DEFAULT_FONT = "/Open_Sans/static/OpenSans-Regular.ttf"
@@ -24,6 +25,7 @@ class Screen_Writer:
     
 DEFAULT_WRITER = Screen_Writer()
 GOTHIC = Screen_Writer(FONT_PATH + "/Jacquard_12/Jacquard12-Regular.ttf")
+CURSIVE = Screen_Writer(FONT_PATH + "/Playwrite_MX_Guides/PlaywriteMXGuides-Regular.ttf")
 
 class Text_Button (ui.Button):
     def __init__ (self, x, y, w, h, ext_display: pygame.surface,
@@ -236,3 +238,57 @@ class Log(Text_Box):
     def __init__(self, x, y, w, h, ext_display, size, cursor, max_char_per_line, max_lines, update_text = utils.FALSE_PTR, writer = DEFAULT_WRITER, action = None, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, p_button=ui.Interactable_Element.DEFAULT_MB, draw_border=True, activation_key=-1, x_offset=0, y_offset=0, args=None, text_color=pygame.Color("black"), scale=True):
         super().__init__(x, y, w, h, ext_display, log.log, size, cursor, max_char_per_line, max_lines, update_text, writer, action, color, border_width, p_button, draw_border, activation_key, x_offset, y_offset, args, text_color, scale)
 
+class Typewriter(Text_Box):
+    TIME = 30
+
+    def __init__(self, x, y, w, h, ext_display, prompt, size, cursor, max_char_per_line, max_lines, update_text = utils.FALSE_PTR, writer = DEFAULT_WRITER, action = None, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, draw_border=True, x_offset=0, y_offset=0, text_color=pygame.Color("black"), scale=True):
+        self.out = utils.Ptr("")
+        super().__init__(x, y, w, h, ext_display, prompt, size, cursor, max_char_per_line, max_lines, update_text, writer, action, color, border_width, -1, draw_border, -1 , x_offset, y_offset, self.out, text_color, scale)
+        self.old_keys = [False * 256]
+        self.prompt = prompt.value
+        self.is_lower = True
+        self.body = ""
+        self.flash = False
+        self.flip = self.TIME
+        self.slice = 0
+
+    def update(self, m_x, m_y, mouse, keys):
+        self.flip -= 1
+        if self.flip < 0:
+            self.flash = not self.flash
+            self.flip = self.TIME
+        k_pressed = key_in.poll_keys(keys)
+        checkEnd = False
+        if k_pressed[key_in.POLL_KP]:
+            arrow = k_pressed[key_in.POLL_ARROWS]
+            if arrow != key_in.P_NONE:
+                    if arrow == key_in.P_UP:
+                        self.cursor.value = utils.clamp_addition(self.cursor.value,-1,len(self.lines)-1, 0)
+                    elif arrow == key_in.P_DOWN:
+                        self.cursor.value = utils.clamp_addition(self.cursor.value,1,len(self.lines)-1, 0)
+                    elif arrow == key_in.P_LEFT:
+                        self.slice = utils.clamp_addition(self.slice,-1, len(self.body), 0)
+                    elif arrow == key_in.P_RIGHT:
+                        self.slice = utils.clamp_addition(self.slice, 1, len(self.body), 0)
+            self.flash = True 
+            self.flip = self.TIME
+            if k_pressed[key_in.POLL_ENT] and self.action != None:
+                self.action(self.body)
+                self.body = ""
+                self.slice = 0
+            elif k_pressed[key_in.POLL_DEL] and len(self.body) > 0:
+                self.body= self.body[:self.slice - 1] + self.body[self.slice:]
+                self.slice-=1
+            else:
+                self.body = self.body[:self.slice] +  k_pressed[key_in.POLL_TXT] + self.body[self.slice:]
+                self.slice += len(k_pressed[key_in.POLL_TXT])
+                if "\n" in k_pressed[key_in.POLL_TXT]:
+                    checkEnd = True
+        char = " "
+        if self.flash:
+            char =  "_"
+        self.text.value = self.prompt + self.body[:self.slice] + char + self.body[self.slice:]
+        self.refresh.value = True
+        super().update(m_x, m_y, mouse, keys)
+        if checkEnd:
+            self.cursor.value = len(self.lines) - 1
