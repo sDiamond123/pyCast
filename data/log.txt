@@ -24,6 +24,7 @@ USER: help
  
   Commands 
  -------------------- 
+ help - shows list of commands 
  exit - exit the game 
  stages - get a list of stages 
  
@@ -34,27 +35,145 @@ SELECT * FROM npc WHERE id = 0
 
 Game Start! 
 
-switching state to: MENU 
+switching stage to: MENU 
 
-switching state to: OPTIONS 
+switching stage to: DIALOUGE 
 
-USER: set stage EXTRAS 
+SELECT * FROM dialogue WHERE id = 0 
 
-switching state to: EXTRAS 
+Succesfully loaded dialouge 0 
 
-reverting state to: OPTIONS 
+SELECT * FROM dialogue WHERE id = 1 
 
-USER: help 
+SELECT * FROM npc WHERE id = 1 
 
- 
- 
-  Commands 
- -------------------- 
- exit - exit the game 
- stages - get a list of stages 
- 
- prev_stage - reload last stage 
- set <VAR> <VAL> - set VAR to VAL ('set help' for list of variables) 
+Succesfully loaded dialouge 1 
+
+SELECT * FROM dialogue WHERE id = 2 
+
+Succesfully loaded dialouge 2 
+
+reverting stage to: MENU 
+
+SELECT * FROM npc WHERE id = 0 
+
+Successfully loaded map: data/maps/singleton/test_town 
+
+Successfully spawned player: (12.567,6.5,152.9797312999298) 
+
+Set up camera at (12.567,6.5) with a 90.0 degree FOV and casting 350 rays out to 15 cells 
+
+PISTOL added to inventory 
+
+SHOTGUN added to inventory 
+
+MG added to inventory 
+
+Successfully loaded save: built_in/town.csv 
+
+switching stage to: FPS 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+switching stage to: PAUSE_MENU 
+
+switching stage to: OPTIONS 
+
+reverting stage to: PAUSE_MENU 
+
+reverting stage to: FPS 
+
+switching stage to: PAUSE_MENU 
+
+switching stage to: MENU 
+
+switching stage to: OPTIONS 
+
+reverting stage to: MENU 
+
+switching stage to: DIALOUGE 
+
+SELECT * FROM dialogue WHERE id = 0 
+
+Succesfully loaded dialouge 0 
+
+SELECT * FROM dialogue WHERE id = 1 
+
+SELECT * FROM npc WHERE id = 1 
+
+Succesfully loaded dialouge 1 
+
+reverting stage to: MENU 
+
+SELECT * FROM npc WHERE id = 0 
+
+switching stage to: LOAD 
+
+reverting stage to: MENU 
+
+switching stage to: EXTRAS 
+
+Successfully loaded map: data/maps/singleton/test_town 
+
+Successfully spawned player: (12.567,6.5,152.9797312999298) 
+
+Set up camera at (12.567,6.5) with a 90.0 degree FOV and casting 350 rays out to 15 cells 
+
+PISTOL added to inventory 
+
+SHOTGUN added to inventory 
+
+MG added to inventory 
+
+Successfully loaded save: built_in/town.csv 
+
+switching stage to: FPS 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+switching stage to: PAUSE_MENU 
+
+reverting stage to: FPS 
+
+switching stage to: MAP 
+
+switching stage to: PAUSE_MENU 
+
+switching stage to: OPTIONS 
+
+reverting stage to: PAUSE_MENU 
+
+reverting stage to: MAP 
+
+reverting stage to: FPS 
+
+switching stage to: PAUSE_MENU 
+
+switching stage to: OPTIONS 
+
+reverting stage to: PAUSE_MENU 
+
+reverting stage to: FPS 
 
 Long's Word Succesfully Exited 
 

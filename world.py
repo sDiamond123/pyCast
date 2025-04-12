@@ -234,7 +234,7 @@ class World:
     def update_game_state (self, new_state):
         self.prev_states.append(self.game_state)
         self.game_state = new_state
-        log.write("switching state to: " + self.game_state.name)
+        log.write("switching stage to: " + self.game_state.name)
         if len(self.prev_states) > self.MAX_SAVED_STATES:
             self.prev_states.pop(0)
         if self.UI[self.game_state.value].want_mouse:
@@ -248,7 +248,14 @@ class World:
             self.game_state = self.prev_states.pop()
         else:
             self.game_state = self.GAME_STATES.MENU
-        log.write("reverting state to: " + self.game_state.name)
+        log.write("reverting stage to: " + self.game_state.name)
+        if (len(self.prev_states) > 0):
+            prev_s = self.prev_states[len(self.prev_states) - 1]
+            if prev_s == self.GAME_STATES.FPS:
+                self.c.render()
+                #push camera's display onto main display
+                self.internal_display.blit(self.c.external_surface)
+            self.UI[prev_s.value].render()
         if self.UI[self.game_state.value].want_mouse:
             if self.mouse.alive:
                 self.mouse.toggle()
@@ -285,11 +292,17 @@ class World:
                     self.p.y = float(split[2])
                 else:
                     log.write("SET FAILED - PLAYER NOT YET SPAWNED")
+            elif split[1] == "player_health":
+                if self.p != None:
+                    log.write("PLAYER HEALED")
+                    self.p.health(float(split[2]))
+                else:
+                    log.write("SET FAILED - PLAYER NOT YET SPAWNED")
             elif split[1] == 'dialouge':
                 self.set_dialouge_entry_point(int(split[2]))
             elif split[1] == 'stage':
                 self.update_game_state(self.GAME_STATES[split[2]])
             else:
-                log.write("possiple variables are: \n -------------------- \n player_x \n player_y \n dialouge \n stage")
+                log.write("possiple variables are: \n -------------------- \n player_x \n player_y \n player_health \n dialouge \n stage")
         else:   
             log.write("INVALID COMMAND \n enter \'help\' for a list of commands")
