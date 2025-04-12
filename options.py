@@ -1,4 +1,5 @@
 from utils import Ptr as Ptr
+from log import LOG as log
 
 class __Options__ ():
     CONFIG = "data/config/config.txt"
@@ -87,7 +88,7 @@ class __Options__ ():
         item = (int(config.readline()))
         self.__update_ptr__(header, item)
         config.close()
-        print("Config loaded (" + file + ")")
+        log.write("Config loaded (" + file + ")")
 
     def save_config(self):
         config = open(self.CONFIG, "w")
@@ -95,6 +96,6 @@ class __Options__ ():
             config.write(self.boilerplate[i])
             config.write(str(self.contents[self.boilerplate[i]]) + "\n")
         config.close()
-        print("Config updated")
+        log.write("Config updated")
 
 CONFIG = __Options__()

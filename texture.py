@@ -1,7 +1,7 @@
 import pygame
 import utils
 import math
-import functools
+#from log import LOG as log
 
 class Texture:
     PATH = "data/textures/"
@@ -17,7 +17,7 @@ class Texture:
         self.slices = [None] * self.slice_count
         for i in range(self.slice_count):
             self.slices[i] = base_image.subsurface((i,0,1,dimensions[1]))
-        #print ("Successfully loaded sliced texture:" + file)
+        #log.write ("Successfully loaded sliced texture:" + file)
 
     def update(self):
         # nothing to update so waste a line b/c python
@@ -50,7 +50,7 @@ class AnimatedTexture:
         frame_manifest = utils.csv_load(file + self.MANIFEST, 2, self.frames)
         for i in range (self.frames):
             self.textures[i] = (Texture(directory + "/" + frame_manifest[i][0]), frame_manifest[i][1])
-        #print("Successfully loaded animated texture: " + directory)
+        #log.write("Successfully loaded animated texture: " + directory)
 
     # loop through frames
     def update(self):

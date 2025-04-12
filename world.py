@@ -1,5 +1,6 @@
 import pygame,utils,map,camera,math,ui_implementation,game_object,player, enum, dialogue
 from map_chunk import OVER_MAP as overworld
+from log import LOG as log
 
 class World:
     PATH = "data/state/"
@@ -72,7 +73,7 @@ class World:
             self.m = overworld.load(self.state_data[0][0], self.state_data[8][0], self.state_data[8][1])
             self.is_overworld = True
         
-        print("Successfully spawned player: " + str(self.p))
+        log.write("Successfully spawned player: " + str(self.p))
         
         #load game objects
         self.object_count = self.state_data[5][1]
@@ -98,8 +99,8 @@ class World:
         self.UI[self.GAME_STATES.FPS.value] =ui_implementation.HUD(self.internal_display, self.m, self.p)
         self.UI[self.GAME_STATES.MAP.value] = ui_implementation.Map_Screen(self.internal_display,self.m, self.p, has_buttons=True)
         self.p.load_inv(self.state_data[6][0])
-        # print state
-        print("Successfully loaded save: " + self.state)
+        # log.write state
+        log.write("Successfully loaded save: " + self.state)
 
     def __map_controls__ (self, keys, mouse):
         if keys[utils.Key.M_ZOOM_OUT]:
@@ -193,7 +194,7 @@ class World:
                 object = self.state_objects[i]
                 object.update(self.p, self.state_objects, self.m)
                 if object.health() <= 0:
-                    #print("reaping: " + object.name)
+                    #log.write("reaping: " + object.name)
                     to_pop.append(i)
             #reap dead objects
             for dead in reversed(to_pop):
@@ -229,7 +230,7 @@ class World:
     def update_game_state (self, new_state):
         self.prev_states.append(self.game_state)
         self.game_state = new_state
-        print("switching state to: " + self.game_state.name)
+        log.write("switching state to: " + self.game_state.name)
         if len(self.prev_states) > self.MAX_SAVED_STATES:
             self.prev_states.pop(0)
         if self.UI[self.game_state.value].want_mouse:
@@ -243,7 +244,7 @@ class World:
             self.game_state = self.prev_states.pop()
         else:
             self.game_state = self.GAME_STATES.MENU
-        print("reverting state to: " + self.game_state.name)
+        log.write("reverting state to: " + self.game_state.name)
         if self.UI[self.game_state.value].want_mouse:
             if self.mouse.alive:
                 self.mouse.toggle()

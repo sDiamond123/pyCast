@@ -1,4 +1,5 @@
 import map, utils, player, math
+from log import LOG as log
 
 MAX_CHUNKS = 128 # max number of unique chunks
 
@@ -15,7 +16,7 @@ def load_chunk_palette (path):
     data = utils.bottomless_csv_load(path)
     for i in range(len(data)):
         CHUNK_PALETTE[i] = [0, None, data[i][0]]
-    print("Loaded Chunks (" + path + ")")
+    log.write("Loaded Chunks (" + path + ")")
 
 load_chunk_palette(DEFAULT_PALETTE)
 
@@ -34,7 +35,7 @@ class M_Chunk():
         return self.name
 
     def destroy(self):
-        print("deleted: " + str((self.x, self.y)))
+        log.write("deleted: " + str((self.x, self.y)))
         CHUNK_PALETTE[self.id][CHUNK_COUNT] -= 1
         if (CHUNK_PALETTE[self.id][CHUNK_COUNT] <= 0):
             CHUNK_PALETTE[self.id][CHUNK_MAP] = None
@@ -120,11 +121,11 @@ class Overmap():
         self.primary_y = start_chunk_y
         self.grid = utils.bottomless_csv_load(path)
         self.chunks = [MAX_CHUNKS]
-        print((start_chunk_x, start_chunk_y))
+        log.write((start_chunk_x, start_chunk_y))
        
         for i in range ((self.SUPPORT_W)):
             for j in range((self.SUPPORT_W)):
-                print("added: "+ str((i + self.primary_x - self.MID_VALUE, j + self.primary_y - self.MID_VALUE))+ "to" + str((i, j)))
+                log.write("added: "+ str((i + self.primary_x - self.MID_VALUE, j + self.primary_y - self.MID_VALUE))+ "to" + str((i, j)))
                 self.render_world[j][i] = self.init_chunk(i + self.primary_x - self.MID_VALUE, j + self.primary_y - self.MID_VALUE)
         return self.render_world[self.MID_VALUE][self.MID_VALUE]
 
@@ -135,7 +136,7 @@ class Overmap():
 
     def delete_group(self, x0, y0, dx, dy):
         for i in range(self.SUPPORT_W):
-            print("deleted: " + str((x0 + i * dx, y0 + i * dy)))
+            log.write("deleted: " + str((x0 + i * dx, y0 + i * dy)))
             del_me = self.render_world[y0 + i * dy][x0 + i * dx]
             if (del_me != self.empty):
                 del_me.destroy()
@@ -146,34 +147,34 @@ class Overmap():
                 if (x == targ_x or y == targ_y):
                     self.render_world[y][x] = self.init_chunk(self.primary_x + dx, self.primary_y + dy)
                 else:
-                    print("shifted " + str((x,y)) + " to " + str((x+dx, y + dy)))
+                    log.write("shifted " + str((x,y)) + " to " + str((x+dx, y + dy)))
                     self.render_world[y + dy][x + dx] = self.render_world[y][x]
 
     def update (self, p: player.Player):
         if not self.render_world[self.primary_y][self.primary_x].in_chunk(p):
-            print(self.primary_x, self.primary_y)
+            log.write(self.primary_x, self.primary_y)
             if (p.x < 0):
                 p.x += CHUNK_W
                 self.primary_x -= 1
                 #self.delete_group(0, self.SUPPORT_W - 1, 0, 1)
-                print("a")
+                log.write("a")
                # self.shift_group(1, 0, self.SUPPORT_W - 1 ,-1)
             elif (p.x >= CHUNK_W):
                 p.x -= CHUNK_W
                 self.primary_x += 1
                 #self.delete_group(0, 0, 0, 1)
-                print("b")
+                log.write("b")
                # self.shift_group(-1, 0, 0,-1)
             if (p.y < 0):
                 p.y += CHUNK_W
                 self.primary_y -= 1
                 #self.delete_group(self.SUPPORT_W - 1, 0, 1, 0)
-                print("c")
+                log.write("c")
             elif (p.y >= CHUNK_W):
                 p.y -= CHUNK_W
                 self.primary_y += 1
                 #self.delete_group(0, 0, 1, 0)
-                print("d")
+                log.write("d")
             
         return self.render_world[self.primary_y][self.primary_x]
 

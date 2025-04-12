@@ -1,5 +1,6 @@
 class __log__:
     MAX_SIZE = 1000
+    DUMP_FILE = "data/log.txt"
 
     def __init__(self):
         self.log = []
@@ -12,7 +13,7 @@ class __log__:
             self.log.insert(self.cursor, value)
         self.cursor += 1
         if len(self.log) > self.MAX_SIZE:
-            self.log.pop()
+            self.log.pop(0)
     
     def get(self):
         return self.log[self.cursor]
@@ -23,5 +24,10 @@ class __log__:
     def __len__(self):
         return len(self.log)
     
+    def dump(self):
+        file = open(self.DUMP_FILE, "w")
+        for line in self.log:
+            file.write(line + "\n")
+        file.close()
 
 LOG = __log__()

@@ -3,7 +3,7 @@ import math
 import texture
 import pygame
 import utils
-import functools
+from log import LOG as log
 
 class Camera:
     # camera constants
@@ -61,7 +61,7 @@ class Camera:
             sky = self.map.get_skybox()
             self.skybox = texture.RollingTexture(sky[0],sky[1],self.fov, self.int_w, self.int_h/2)
         # print statement
-        print("Set up camera at ("+str(camera_man.x)+","+str(camera_man.y)
+        log.write("Set up camera at ("+str(camera_man.x)+","+str(camera_man.y)
               +") with a " + str(math.degrees(self.fov)) + 
               " degree FOV and casting " + str(self.raycount) +" rays out to " 
               + str(self.draw_dist) +" cells")

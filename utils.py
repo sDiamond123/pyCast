@@ -1,4 +1,5 @@
 import enum, math, pygame
+from log import LOG as log
 
 class Timed_Toggle():
     def __init__(self, cool_down):
@@ -128,7 +129,7 @@ class Key:
     PAUSE = get_key(binds)
     UI = get_key(binds)
     binds.close()
-    print("Successfully loaded key binds")
+    log.write("Successfully loaded key binds")
 
 class Ptr():
     def __init__ (self, value):

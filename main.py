@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import world, utils, clock, options
+from log import LOG as log
 
 if __name__ == "__main__":
     # pygame setup
@@ -23,7 +24,7 @@ if __name__ == "__main__":
 
 
     #print out config to terminal
-    print ("Started: "+name+"\nWindow: " + str(w) + " by " + str(h) +"\nFullscreen: "+str(fullscreen)+
+    log.write ("Started: "+name+"\nWindow: " + str(w) + " by " + str(h) +"\nFullscreen: "+str(fullscreen)+
            "\nInternal Resolution: "+str(i_w)+" by "+ str(i_h)+"\nTargeting " + str(fps) +" FPS")
     
     # finish pygame init
@@ -38,7 +39,7 @@ if __name__ == "__main__":
     #manager = world.World(screen,w,h,i_w, i_h, "basic_mansion.csv")
     manager = world.World(screen, w,h,i_w,i_h,"built_in/town.csv",(fov,rays,draw_dist))
     #manager = world.World(screen, w, h, i_w, i_h, "default.csv")
-    print("Game Start!")
+    log.write("Game Start!")
     # main loop
     while running:
         
@@ -69,5 +70,6 @@ if __name__ == "__main__":
             # limits FPS
             dt = clock.CLOCK.tick(fps.value) / 1000
             #print(clock.get_fps())
-    print(name + " Succesfully Exited")
+    log.write(name + " Succesfully Exited")
+    log.dump()
     pygame.quit()

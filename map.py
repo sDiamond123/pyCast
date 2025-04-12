@@ -2,6 +2,7 @@ import pygame
 import math
 import utils
 import texture
+from log import LOG as log
 
 class Map :
     EMPTY_TILE = 0
@@ -72,7 +73,7 @@ class Map :
                 # load animated texture
                 self.text_palette[i] = texture.AnimatedTexture(texts[i][0])
             
-        print("Successfully loaded map: " + map_name)
+        log.write("Successfully loaded map: " + map_name)
         
     def is_valid (self, x, y):
         return y >= 0 and y < len(self.map) and x >= 0 and x < len(self.map[int(y)])

@@ -1,6 +1,7 @@
 import ui, screen_writer, json, pygame, utils
 from utils import Ptr as ptr
 from database import DB as db
+from log import LOG as log
 
 class Talking_Head(ui.Still_Image):
     DEFAULT_IMG = "data/npc_profiles/empty/empty.png"
@@ -118,12 +119,12 @@ class Dialogue_Window (ui.UI_Heirarchy):
 
     def __check_prereqs(self, i):
         for prereq in self.prereqs[i]:
-            print(prereq)
+            log.write(prereq)
         return True
 
     def __apply_attr(self, i):
         for attr in self.set_on_click[i]:
-            #print(attr)
+            #log.write(attr)
             if (attr["type"] == "sentiment"):
                 self.elements[1].update_sentiment(attr["value"])
 
@@ -177,5 +178,5 @@ class Dialogue_Window (ui.UI_Heirarchy):
         self.elements[1].update_img(self.data[self.BACKGROUND], self.data[self.SHOW_NPC] == 1)
         self.menu = screen_writer.Text_Menu(0,self.BODY_H,800,200,self.display,self.lines, x_off= 10, cap_w=100, y_off= 10,max_display=3,action=self.select)
         self.sub_composites[0] = self.menu
-        print("Succesfully loaded dialouge " + str(entry_point))
+        log.write("Succesfully loaded dialouge " + str(entry_point))
         

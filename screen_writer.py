@@ -1,4 +1,5 @@
 import pygame, ui, utils, clock, math
+from log import LOG as log
 
 FONT_PATH = "data/fonts"
 DEFAULT_FONT = "/Open_Sans/static/OpenSans-Regular.ttf"
@@ -15,7 +16,7 @@ class Screen_Writer:
         self.default_size = sizes[0]
         for size in sizes:
             self.fonts[size] = pygame.font.Font(font, size)
-        print("Succesfully loaded font: " + font)
+        log.write("Succesfully loaded font: " + font)
 
     def render (self, text : str, size : int = default_size, color = "black", antialias = True):
         font = self.fonts[size]

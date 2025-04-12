@@ -1,4 +1,6 @@
 import utils, item, weapon
+from log import LOG as log
+
 
 class Inventory():
     def __init__ (self, file):
@@ -27,7 +29,7 @@ class Inventory():
                     cur_item = item.Item(line[2], line[3])
                 self.items[(cur_item.name, i)] = cur_item
                 i+=1
-                print(cur_item.name + " added to inventory")
+                log.write(cur_item.name + " added to inventory")
             elif "FLAG" in line:
                 in_attr = False
                 if "EQUIPED" in line:
@@ -57,7 +59,7 @@ class Inventory():
                 self.equiped.is_equiped = True 
                 if (self.equiped.need_to_load):
                     self.equiped.load()
-                print("equiped: " + self.equiped.name)
+                log.write("equiped: " + self.equiped.name)
                 return self.items[item]
         return None
     

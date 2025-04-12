@@ -2,7 +2,6 @@ import utils, inventory, weapon
 
 
 
-
 class Player (utils.Obj_Vector):
     COOL_DOWN = 300
     MAX_HEALTH = 100

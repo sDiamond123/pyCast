@@ -1,5 +1,5 @@
 import utils, math, pygame, map
-
+from log import LOG as log
 class World_Sprite:
     META = "/meta.csv"
     MANIFEST = "/manifest.csv"
@@ -72,13 +72,13 @@ class Game_Object:
                 if not key in sprites:
                     if sprite_data[i][1] == "simple":
                         sprites[key] = World_Sprite(obj + self.SPRITE_PATH + sprite_data[i][2])
-                        #print ("Successfully loaded sprite: " +key)
+                        #log.write ("Successfully loaded sprite: " +key)
         self.sprites = sprites
         self.is_projectile = False
         self.is_enemy = False
         self.is_NPC = False
-        #print("Successfully placed a " + self.name + " <" + self.state + ", " + str(self.health())+ " HP> at " + str(self.pos))
-        #print("\tattr: " +  str(self.attr))
+        #log.write("Successfully placed a " + self.name + " <" + self.state + ", " + str(self.health())+ " HP> at " + str(self.pos))
+        #log.write("\tattr: " +  str(self.attr))
 
     def x(self):
         return self.pos.x
@@ -200,7 +200,7 @@ class Projectile(Game_Object):
     def update(self, player, objects, map: map.Map):
         super().update(player,objects, map)
         if self.check_collision_player(player):
-            print(self.name + " hit player for " + str(self.attr["d_p"]) + " dmg with " + str(self.attr["d_s"]) + " decay")
+            log.write(self.name + " hit player for " + str(self.attr["d_p"]) + " dmg with " + str(self.attr["d_s"]) + " decay")
             self.change_health(-self.attr["d_s"])
             player.health(-self.attr["d_p"])
         for obj in objects:
@@ -210,7 +210,7 @@ class Projectile(Game_Object):
                 if (not obj.is_projectile):
                     self.change_health(-self.attr["d_s"])
                     obj.change_health(-self.attr["d_o"])
-                    print(self.name + " hit obj " + obj.name + " for " + str(self.attr["d_o"]) + " dmg with " + str(self.attr["d_s"]) + " decay")
+                    log.write(self.name + " hit obj " + obj.name + " for " + str(self.attr["d_o"]) + " dmg with " + str(self.attr["d_s"]) + " decay")
 
 class Melee(Game_Object):
      COOL_DOWN = 2500
@@ -225,7 +225,7 @@ class Melee(Game_Object):
      def update(self, player, objects, map: map.Map):
         super().update(player,objects, map)
         if self.check_collision_player(player) and self.timer.update():
-            print(self.name + " hit player for " + str(self.attr["d_p"]) + " dmg")
+            log.write(self.name + " hit player for " + str(self.attr["d_p"]) + " dmg")
             self.change_health(-self.attr["d_s"])
             player.health(- self.attr["d_p"])
        

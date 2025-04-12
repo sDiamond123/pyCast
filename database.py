@@ -1,4 +1,6 @@
 import sqlite3
+from log import LOG as log
+
 
 PRINT_SQL = True
 
@@ -28,7 +30,7 @@ class Database ():
             for i in range(1, int(len(base_where)/2)):
                 where += iterator+ " " + str(base_where[2 * i]) + " = " + str(base_where[2*i + 1])
         if PRINT_SQL:
-            print(command + " " + type + " " + do + " " + table + where)
+            log.write(command + " " + type + " " + do + " " + table + where)
         self.cur = self.execute(command + " " + type + " " + do + " " + table + where)
         return self.cur
 
@@ -72,4 +74,5 @@ if __name__ == "__main__":
       #print(DB.get("*", "npc"))
       #DB.update("\'name\'", "npc", "\'name_2\'",("name","\'test_npc\'"))
       #DB.delete( "npc",("name","\'name_2\'"))
+      
       #print(DB.get("*", "npc"))
