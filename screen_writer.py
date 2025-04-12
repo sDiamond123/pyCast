@@ -23,6 +23,7 @@ class Screen_Writer:
         return font.render(text, antialias = antialias, color = color)
     
 DEFAULT_WRITER = Screen_Writer()
+GOTHIC = Screen_Writer(FONT_PATH + "/Jacquard_12/Jacquard12-Regular.ttf")
 
 class Text_Button (ui.Button):
     def __init__ (self, x, y, w, h, ext_display: pygame.surface,
@@ -235,64 +236,3 @@ class Log(Text_Box):
     def __init__(self, x, y, w, h, ext_display, size, cursor, max_char_per_line, max_lines, update_text = utils.FALSE_PTR, writer = DEFAULT_WRITER, action = None, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, p_button=ui.Interactable_Element.DEFAULT_MB, draw_border=True, activation_key=-1, x_offset=0, y_offset=0, args=None, text_color=pygame.Color("black"), scale=True):
         super().__init__(x, y, w, h, ext_display, log.log, size, cursor, max_char_per_line, max_lines, update_text, writer, action, color, border_width, p_button, draw_border, activation_key, x_offset, y_offset, args, text_color, scale)
 
-class Keyboard(ui.Button):
-    BUTTONS_PER_ROW = 10
-    KEY_SIZE = utils.Ptr(20)
-    BUTTON_SPACING = 3
-    SPECIAL_CHARS = [("SPACE", ord(' ')),(".", ord('.')), (",", ord(',')), ("ENT", ord('\r'))]
-
-    def keypressed (self, key):
-        if key == ord('\r'):
-            self.nc_text += " "
-            self.cursor.value += 1
-        self.nc_text += chr(key)
-        self.has_text.value = True
-        self.c_text.value = self.nc_text
-
-    def __init__(self, x, y, w, h, ext_display, size, writer = DEFAULT_WRITER, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, p_button=ui.Interactable_Element.DEFAULT_MB, draw_border=True, x_offset=0, y_offset=0, args=None, text_color=pygame.Color("black"), back_color = pygame.Color("bisque2"), scale = True):
-        self.keyboard = []
-        self.keys = []
-        self.w = w
-        self.h = h
-        j = 0
-        k = 0
-        self.nc_text = ""
-        self.c_text = utils.Ptr("")
-        self.has_text = utils.Ptr(False)
-        self.cursor = utils.Ptr(0)
-        button_size = math.floor(self.w/(self.BUTTONS_PER_ROW + 1)) - self.BUTTON_SPACING
-        for i in range (256):
-            self.keys.append([utils.Ptr(chr(i)), False])
-        for i in range (ord("a"), ord("z") + 1):
-            self.keyboard.append(Text_Button(x + j * button_size + j * self.BUTTON_SPACING , y + k * button_size + k * self.BUTTON_SPACING, button_size, button_size,ext_display,self.keys[i][0],size,writer,self.keypressed,color,border_width,p_button,draw_border,i,x_offset,y_offset,i,text_color))
-            j += 1
-            if j > self.BUTTONS_PER_ROW:
-                j = 0
-                k+=1
-        for sc in self.SPECIAL_CHARS:
-            self.keys[sc[1]][0] = utils.Ptr(sc[0])
-            self.keyboard.append(Text_Button(x + j * button_size + j * self.BUTTON_SPACING , y + k * button_size + k * self.BUTTON_SPACING, button_size, button_size,ext_display,self.keys[sc[1]][0],size,writer,self.keypressed,color,border_width,p_button,draw_border,sc[1],x_offset,y_offset,sc[1],text_color))
-            j += 1
-            if j > self.BUTTONS_PER_ROW:
-                j = 0
-                k+=1
-        super().__init__(x,y,w,h,ext_display,None,back_color,border_width,p_button=1,scale=scale)
-        
-
-    def update(self, m_x, m_y, mouse, keys):
-        super().update(m_x,m_y, mouse, keys)
-        self.has_text.value = False
-        for key in self.keyboard:
-            key.update(m_x,m_y,mouse,keys)
-            if keys[key.activation_key]:
-                if not key.key_lock:
-                    key.key_lock = True
-            else:
-                if key.key_lock:
-                    key.key_lock = False
-           
-
-    def render(self):
-        super().render()
-        for key in self.keyboard:
-            key.render()

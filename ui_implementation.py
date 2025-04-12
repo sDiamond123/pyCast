@@ -18,8 +18,8 @@ class Map_Screen(ui.UI_Composite):
         if has_buttons:
             size = utils.Ptr(16)
             cursor = utils.Ptr(0)
-            self.elements.append(screen_writer.Text_Box(720,370,60,60,self.display,utils.Ptr("zoom\nin"),size,cursor,10,3,action = self.__direct_z_in__))
-            self.elements.append(screen_writer.Text_Box(720,490,60,60,self.display,utils.Ptr("zoom\nout"),size,cursor,10,3,action = self.__direct_z_out__))
+            self.elements.append(screen_writer.Text_Box(720,370,60,60,self.display,utils.Ptr("zoom\nin"),size,cursor,10,3,action = self.__direct_z_in__,writer=screen_writer.GOTHIC))
+            self.elements.append(screen_writer.Text_Box(720,490,60,60,self.display,utils.Ptr("zoom\nout"),size,cursor,10,3,action = self.__direct_z_out__,writer=screen_writer.GOTHIC))
             self.elements.append(screen_writer.Text_Box(600,445,30,30,self.display,utils.Ptr("<"),size,cursor,10,3,action = self.__move_left__))
             self.elements.append(screen_writer.Text_Box(645,400,30,30,self.display,utils.Ptr("^"),size,cursor,10,3,action = self.__move_up__))
             self.elements.append(screen_writer.Text_Box(690,445,30,30,self.display,utils.Ptr(">"),size,cursor,10,3,action = self.__move_right__))
@@ -154,16 +154,16 @@ class Main_Menu (ui.UI_Composite):
         self.cursor = utils.Ptr(3)
         self.phase = utils.Ptr(0)
         self.elements.append(ui.Rolling_Image(0,0,display.size[0], display.size[1],display, "/menu/main_menu.png",self.phase,fov = math.pi ))
-        self.elements.append(screen_writer.Text_Button(15,15,0,0,display,utils.Ptr("Long's Word"),utils.Ptr(50),draw_border=False, text_color = (0, 70, 20)))
+        self.elements.append(screen_writer.Text_Button(15,15,0,0,display,utils.Ptr("Long's Word"),utils.Ptr(50),draw_border=False, text_color = (0, 70, 20),writer=screen_writer.GOTHIC))
         self.elements.append(screen_writer.Text_Box(10,450,400,140,self.display,text,size,self.cursor,68,7))
         self.elements.append(ui.Button(420,450,30,30,display,self.cursor_up))
         self.elements.append(ui.Button(420,500,30,30,display,self.cursor_down))
         self.elements.append(ui.Element(595,330,195,260,display, color=ui.UI_Composite.DEFAULT_BACK))
-        self.elements.append(screen_writer.Text_Button(605,340,175,40,display,utils.Ptr("1. New"),utils.Ptr(20), color = (155,130,15), activation_key=49, action = self.new_game))
-        self.elements.append(screen_writer.Text_Button(605,390,175,40,display,utils.Ptr("2. Continue"),utils.Ptr(20), color = (155,130,15), activation_key=50, action = self.reload_last_save))
-        self.elements.append(screen_writer.Text_Button(605,440,175,40,display,utils.Ptr("3. Load"),utils.Ptr(20), color = (155,130,15), activation_key=51,action=self.load))
-        self.elements.append(screen_writer.Text_Button(605,490,175,40,display,utils.Ptr("4. Options"),utils.Ptr(20), color = (155,130,15), activation_key=52, action = self.options))
-        self.elements.append(screen_writer.Text_Button(605,540,175,40,display,utils.Ptr("5. Exit Game"),utils.Ptr(20), color = (155,130,15), activation_key=53, action = self.exit_game))
+        self.elements.append(screen_writer.Text_Button(605,340,175,40,display,utils.Ptr("1. New"),utils.Ptr(20), color = (155,130,15), activation_key=49, action = self.new_game,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(605,390,175,40,display,utils.Ptr("2. Continue"),utils.Ptr(20), color = (155,130,15), activation_key=50, action = self.reload_last_save,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(605,440,175,40,display,utils.Ptr("3. Load"),utils.Ptr(20), color = (155,130,15), activation_key=51,action=self.load,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(605,490,175,40,display,utils.Ptr("4. Options"),utils.Ptr(20), color = (155,130,15), activation_key=52, action = self.options,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(605,540,175,40,display,utils.Ptr("5. Exit Game"),utils.Ptr(20), color = (155,130,15), activation_key=53, action = self.exit_game,writer=screen_writer.GOTHIC))
 
     def update(self, mouse : utils.Mouse_Manager, keys):
          self.phase.value += self.ANG_DELTA
@@ -182,10 +182,10 @@ class Splash_Screen (ui.UI_Composite):
         super().__init__(display, draw_background=False)
         self.control = control
         self.text = utils.Ptr(self.BASE_MESSAGE)
-        size = utils.Ptr(24)
+        size = utils.Ptr(36)
         self.refresh = utils.Ptr(False)
         self.elements.append(ui.Still_Image(0,0,800,600,self.display,self.CHICK))
-        self.elements.append(screen_writer.Text_Box(180,490,440,75,self.display,self.text,size,utils.Ptr(0),45,1,action = self.action, activation_key=options.Key.INTERACT,update_text=self.refresh, color = (200,180,110), y_offset=-2, x_offset=35, border_width= 10))
+        self.elements.append(screen_writer.Text_Box(180,490,440,75,self.display,self.text,size,utils.Ptr(0),45,1,action = self.action, activation_key=options.Key.INTERACT,update_text=self.refresh, color = (200,180,110), y_offset=-2, border_width= 10,writer=screen_writer.GOTHIC))
         small_size = utils.Ptr(8)
         version = open(self.VERSION)
         info = utils.Ptr(version.readlines())
@@ -217,13 +217,13 @@ class Pause (ui.UI_Composite):
     def __init__ (self, display, control):
         super().__init__(display, draw_background=False)
         self.control = control
-        self.elements.append(screen_writer.Text_Button(50,150,175,40,display,utils.Ptr("1. Return"),utils.Ptr(20), activation_key=49, action = self.continue_play))
-        self.elements.append(screen_writer.Text_Button(50,200,175,40,display,utils.Ptr("2. Reload Save"),utils.Ptr(20), activation_key=50, action = self.reload_last_save))
-        self.elements.append(screen_writer.Text_Button(50,250,175,40,display,utils.Ptr("3. Load"),utils.Ptr(20), activation_key=51,action=self.load))
-        self.elements.append(screen_writer.Text_Button(50,300,175,40,display,utils.Ptr("4. Save"),utils.Ptr(20), activation_key=52))
-        self.elements.append(screen_writer.Text_Button(50,350,175,40,display,utils.Ptr("5. Options"),utils.Ptr(20), activation_key=53, action = self.options))
-        self.elements.append(screen_writer.Text_Button(50,400,175,40,display,utils.Ptr("6. Main Menu"),utils.Ptr(20), activation_key=54,action=self.menu))
-        self.elements.append(screen_writer.Text_Button(50,450,175,40,display,utils.Ptr("7. Exit Game"),utils.Ptr(20), activation_key=55, action=self.exit_game))
+        self.elements.append(screen_writer.Text_Button(50,150,175,40,display,utils.Ptr("1. Return"),utils.Ptr(20), activation_key=49, action = self.continue_play,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(50,200,175,40,display,utils.Ptr("2. Reload Save"),utils.Ptr(20), activation_key=50, action = self.reload_last_save,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(50,250,175,40,display,utils.Ptr("3. Load"),utils.Ptr(20), activation_key=51,action=self.load,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(50,300,175,40,display,utils.Ptr("4. Save"),utils.Ptr(20), activation_key=52,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(50,350,175,40,display,utils.Ptr("5. Options"),utils.Ptr(20), activation_key=53, action = self.options,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(50,400,175,40,display,utils.Ptr("6. Main Menu"),utils.Ptr(20), activation_key=54,action=self.menu,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(50,450,175,40,display,utils.Ptr("7. Exit Game"),utils.Ptr(20), activation_key=55, action=self.exit_game,writer=screen_writer.GOTHIC))
         self.exit = False
 
 class Load (ui.UI_Composite):
@@ -434,8 +434,5 @@ class Console (ui.UI_Sub_Screen):
 
     def __init__ (self, x, y, ext_display: pygame.surface):
         super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),True,True)
-        kb = screen_writer.Keyboard(self.x + 10, self.y + 200, self.w-20, self.h-220,ext_display, self.TEXT_SIZE, scale = False)
-        self.elements.append(kb)
         self.cursor = utils.Ptr(0)
-        #self.elements.append(screen_writer.Text_Box(self.x + 10, self.y + 10, self.w-20, 190,ext_display,kb.c_text,self.TITLE_SIZE,kb.cursor,40,5,kb.has_text, scale = False))
-        self.elements.append(screen_writer.Log(self.x + 10, self.y + 10, self.w-20, 470,ext_display,self.TITLE_SIZE,kb.cursor,65,16,log.new, scale = False, color=(0,0,0), text_color=(50,200,50)))
+        self.elements.append(screen_writer.Log(self.x + 10, self.y + 10, self.w-20, 470,ext_display,self.TITLE_SIZE,self.cursor,65,16,log.new, scale = False, color=(0,0,0), text_color=(50,200,50)))

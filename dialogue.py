@@ -87,7 +87,7 @@ class Dialogue_Window (ui.UI_Heirarchy):
     SECONDARY_COLOR = pygame.Color("bisque4")
 
     BODY_TXT_SIZE = ptr(16)
-    BIG_TXT_SIZE = ptr(20)
+    BIG_TXT_SIZE = ptr(36)
     BODY_LINES = 10
     BODY_C_PER_LINE = 50
     BODY_W = 400
@@ -151,7 +151,7 @@ class Dialogue_Window (ui.UI_Heirarchy):
         img = Talking_Head(self.T_HEAD_X, self.T_HEAD_Y, self.T_HEAD_W, self.T_HEAD_H, surface, self.DEFAULT_PORTRAIT)
         img.update_img(self.DEFAULT_BG, False)
         self.elements.append(img)
-        self.elements.append(screen_writer.Text_Box(self.HEADER_X,self.HEADER_Y,self.HEADER_W,self.HEADER_H,surface,self.header,self.BIG_TXT_SIZE,ptr(0),self.BODY_C_PER_LINE,self.BODY_LINES,self.update_hdr, color=self.SECONDARY_COLOR))
+        self.elements.append(screen_writer.Text_Box(self.HEADER_X,self.HEADER_Y,self.HEADER_W,self.HEADER_H,surface,self.header,self.BIG_TXT_SIZE,ptr(0),self.BODY_C_PER_LINE,self.BODY_LINES,self.update_hdr, color=self.SECONDARY_COLOR,writer=screen_writer.GOTHIC, y_offset=-4))
         self.control = control
         self.lines = []
         self.menu = screen_writer.Text_Menu(0,self.BODY_H,800,200,surface,self.lines, x_off= 40, y_off= 10,max_display=3)
