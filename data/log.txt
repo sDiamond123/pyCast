@@ -11,4 +11,41 @@ Targeting 60 FPS
 SELECT * FROM npc WHERE id = 0
 Game Start!
 switching state to: MENU
+switching state to: DIALOUGE
+SELECT * FROM dialogue WHERE id = 0
+Succesfully loaded dialouge 0
+SELECT * FROM dialogue WHERE id = 1
+SELECT * FROM npc WHERE id = 1
+Succesfully loaded dialouge 1
+SELECT * FROM dialogue WHERE id = 2
+Succesfully loaded dialouge 2
+SELECT * FROM dialogue WHERE id = 2
+Succesfully loaded dialouge 2
+SELECT * FROM dialogue WHERE id = 2
+Succesfully loaded dialouge 2
+SELECT * FROM dialogue WHERE id = 2
+Succesfully loaded dialouge 2
+SELECT * FROM dialogue WHERE id = 2
+Succesfully loaded dialouge 2
+SELECT * FROM dialogue WHERE id = 2
+Succesfully loaded dialouge 2
+SELECT * FROM dialogue WHERE id = 3
+Succesfully loaded dialouge 3
+reverting state to: MENU
+SELECT * FROM npc WHERE id = 0
+Successfully loaded map: data/maps/singleton/test_town
+Successfully spawned player: (12.567,6.5,152.9797312999298)
+Set up camera at (12.567,6.5) with a 90.0 degree FOV and casting 300 rays out to 15 cells
+PISTOL added to inventory
+SHOTGUN added to inventory
+MG added to inventory
+Successfully loaded save: built_in/town.csv
+switching state to: FPS
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay
+switching state to: PAUSE_MENU
 Long's Word Succesfully Exited

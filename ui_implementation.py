@@ -1,4 +1,4 @@
-import utils, map, pygame, player, math, ui, screen_writer, options, sheet
+import utils, map, pygame, player, math, ui, screen_writer, options, sheet, options
 
 class Map_Screen(ui.UI_Composite):
      MAP_INDEX = 0
@@ -23,7 +23,7 @@ class Map_Screen(ui.UI_Composite):
             self.elements.append(screen_writer.Text_Box(645,400,30,30,self.display,utils.Ptr("^"),size,cursor,10,3,action = self.__move_up__))
             self.elements.append(screen_writer.Text_Box(690,445,30,30,self.display,utils.Ptr(">"),size,cursor,10,3,action = self.__move_right__))
             self.elements.append(screen_writer.Text_Box(645,490,30,30,self.display,utils.Ptr("v"),size,cursor,10,3,action = self.__move_down__))
-            self.elements.append(screen_writer.Text_Button(15,15,100,40,self.display,utils.Ptr("'"+chr(utils.Key.INTERACT) + "'. Back"),utils.Ptr(20), action = self.go_back))
+            self.elements.append(screen_writer.Text_Button(15,15,100,40,self.display,utils.Ptr("'"+chr(options.Key.INTERACT) + "'. Back"),utils.Ptr(20), action = self.go_back))
         self.return_now = False
 
      def update(self, mouse : utils.Mouse_Manager, keys):
@@ -170,7 +170,7 @@ class Main_Menu (ui.UI_Composite):
          super().update(mouse, keys)
         
 class Splash_Screen (ui.UI_Composite):
-    BASE_MESSAGE = "Press '" + chr(utils.Key.INTERACT) + "' or click here to start \n CHEAP CHEAP goes the Chick"
+    BASE_MESSAGE = "Press '" + chr(options.Key.INTERACT) + "' or click here to start \n CHEAP CHEAP goes the Chick"
     CHICK = "data/config/little_bird.png"
     VERSION = "data/config/info.txt"
 
@@ -184,7 +184,7 @@ class Splash_Screen (ui.UI_Composite):
         size = utils.Ptr(24)
         self.refresh = utils.Ptr(False)
         self.elements.append(ui.Still_Image(0,0,800,600,self.display,self.CHICK))
-        self.elements.append(screen_writer.Text_Box(180,490,440,75,self.display,self.text,size,utils.Ptr(0),45,1,action = self.action, activation_key=utils.Key.INTERACT,update_text=self.refresh, color = (200,180,110), y_offset=-2, x_offset=35, border_width= 10))
+        self.elements.append(screen_writer.Text_Box(180,490,440,75,self.display,self.text,size,utils.Ptr(0),45,1,action = self.action, activation_key=options.Key.INTERACT,update_text=self.refresh, color = (200,180,110), y_offset=-2, x_offset=35, border_width= 10))
         small_size = utils.Ptr(8)
         version = open(self.VERSION)
         info = utils.Ptr(version.readlines())
@@ -310,10 +310,10 @@ class Load (ui.UI_Composite):
         self.update_txt = []
         self.update_name = []
         self.lines = utils.bottomless_csv_load(path)
-        self.elements.append(screen_writer.Text_Button(15,15,175,40,display,utils.Ptr("'"+chr(utils.Key.MAP) + "'. Back"),utils.Ptr(20), activation_key=utils.Key.MAP, action = self.return_play))
-        self.elements.append(screen_writer.Text_Button(600,300,175,40,display,utils.Ptr("'"+chr(utils.Key.BACK) + "'. Down"),utils.Ptr(20), activation_key=utils.Key.BACK, action = self.down))
-        self.elements.append(screen_writer.Text_Button(600,200,175,40,display,utils.Ptr("'"+chr(utils.Key.FORWARD) + "'. Up"),utils.Ptr(20), activation_key=utils.Key.FORWARD, action = self.up))
-        self.elements.append(screen_writer.Text_Button(600,250,175,40,display,utils.Ptr("'"+chr(utils.Key.INTERACT) + "'. Load TOP"),utils.Ptr(20), activation_key=utils.Key.INTERACT, action = self.load))
+        self.elements.append(screen_writer.Text_Button(15,15,175,40,display,utils.Ptr("'"+chr(options.Key.MAP) + "'. Back"),utils.Ptr(20), activation_key=options.Key.MAP, action = self.return_play))
+        self.elements.append(screen_writer.Text_Button(600,300,175,40,display,utils.Ptr("'"+chr(options.Key.BACK) + "'. Down"),utils.Ptr(20), activation_key=options.Key.BACK, action = self.down))
+        self.elements.append(screen_writer.Text_Button(600,200,175,40,display,utils.Ptr("'"+chr(options.Key.FORWARD) + "'. Up"),utils.Ptr(20), activation_key=options.Key.FORWARD, action = self.up))
+        self.elements.append(screen_writer.Text_Button(600,250,175,40,display,utils.Ptr("'"+chr(options.Key.INTERACT) + "'. Load TOP"),utils.Ptr(20), activation_key=options.Key.INTERACT, action = self.load))
         for i in range(self.max):
             self.update_txt.append(utils.Ptr(False))
             self.update_name.append(utils.Ptr(False))
@@ -340,7 +340,7 @@ class Options(ui.UI_Heirarchy):
         self.sub_composites.append(Config_Menu(125,25,ext_disp))
         self.sub_composites.append(Binds_Menu(125,25,ext_disp))
         self.sub_composites.append(Console(125,25,ext_disp))
-        self.elements.append(screen_writer.Text_Button(10,10,110,40,ext_disp,utils.Ptr("'"+chr(utils.Key.MAP) + "'. Back"),utils.Ptr(20), activation_key=utils.Key.MAP, action = self.return_play))
+        self.elements.append(screen_writer.Text_Button(10,10,110,40,ext_disp,utils.Ptr("'"+chr(options.Key.MAP) + "'. Back"),utils.Ptr(20), activation_key=options.Key.MAP, action = self.return_play))
         self.elements.append(screen_writer.Text_Button(10,60,110,40,ext_disp,utils.Ptr("GRAPHICS"),utils.Ptr(20), action = self.focus, args=self.CONFIG_ID))
         self.elements.append(screen_writer.Text_Button(10,110,110,40,ext_disp,utils.Ptr("BINDS"),utils.Ptr(20),  action = self.focus,args=self.BINDS_ID))
         self.elements.append(screen_writer.Text_Button(10,160,110,40,ext_disp,utils.Ptr("CONSOLE"),utils.Ptr(20),  action = self.focus,args=self.CONSOLE_ID))

@@ -1,4 +1,4 @@
-import pygame,utils,map,camera,math,ui_implementation,game_object,player, enum, dialogue
+import pygame,utils,map,camera,math,ui_implementation,game_object,player, enum, dialogue, options
 from map_chunk import OVER_MAP as overworld
 from log import LOG as log
 
@@ -103,54 +103,54 @@ class World:
         log.write("Successfully loaded save: " + self.state)
 
     def __map_controls__ (self, keys, mouse):
-        if keys[utils.Key.M_ZOOM_OUT]:
+        if keys[options.Key.M_ZOOM_OUT]:
            self.UI[self.GAME_STATES.MAP.value].map_zoom_out()
-        elif keys[utils.Key.M_ZOOM_IN]:
+        elif keys[options.Key.M_ZOOM_IN]:
             self.UI[self.GAME_STATES.MAP.value].map_zoom_in()
-        if keys[utils.Key.INTERACT]:
+        if keys[options.Key.INTERACT]:
             self.last_state()
-        if keys[utils.Key.FORWARD]:
+        if keys[options.Key.FORWARD]:
            self.UI[self.GAME_STATES.MAP.value].__move_up__()
-        if keys[utils.Key.BACK]:
+        if keys[options.Key.BACK]:
             self.UI[self.GAME_STATES.MAP.value].__move_down__()
-        if keys[utils.Key.S_RIGHT]:
+        if keys[options.Key.S_RIGHT]:
              self.UI[self.GAME_STATES.MAP.value].__move_right__()
-        if keys[utils.Key.S_LEFT]:
+        if keys[options.Key.S_LEFT]:
              self.UI[self.GAME_STATES.MAP.value].__move_left__()
 
     def __fps_controls__ (self, keys, mouse):
         player = self.p
         world = self.m
-        if keys[utils.Key.FORWARD]:
+        if keys[options.Key.FORWARD]:
             player.move_with_minimum(world, 0.1, 0,0.25)
-        if keys[utils.Key.BACK]:
+        if keys[options.Key.BACK]:
             player.move_with_minimum(world, -0.1, 0,0.25)
-        if keys[utils.Key.S_RIGHT]:
+        if keys[options.Key.S_RIGHT]:
             player.move_with_minimum(world, 0, 0.1,0.25)
-        if keys[utils.Key.S_LEFT]:
+        if keys[options.Key.S_LEFT]:
             player.move_with_minimum(world, 0, -0.1,0.25)
-        if keys[utils.Key.TURN_L]:
+        if keys[options.Key.TURN_L]:
             player.turn(-0.04)
-        if keys[utils.Key.TURN_R]:
+        if keys[options.Key.TURN_R]:
             player.turn(0.04)
-        if keys[utils.Key.SHOOT]:
+        if keys[options.Key.SHOOT]:
             z = (0.5 - (mouse.poll_rel()[1])) * mouse.sensetivity[1]
             self.p.shoot(self.state_objects,self.base_sprites, self.m, z)
-        if keys[utils.Key.RELOAD]:
+        if keys[options.Key.RELOAD]:
             self.p.reload()
-        if keys[utils.Key.M_ZOOM_OUT]:
+        if keys[options.Key.M_ZOOM_OUT]:
            self.UI[self.GAME_STATES.FPS.value].map_zoom_out()
-        elif keys[utils.Key.M_ZOOM_IN]:
+        elif keys[options.Key.M_ZOOM_IN]:
             self.UI[self.GAME_STATES.FPS.value].map_zoom_in()
-        if keys[utils.Key.CYCLE_NEXT]:
+        if keys[options.Key.CYCLE_NEXT]:
             self.p.cycle_next()
-        elif keys[utils.Key.CYCLE_PREV]:
+        elif keys[options.Key.CYCLE_PREV]:
             self.p.cycle_prev()
-        if keys[utils.Key.JUMP]:
+        if keys[options.Key.JUMP]:
             player.z = 50
-        elif keys[utils.Key.CROUCH]:
+        elif keys[options.Key.CROUCH]:
             player.z = -50
-        elif keys[utils.Key.MAP]:
+        elif keys[options.Key.MAP]:
             self.update_game_state(self.GAME_STATES.MAP)
         else:
             player.z = 0 
@@ -160,11 +160,11 @@ class World:
 
     def __general_controls__ (self, keys, mouse):
         # update keys
-        if keys[utils.Key.EXIT]:
+        if keys[options.Key.EXIT]:
             return False
-        if keys[utils.Key.FREE_LOOK]:
+        if keys[options.Key.FREE_LOOK]:
             mouse.toggle()
-        if keys[utils.Key.PAUSE] and self.game_state != self.GAME_STATES.PAUSE_MENU and self.game_state != self.GAME_STATES.MENU and self.game_state != self.GAME_STATES.SPLASH_SCREEN and self.game_state != self.GAME_STATES.OPTIONS:
+        if keys[options.Key.PAUSE] and self.game_state != self.GAME_STATES.PAUSE_MENU and self.game_state != self.GAME_STATES.MENU and self.game_state != self.GAME_STATES.SPLASH_SCREEN and self.game_state != self.GAME_STATES.OPTIONS:
             self.update_game_state(self.GAME_STATES.PAUSE_MENU)
         mouse.update()
         self.mouse = mouse

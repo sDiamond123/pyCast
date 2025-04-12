@@ -229,6 +229,11 @@ class Text_Menu (ui.UI_Sub_Screen):
                                           utils.Ptr(size),utils.Ptr(0),char_per_line,lines_per_box, color=self.DESC_COLOR, 
                                           update_text=self.update_txt[i], action=action, activation_key= 49 + i, args = i))
 
+
+class Log(Text_Button):
+    def __init__(self, x, y, w, h, ext_display, text, size, writer = DEFAULT_WRITER, action = None, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, p_button=ui.Interactable_Element.DEFAULT_MB, draw_border=True, activation_key=-1, x_offset=0, y_offset=0, args=None, text_color=pygame.Color("black")):
+        super().__init__(x, y, w, h, ext_display, text, size, writer, action, color, border_width, p_button, draw_border, activation_key, x_offset, y_offset, args, text_color)
+        
 class Keyboard(ui.Button):
     BUTTONS_PER_ROW = 10
     KEY_SIZE = utils.Ptr(20)

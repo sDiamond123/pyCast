@@ -1,5 +1,4 @@
 import enum, math, pygame
-from log import LOG as log
 
 class Timed_Toggle():
     def __init__(self, cool_down):
@@ -94,42 +93,7 @@ class Mouse_Manager:
     def set_mouse_wheel(self, value):
         self.mw = value
 
-class Key:
-    def get_key (file):
-        # get rid of explanation line
-        file.readline()
-        # get key
-        out = file.readline().lower().strip()
-        if (out.isnumeric()):
-            # if given a number, assume it's an ascii key
-            return int(out)
-        # else convert to ascii
-        return ord(out[0])
 
-    #set up key binds
-    binds = open("data/config/key_binds.txt", "r")
-    FORWARD = get_key(binds)
-    BACK = get_key(binds)
-    S_LEFT = get_key(binds)
-    S_RIGHT = get_key(binds)
-    TURN_L = get_key(binds)
-    TURN_R = get_key(binds)
-    JUMP = get_key(binds)
-    CROUCH = get_key(binds)
-    FREE_LOOK = get_key(binds)
-    EXIT = get_key(binds)
-    SHOOT = get_key(binds)
-    RELOAD = get_key(binds)
-    CYCLE_NEXT = get_key(binds)
-    CYCLE_PREV = get_key(binds)
-    M_ZOOM_IN = get_key(binds)
-    M_ZOOM_OUT = get_key(binds)
-    INTERACT = get_key(binds)
-    MAP = get_key(binds)
-    PAUSE = get_key(binds)
-    UI = get_key(binds)
-    binds.close()
-    log.write("Successfully loaded key binds")
 
 class Ptr():
     def __init__ (self, value):
