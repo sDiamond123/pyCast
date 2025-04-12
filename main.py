@@ -39,6 +39,7 @@ if __name__ == "__main__":
     #manager = world.World(screen,w,h,i_w, i_h, "basic_mansion.csv")
     manager = world.World(screen, w,h,i_w,i_h,"built_in/town.csv",(fov,rays,draw_dist))
     #manager = world.World(screen, w, h, i_w, i_h, "default.csv")
+    print(name + " started")
     log.write("Game Start!")
     # main loop
     while running:
@@ -71,5 +72,6 @@ if __name__ == "__main__":
             dt = clock.CLOCK.tick(fps.value) / 1000
             #print(clock.get_fps())
     log.write(name + " Succesfully Exited")
+    print(name + " exited\nsee data/log.txt for more info")
     log.dump()
     pygame.quit()

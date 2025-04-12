@@ -3,3 +3,4 @@ __pycache__
 doom_sprites
 test.py
 multi_threaded.py
+data/log.txt
