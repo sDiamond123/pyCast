@@ -163,7 +163,6 @@ class Dialogue_Window (ui.UI_Heirarchy):
         self.update_txt.value = True
         self.header.value = self.data[self.HEADER]
         self.update_hdr.value = True
-        print(self.data[self.CHOICES])
         self.choices = json.loads(self.data[self.CHOICES])
         self.lines = []
         self.goto = []

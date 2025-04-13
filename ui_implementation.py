@@ -168,7 +168,7 @@ class Main_Menu (ui.UI_Composite):
          super().update(mouse, keys)
         
 class Splash_Screen (ui.UI_Composite):
-    BASE_MESSAGE = "Press '" + chr(options.Key.INTERACT) + "' or click here to start \n CHEAP CHEAP goes the Chick"
+    BASE_MESSAGE = "Press '" + chr(options.Key.INTERACT) + "' or click here to start \n CHEAP CHEAP"
     CHICK = "data/config/little_bird.png"
     VERSION = "data/config/info.txt"
 
@@ -410,7 +410,7 @@ class Key_Prompt (ui.UI_Composite):
         self.elements.append(screen_writer.Text_Button(210,350,100,40,ext_disp,utils.Ptr("cancel"),self.TEXT_SIZE,action=control.last_state))
         self.elements.append(screen_writer.Text_Button(350,350,100,40,ext_disp,utils.Ptr("update"),self.TEXT_SIZE,action=self.__update__))
         self.elements.append(screen_writer.Text_Button(410,110,180,40,ext_disp,self.default_key,self.TEXT_SIZE,action=self.__default__))
-        self.elements.append(screen_writer.Text_Button(200,50,200,50,ext_disp,self.label,self.TITLE_SIZE,text_color=(150,0,0), color=pygame.Color("bisque2"), y_offset= - 6))
+        self.elements.append(screen_writer.Text_Button(200,50,300,50,ext_disp,self.label,self.TITLE_SIZE,text_color=(150,0,0), color=pygame.Color("bisque2"), y_offset= - 6))
         self.elements.append(screen_writer.Text_Button(210,110,180,40,ext_disp,self.current_key,self.TEXT_SIZE, action = self.__prev__))
         #self.elements.append(ui.Element(210,160,380,180,ext_disp,(30,30,30)))
         self.elements.append(screen_writer.Text_Button(210,160,380,180,ext_disp,self.text,self.TITLE_SIZE,text_color=(150,0,0),color=(30,30,30),x_offset=20, y_offset=20))

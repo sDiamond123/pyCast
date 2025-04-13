@@ -210,7 +210,7 @@ class __Key__:
                    ord("-") : {PT_LOWER : '-', PT_UPPER : '_', PT_PRINT_LOWER : '-', PT_PRINT_UPPER : '_'},
                    ord("=") : {PT_LOWER : '=', PT_UPPER : '+', PT_PRINT_LOWER : '=', PT_PRINT_UPPER : '+'},
                    ord('[') : {PT_LOWER : '[', PT_UPPER : '{', PT_PRINT_LOWER : '[', PT_PRINT_UPPER : '{'},
-                   ord(']') : {PT_LOWER : ']', PT_UPPER : '}', PT_PRINT_LOWER : '[', PT_PRINT_UPPER : '}'},
+                   ord(']') : {PT_LOWER : ']', PT_UPPER : '}', PT_PRINT_LOWER : ']', PT_PRINT_UPPER : '}'},
                    ord('\\') : {PT_LOWER : '\\', PT_UPPER : ' | ', PT_PRINT_LOWER : '\\', PT_PRINT_UPPER : '|'},
                    ord(';') : {PT_LOWER : ';', PT_UPPER : ':', PT_PRINT_LOWER : ';', PT_PRINT_UPPER : ':'},
                    ord('\'') : {PT_LOWER : '\'', PT_UPPER : '\"', PT_PRINT_LOWER : '\'', PT_PRINT_UPPER : '\"'},

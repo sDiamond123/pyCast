@@ -315,8 +315,8 @@ class World:
                 log.write("possiple variables are: \n -------------------- \n player_x \n player_y \n player_health \n dialouge \n stage")
         elif split[0] == "clear":
             log.log.value = []
-            log.cursor = 0
             self.execute("help")
+            log.cursor = 0
         elif split[0] == "to_file":
             log.dump(split[1])
         else:   
