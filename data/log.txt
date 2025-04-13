@@ -45,9 +45,55 @@ switching stage to: MENU
 
 switching stage to: OPTIONS 
 
-modifying key:4->(4, 91, 'look left', 91) 
+modifying key:12->[12, 113, 'cycle next', 113] 
 
 switching stage to: KEY_PROMPT 
+
+reverting stage to: OPTIONS 
+
+modifying key:15->[15, 46, 'zoom out (map)', 46] 
+
+switching stage to: KEY_PROMPT 
+
+reverting stage to: OPTIONS 
+
+modifying key:17->[17, 109, 'map', 109] 
+
+switching stage to: KEY_PROMPT 
+
+reverting stage to: OPTIONS 
+
+modifying key:11->[11, 114, 'reload', 114] 
+
+switching stage to: KEY_PROMPT 
+
+reverting stage to: OPTIONS 
+
+modifying key:5->[5, 93, 'look right', 93] 
+
+switching stage to: KEY_PROMPT 
+
+reverting stage to: OPTIONS 
+
+modifying key:1->[1, 115, 'move backward', 115] 
+
+switching stage to: KEY_PROMPT 
+
+reverting stage to: OPTIONS 
+
+modifying key:11->[11, 114, 'reload', 114] 
+
+switching stage to: KEY_PROMPT 
+
+reverting stage to: OPTIONS 
+
+modifying key:16->[16, 102, 'interact', 102] 
+
+switching stage to: KEY_PROMPT 
+
+switching stage to: PAUSE_MENU 
+
+switching stage to: EXIT 
 
 Long's Word Succesfully Exited 
 

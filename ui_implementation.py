@@ -377,33 +377,60 @@ class Binds_Menu (ui.UI_Sub_Screen):
         self.control = control
         self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 75,self.y+ normalize.SCALE_FACTOR_Y * 10,0, 0, ext_display,utils.Ptr("KEYBINDS (click to change):"),self.TITLE_SIZE,scale = False))
         self.elements.append(screen_writer.Text_Menu(self.x + normalize.SCALE_FACTOR_X * 75, self.y + normalize.SCALE_FACTOR_Y * 50, 500, 440,ext_display,self.lines,max_display=10,scale=False,draw_background=False,box_color=ui.Element.DEFAULT_GREY, action=self.__modify_key__))
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *110,self.y + normalize.SCALE_FACTOR_Y *490,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.Key.save_binds,x_offset=12, y_offset=10,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *300,self.y + normalize.SCALE_FACTOR_Y *490,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("RELOAD"),self.TEXT_SIZE,action= options.Key.load_current,x_offset=12, y_offset=10,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + self.w - normalize.SCALE_FACTOR_X *180,self.y + normalize.SCALE_FACTOR_Y *490,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("DEFAULT"),self.TEXT_SIZE,action= options.Key.load_defaults,x_offset=12, y_offset=10,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *110,self.y + normalize.SCALE_FACTOR_Y *490,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.Key.save_binds,x_offset=1, y_offset=10,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *300,self.y + normalize.SCALE_FACTOR_Y *490,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("RELOAD"),self.TEXT_SIZE,action= options.Key.load_current,x_offset=1, y_offset=10,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + self.w - normalize.SCALE_FACTOR_X *180,self.y + normalize.SCALE_FACTOR_Y *490,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("DEFAULT"),self.TEXT_SIZE,action= options.Key.load_defaults,x_offset=1, y_offset=10,scale = False))
 
 class Key_Prompt (ui.UI_Composite):
     TEXT_SIZE = utils.Ptr(20)
     TITLE_SIZE = utils.Ptr(36)
+
+    def __update__(self):
+        log.write("setting " + self.label.value + " to " + options.Key.PRINT_TABLE[self.key][options.Key.PT_PRINT_LOWER])
+        options.Key.BINDS[self.bind][options.Key.KEY] = self.key
+        self.control.last_state()
+
+    def __default__(self):
+        self.key = self.data[options.Key.DEF_KEY]
+        self.text.value = "PRESS KEY\n " + options.Key.PRINT_TABLE[self.key][options.Key.PT_PRINT_LOWER]
+
+    def __prev__(self):
+        self.key = self.prev
+        self.text.value = "PRESS KEY\n " + options.Key.PRINT_TABLE[self.key][options.Key.PT_PRINT_LOWER]
+
     def __init__(self, control, ext_disp, key_index = 0, background_color=ui.UI_Composite.DEFAULT_BACK):
         super().__init__(ext_disp, False, background_color)
         self.label = utils.Ptr("")
         self.current_key = utils.Ptr("")
         self.default_key = utils.Ptr("")
         self.text = utils.Ptr("")
+        self.control = control
         self.set_key(key_index)
         self.elements.append(ui.Element(200,100,400,300,ext_disp,pygame.Color("bisque3")))
-        self.elements.append(screen_writer.Text_Button(210,350,120,40,ext_disp,utils.Ptr("cancel"),self.TEXT_SIZE,action=control.last_state))
-        self.elements.append(screen_writer.Text_Button(200,50,200,50,ext_disp,utils.Ptr(self.label),self.TITLE_SIZE,text_color=(150,0,0), color=pygame.Color("bisque2"), y_offset= - 6))
-        self.elements.append(screen_writer.Text_Button(210,210,120,40,ext_disp,utils.Ptr(self.current_key),self.TEXT_SIZE))
+        self.elements.append(screen_writer.Text_Button(210,350,100,40,ext_disp,utils.Ptr("cancel"),self.TEXT_SIZE,action=control.last_state))
+        self.elements.append(screen_writer.Text_Button(350,350,100,40,ext_disp,utils.Ptr("update"),self.TEXT_SIZE,action=self.__update__))
+        self.elements.append(screen_writer.Text_Button(410,110,180,40,ext_disp,self.default_key,self.TEXT_SIZE,action=self.__default__))
+        self.elements.append(screen_writer.Text_Button(200,50,200,50,ext_disp,self.label,self.TITLE_SIZE,text_color=(150,0,0), color=pygame.Color("bisque2"), y_offset= - 6))
+        self.elements.append(screen_writer.Text_Button(210,110,180,40,ext_disp,self.current_key,self.TEXT_SIZE, action = self.__prev__))
+        #self.elements.append(ui.Element(210,160,380,180,ext_disp,(30,30,30)))
+        self.elements.append(screen_writer.Text_Button(210,160,380,180,ext_disp,self.text,self.TITLE_SIZE,text_color=(150,0,0),color=(30,30,30),x_offset=20, y_offset=20))
 
     def set_key(self, i):
         self.bind = i
         self.data = options.Key.BINDS[i]
         self.key = self.data[options.Key.KEY]
+        self.prev = self.key
         self.label.value = self.data[options.Key.LABEL]
-        self.current_key.value = "Currently: " + options.Key.PRINT_TABLE[self.key][options.Key.PT_LOWER]
-        self.default_key.value = "Default: " + options.Key.PRINT_TABLE[self.key][options.Key.PT_LOWER]
-        self.text.value = self.current_key.value
+        self.current_key.value = "Currently: " + options.Key.PRINT_TABLE[self.key][options.Key.PT_PRINT_LOWER]
+        self.default_key.value = "Default: " + options.Key.PRINT_TABLE[self.key][options.Key.PT_PRINT_LOWER]
+        self.text.value = "PRESS KEY\n "  + options.Key.PRINT_TABLE[self.key][options.Key.PT_PRINT_LOWER]
+
+    def update(self, mouse, keys):
+        poll = options.TERM.poll_keys(keys,raw=True)
+        if (poll != None):
+            self.key = poll[0]
+            self.text.value = "PRESS KEY\n " + poll[1]
+        return super().update(mouse, keys)
 
 class Config_Menu (ui.UI_Sub_Screen):
     WIDTH = 650

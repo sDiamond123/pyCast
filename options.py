@@ -109,7 +109,10 @@ class __Key__:
     DEF_KEY = 3
 
     def load_binds(self):
-        self.BINDS = DB.get("*", "keybinds")
+        as_tuple = DB.get("*", "keybinds")
+        self.BINDS = []
+        for tup in as_tuple:
+            self.BINDS.append([tup[0],tup[1],tup[2],tup[3]])
 
     def load_label(self):
         self.LABELS = []
@@ -214,7 +217,7 @@ class __Key__:
                    ord(',') : {PT_LOWER : ',', PT_UPPER : '<', PT_PRINT_LOWER : ',', PT_PRINT_UPPER : '<'},
                    ord('.') : {PT_LOWER : '.', PT_UPPER : '>', PT_PRINT_LOWER : '.', PT_PRINT_UPPER : '>'},
                    ord('/') : {PT_LOWER : '/', PT_UPPER : '?', PT_PRINT_LOWER : '/', PT_PRINT_UPPER : '?'},}
-    for i in range (ord('a'), ord('z')):
+    for i in range (ord('a'), ord('z') + 1):
         PRINT_TABLE[i] = {PT_LOWER : chr(i), PT_UPPER : chr(i - 32), PT_PRINT_LOWER : chr(i), PT_PRINT_UPPER : chr(i-32)}
 
 

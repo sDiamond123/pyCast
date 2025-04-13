@@ -167,11 +167,11 @@ class World:
 
     def __general_controls__ (self, keys, mouse):
         # update keys
-        if keys[options.Key.EXIT] and self.game_state != self.GAME_STATES.EXIT:
+        if keys[options.Key.EXIT] and self.game_state != self.GAME_STATES.EXIT and self.game_state != self.GAME_STATES.KEY_PROMPT:
             self.update_game_state(self.GAME_STATES.EXIT)
-        if keys[options.Key.FREE_LOOK]:
+        if keys[options.Key.FREE_LOOK] and self.game_state != self.GAME_STATES.KEY_PROMPT:
             mouse.toggle()
-        if keys[options.Key.PAUSE] and self.game_state != self.GAME_STATES.PAUSE_MENU and self.game_state != self.GAME_STATES.DEAD and self.game_state != self.GAME_STATES.MENU and self.game_state != self.GAME_STATES.SPLASH_SCREEN and self.game_state != self.GAME_STATES.OPTIONS:
+        if keys[options.Key.PAUSE] and self.game_state != self.GAME_STATES.PAUSE_MENU and self.game_state != self.GAME_STATES.KEY_PROMPT and self.game_state != self.GAME_STATES.DEAD and self.game_state != self.GAME_STATES.MENU and self.game_state != self.GAME_STATES.SPLASH_SCREEN and self.game_state != self.GAME_STATES.OPTIONS:
             self.update_game_state(self.GAME_STATES.PAUSE_MENU)
         mouse.update()
         self.mouse = mouse
