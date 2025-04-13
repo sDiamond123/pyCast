@@ -15,8 +15,8 @@ Successfully loaded map: data/maps/chunks/empty_chunk
 Started: Long's Word 
  Window: 800 by 600 
  Fullscreen: False 
- Internal Resolution: 800 by 600 
- Targeting 60 FPS 
+ Internal Resolution: 1200 by 800 
+ Targeting 240 FPS 
 
 USER: help 
 
@@ -39,11 +39,15 @@ Game Start!
 
 switching stage to: MENU 
 
+switching stage to: OPTIONS 
+
+reverting stage to: MENU 
+
 Successfully loaded map: data/maps/singleton/test_town 
 
 Successfully spawned player: (12.567,6.5,152.9797312999298) 
 
-Set up camera at (12.567,6.5) with a 90.0 degree FOV and casting 500 rays out to 15 cells 
+Set up camera at (12.567,6.5) with a 90.0 degree FOV and casting 800 rays out to 16 cells 
 
 PISTOL added to inventory 
 
@@ -66,6 +70,14 @@ fire_ball hit obj test_object for 0.5 dmg with 1.5 decay
 fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
 
 fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
+
+switching stage to: PAUSE_MENU 
+
+switching stage to: MENU 
+
+switching stage to: OPTIONS 
+
+reverting stage to: MENU 
 
 Long's Word Succesfully Exited 
 

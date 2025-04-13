@@ -1,5 +1,5 @@
 # profile
-High
+NASA
 # name
 Long's Word
 # icon
@@ -11,11 +11,11 @@ False
 # display height
 600
 # target FPS
-60
+240
 # internal resolution (width)
-800
+1200
 # internal resolution (height)
-600
+800
 # x sensitivity
 10
 # y sensitivity
@@ -23,6 +23,6 @@ False
 # fov
 90
 # rays
-500
+800
 # draw_dist
-15
+16

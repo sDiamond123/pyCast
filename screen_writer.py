@@ -1,4 +1,4 @@
-import pygame, ui, utils, clock, math
+import pygame, ui, utils, clock, normalize
 from log import LOG as log
 from options import TERM as key_in
 
@@ -124,6 +124,17 @@ class Text_Box (Text_Button):
                     self.__end_on_word__(word,line,length)
         if length.value != 0:
             self.lines.append(line.value)
+       
+        if self.has_slider:
+            if len(self.lines) > self.max_lines:
+                 if self.slider != None:
+                    self.slider.max = len(self.lines)
+                    self.slider.refresh.value = True
+                 else:
+                    self.slider = ui.Slider((self.x + self.w)/normalize.SCALE_FACTOR_X - self.b_w - 16, self.y/normalize.SCALE_FACTOR_Y + self.b_w, 16,self.h/normalize.SCALE_FACTOR_Y - 2 * self.b_w,self.ext_display,color = self.text_color,current=self.cursor, phantom_dist= 64, max=len(self.lines))
+
+            else:
+                self.slider = None
 
     def __init__ (self, x, y, w, h, ext_display: pygame.surface,
                    text : utils.Ptr, size: utils.Ptr, cursor: utils.Ptr,
@@ -131,16 +142,28 @@ class Text_Box (Text_Button):
                     writer: Screen_Writer = DEFAULT_WRITER, action : callable = None,
                    color:tuple = ui.Element.DEFAULT_GREY, border_width : int = ui.Interactable_Element.DEFAULT_BORDER_W, 
                   p_button = ui.Interactable_Element.DEFAULT_MB, draw_border = True, activation_key = -1, x_offset = 0, y_offset = 0,
-                    args = None, text_color = pygame.Color("black"), scale = True):
+                    args = None, text_color = pygame.Color("black"), scale = True, has_slider = True):
         self.max_c_per_line = max_char_per_line
         self.max_lines = max_lines
         self.cursor = cursor
         self.refresh = update_text
+        self.true_button = p_button
+        self.slider = None
         super().__init__ (x, y, w, h, ext_display, text , size, writer, action, color, border_width, 
                   p_button, draw_border, activation_key , x_offset=x_offset, y_offset=y_offset,args = args, text_color=text_color, scale = scale)
+        self.has_slider = has_slider
         self.__parse_text__()
-    
+        
+        #if has_slider and len(self.lines) > max_lines:
+        #    self.slider = ui.Slider(x + w + border_width, y + border_width, 16,h - 2 * border_width,ext_display,color = text_color,current=self.cursor, phantom_dist= 64, max=len(self.lines))
+            
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
+        if self.slider!=None:
+            self.slider.update(m_x, m_y, mouse, keys)
+            if self.slider.state != utils.Mouse_State.UNDEFINED:
+                self.activation_button = -1
+            else:
+                self.activation_button = self.true_button
         super(Text_Button, self).update(m_x, m_y, mouse, keys)
         if self.state == utils.Mouse_State.NOT_PRESSED:
             if mouse.mw != 0:
@@ -148,6 +171,7 @@ class Text_Box (Text_Button):
         if self.refresh.value:
             self.refresh.value = False
             self.__parse_text__()
+        
         
 
 
@@ -165,6 +189,8 @@ class Text_Box (Text_Button):
              delta_y = rendered.size[1]
              self.ext_display.blit(rendered,(self.x_offset + self.x, draw_y))
              draw_y += delta_y
+             if self.slider != None:
+                 self.slider.render()
 
 class Text_Menu (ui.UI_Sub_Screen):
 
@@ -179,18 +205,18 @@ class Text_Menu (ui.UI_Sub_Screen):
             text = ""
             if self.draw_numbers:
                 text = str(i) + " . "
-            if i + self.cursor < len(self.lines) and self.cursor >= 0:
-                  text += str(self.lines[i + self.cursor ])
+            if i + self.cursor.value < len(self.lines) and self.cursor.value >= 0:
+                  text += str(self.lines[i + self.cursor.value ])
             else:
                 text = self.DEFAULT_TEXT.value
             self.text[i].value = text
 
     def down(self):
-        self.cursor = utils.clamp_addition(self.cursor, 1, len(self.lines) - 1,0)
+        self.cursor.value = utils.clamp_addition(self.cursor, 1, len(self.lines) - 1,0)
         self.update_text()
 
     def up(self):
-        self.cursor = utils.clamp_addition(self.cursor, -1, len(self.lines) - 1,0)
+        self.cursor.value = utils.clamp_addition(self.cursor, -1, len(self.lines) - 1,0)
         self.update_text()
 
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
@@ -207,11 +233,11 @@ class Text_Menu (ui.UI_Sub_Screen):
 
     def __init__ (self,x, y, w, h, ext_display: pygame.surface, lines, action:callable = None, max_display = MAX, 
                   color:tuple=(59,54,48), render = True, draw_background = True, x_off = 0, y_off = 0, size = DESC_SIZE, 
-                  box_w = -1, box_spacing = 10, box_h = -1, cap_w = 10, draw_cur = True, char_per_line = 100, lines_per_box = 2, scale = True):
+                  box_w = -1, box_spacing = 10, box_h = -1, cap_w = 10, draw_cur = True, char_per_line = 100, lines_per_box = 2, scale = True, has_slider = True):
         super().__init__(x,y,w,h,ext_display, color,render,draw_background, scale = scale)
         self.lines = lines
         self.text = []
-        self.cursor = 0
+        self.cursor = utils.Ptr(0)
         self.max = max_display
         self.update_txt = []
         self.draw_numbers = draw_cur
@@ -225,13 +251,15 @@ class Text_Menu (ui.UI_Sub_Screen):
             header = str(i) + " . "
             if (not draw_cur):
                 header = ""
-            if i + self.cursor < len(self.lines) and self.cursor >= 0:
-                  self.text.append(utils.Ptr(header + str(self.lines[i + self.cursor])))
+            if i + self.cursor.value < len(self.lines) and self.cursor.value >= 0:
+                  self.text.append(utils.Ptr(header + str(self.lines[i + self.cursor.value])))
             else:
                 self.text.append(self.DEFAULT_TEXT)
             self.elements.append(Text_Box(x + x_off, y+y_off + box_delta * i,box_w, box_h, ext_display,self.text[i],
                                           utils.Ptr(size),utils.Ptr(0),char_per_line,lines_per_box, color=self.DESC_COLOR, 
                                           update_text=self.update_txt[i], action=action, activation_key= 49 + i, args = i))
+        if has_slider and len(self.lines) > self.max:
+            self.elements.append(ui.Slider(self.x + 32, self.y - 5, 16, self.h-10,ext_display,current = self.cursor,max = len(self.lines)))
 
 
 class Log(Text_Box):

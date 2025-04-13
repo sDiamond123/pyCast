@@ -129,7 +129,7 @@ class Dialogue_Window (ui.UI_Heirarchy):
                 self.elements[1].update_sentiment(attr["value"])
 
     def select(self, i):
-        i += self.menu.cursor
+        i += self.menu.cursor.value
         if (i >= len(self.lines)):
             return
         if (self.__check_prereqs(i)):
@@ -151,7 +151,7 @@ class Dialogue_Window (ui.UI_Heirarchy):
         img = Talking_Head(self.T_HEAD_X, self.T_HEAD_Y, self.T_HEAD_W, self.T_HEAD_H, surface, self.DEFAULT_PORTRAIT)
         img.update_img(self.DEFAULT_BG, False)
         self.elements.append(img)
-        self.elements.append(screen_writer.Text_Box(self.HEADER_X,self.HEADER_Y,self.HEADER_W,self.HEADER_H,surface,self.header,self.BIG_TXT_SIZE,ptr(0),self.BODY_C_PER_LINE,self.BODY_LINES,self.update_hdr, color=self.SECONDARY_COLOR,writer=screen_writer.GOTHIC, y_offset=-4))
+        self.elements.append(screen_writer.Text_Box(self.HEADER_X,self.HEADER_Y,self.HEADER_W,self.HEADER_H,surface,self.header,self.BIG_TXT_SIZE,ptr(0),self.BODY_C_PER_LINE,self.BODY_LINES,self.update_hdr, color=self.SECONDARY_COLOR,writer=screen_writer.GOTHIC, y_offset=-4, has_slider=False))
         self.control = control
         self.lines = []
         self.menu = screen_writer.Text_Menu(0,self.BODY_H,800,200,surface,self.lines, x_off= 40, y_off= 10,max_display=3)

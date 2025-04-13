@@ -260,6 +260,56 @@ class Swtich(Button):
         if self.toggle:
             super().activate()
 
+class Slider (Interactable_Element):
+    def __init__(self, x, y, w, h, ext_display, is_vertical = True, update = utils.Ptr(False), current:utils.Ptr = utils.Ptr(5), max = 10, min = 0, phantom_dist = 100, color = Element.DEFAULT_GREY, border_width = Interactable_Element.DEFAULT_BORDER_W, p_button=Interactable_Element.DEFAULT_MB, draw_border=True, activation_key=-1, scale=True, step =1):
+        self.current = current
+        self.max = max
+        self.min = min
+        self.range = (max - min)/step
+        self.step = step
+        current_pos = (self.current.value - self.min)/(self.max-self.min)
+        self.current = current
+        self.orientation = is_vertical
+        self.refresh = update
+        if is_vertical:
+            self.slider = Sticky(x,current_pos * h + y,w, h/self.range,ext_display,color = color,lock_x=True, phantom_dist=phantom_dist,border_width=0, scale=scale)
+        else:
+            self.slider = Sticky(current_pos * w + x,y,w/self.range,h,ext_display,color = color, lock_y=True,phantom_dist=phantom_dist,border_width=0,scale = scale)
+        super().__init__(x, y, w, h, ext_display, color, border_width, p_button, draw_border, activation_key, scale)
+        self.moved = utils.Ptr(False)
+
+
+    def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
+        super().update(m_x,m_y,mouse,keys)
+        if self.moved.value:
+            self.moved.value = False
+        if self.refresh.value:
+            self.refresh.value = False
+            self.range = (self.max - self.min)/self.step
+            factor = (self.current.value-self.min)/self.range
+            if self.orientation:
+                self.slider.y = self.y + self.h * factor
+            else:
+                self.slider.x = self.x + self.w * factor
+        else:
+            self.slider.update(m_x,m_y,mouse,keys)
+            if self.slider.moved:
+                if self.orientation:
+                    self.slider.y = utils.clamp(self.slider.y,self.y+self.h - self.slider.h,self.y)
+                    self.current.value = int(self.step * (self.slider.y - self.y)/self.h * self.range + self.min)
+                else:
+                    self.slider.x = utils.clamp(self.slider.x,self.x+self.w  - self.slider.w,self.x)
+                    self.current.value = int(self.step * (self.slider.x - self.x)/self.w * self.range + self.min)
+                self.moved.value = True
+
+    def render(self):
+        if self.orientation:
+            pygame.draw.line(self.ext_display,self.color,(self.x + self.w/2,self.h + self.y),(self.x + self.w/2, self.y),width=int(self.w/8))
+        else:
+            pygame.draw.line(self.ext_display,self.color,(self.x + self.w, self.y + self.h/2), (self.x, self.y + self.h/2),width=int(self.h/8))
+        self.slider.render()
+        
+
 
 class Resizable(Sticky):
     DEFAULT_CORNER = 10
