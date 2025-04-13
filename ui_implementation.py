@@ -422,7 +422,7 @@ class Key_Prompt (ui.UI_Composite):
         self.prev = self.key
         self.label.value = self.data[options.Key.LABEL]
         self.current_key.value = "Currently: " + options.Key.PRINT_TABLE[self.key][options.Key.PT_PRINT_LOWER]
-        self.default_key.value = "Default: " + options.Key.PRINT_TABLE[self.key][options.Key.PT_PRINT_LOWER]
+        self.default_key.value = "Default: " + options.Key.PRINT_TABLE[self.data[options.Key.DEF_KEY]][options.Key.PT_PRINT_LOWER]
         self.text.value = "PRESS KEY\n "  + options.Key.PRINT_TABLE[self.key][options.Key.PT_PRINT_LOWER]
 
     def update(self, mouse, keys):
