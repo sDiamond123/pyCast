@@ -75,6 +75,18 @@ class Text_Box (Text_Button):
             for row in self.text.value:
                 self.__parse_line__(row, line, length)
 
+        if self.has_slider and len(self.lines) != self.old_len:
+            if len(self.lines) > self.max_lines:
+                 if self.slider != None:
+                    self.slider.max = len(self.lines)
+                    self.slider.refresh.value = True
+                    print("!")
+                 else:
+                    self.slider = ui.Slider((self.x + self.w)/normalize.SCALE_FACTOR_X - self.b_w - 16, self.y/normalize.SCALE_FACTOR_Y + self.b_w, 16,self.h/normalize.SCALE_FACTOR_Y - 2 * self.b_w,self.ext_display,color = self.text_color,current=self.cursor, phantom_dist= 64, max=len(self.lines))
+            else:
+                self.slider = None
+        self.old_len = len(self.lines)
+
     def __end_on_word__ (self, word, line: utils.Ptr, length:utils.Ptr):
         if len(word) < self.max_c_per_line:
             if length.value > 0:
@@ -97,6 +109,7 @@ class Text_Box (Text_Button):
 
 
     def __parse_line__ (self, value, line: utils.Ptr, length:utils.Ptr):
+       
         split = value.split(" ")
         for word in split:
             if len(word) == 0:
@@ -124,17 +137,6 @@ class Text_Box (Text_Button):
                     self.__end_on_word__(word,line,length)
         if length.value != 0:
             self.lines.append(line.value)
-       
-        if self.has_slider:
-            if len(self.lines) > self.max_lines:
-                 if self.slider != None:
-                    self.slider.max = len(self.lines)
-                    self.slider.refresh.value = True
-                 else:
-                    self.slider = ui.Slider((self.x + self.w)/normalize.SCALE_FACTOR_X - self.b_w - 16, self.y/normalize.SCALE_FACTOR_Y + self.b_w, 16,self.h/normalize.SCALE_FACTOR_Y - 2 * self.b_w,self.ext_display,color = self.text_color,current=self.cursor, phantom_dist= 64, max=len(self.lines))
-
-            else:
-                self.slider = None
 
     def __init__ (self, x, y, w, h, ext_display: pygame.surface,
                    text : utils.Ptr, size: utils.Ptr, cursor: utils.Ptr,
@@ -149,6 +151,7 @@ class Text_Box (Text_Button):
         self.refresh = update_text
         self.true_button = p_button
         self.slider = None
+        self.old_len = 0
         super().__init__ (x, y, w, h, ext_display, text , size, writer, action, color, border_width, 
                   p_button, draw_border, activation_key , x_offset=x_offset, y_offset=y_offset,args = args, text_color=text_color, scale = scale)
         self.has_slider = has_slider
