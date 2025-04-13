@@ -1,3 +1,5 @@
+SELECT * FROM keybinds 
+
 Successfully loaded key binds 
 
 Config loaded (data/config/config.txt) 
@@ -41,19 +43,9 @@ switching stage to: MENU
 
 switching stage to: OPTIONS 
 
-reverting stage to: MENU 
+modifying key:7->(7, 99, 'crouch', 99) 
 
-switching stage to: OPTIONS 
-
-reverting stage to: MENU 
-
-switching stage to: LOAD 
-
-reverting stage to: MENU 
-
-switching stage to: EXTRAS 
-
-reverting stage to: MENU 
+modifying key:14->(14, 44, 'zoom in (map)', 44) 
 
 Long's Word Succesfully Exited 
 

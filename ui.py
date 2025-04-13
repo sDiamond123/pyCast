@@ -114,7 +114,7 @@ class Rolling_Image (Still_Image):
                   p_button = Still_Image.DEFAULT_MB, draw_border = False, color = Element.DEFAULT_GREY, border_width = 0, 
                   activation_key = -1, phase = DEFAULT_PHASE, fov = DEFAULT_FOV, scale = True):
         if isinstance(image, str):
-            image = texture.RollingTexture(image, phase, fov, w - 2 * border_width, h - 2 * border_width)
+            image = texture.RollingTexture(image, phase, fov, (w - 2 * border_width) * normalize.SCALE_FACTOR_X, (h - 2 * border_width)*normalize.SCALE_FACTOR_Y)
         super().__init__(x,y,w,h,ext_display, image, p_button=p_button, draw_border=draw_border, 
                          color=color, border_width=border_width, activation_key=activation_key, scale = scale)
         self.phase_ptr = phase_ptr

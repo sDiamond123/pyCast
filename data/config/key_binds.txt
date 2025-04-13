@@ -1,40 +1,40 @@
-# move forward
+move forward
 119
-# move backward
+move backward
 s
-# strafe left
+strafe left
 A
-# strafe right
+strafe right
 d
-# look left
+look left
  [
-# look right
+look right
  ]
-# jump
+jump
 v
-# crouch
+crouch
     c
-# m_look
+m_look
 z
-# exit
+exit
 27
-#shoot
+shoot
 32
-# reload
+reload
 r
-# cycle next
+cycle next
 q
-# cycle prev
+cycle prev
 e
-#zoom in (map)
+zoom in (map)
 ,
-#zoom out (map)
+zoom out (map)
 .
-#interact
+interact
 f
-# map
+map
 m
-# pause
+pause
 p
-# bring up UI
+bring up UI
 x

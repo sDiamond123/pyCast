@@ -1,6 +1,7 @@
 import pygame
 from utils import Ptr as Ptr
 from log import LOG as log
+from database import DB
 
 class __Options__ ():
     CONFIG = "data/config/config.txt"
@@ -100,42 +101,76 @@ class __Options__ ():
         log.write("Config updated")
 
 
-class Key:
-    def get_key (file):
-        # get rid of explanation line
-        file.readline()
-        # get key
-        out = file.readline().lower().strip()
-        if (out.isnumeric()):
-            # if given a number, assume it's an ascii key
-            return int(out)
-        # else convert to ascii
-        return ord(out[0])
+class __Key__:
+    BINDS = ""
+    ID = 0
+    KEY = 1
+    LABEL = 2
+    DEF_KEY = 3
 
-    #set up key binds
-    binds = open("data/config/key_binds.txt", "r")
-    FORWARD = get_key(binds)
-    BACK = get_key(binds)
-    S_LEFT = get_key(binds)
-    S_RIGHT = get_key(binds)
-    TURN_L = get_key(binds)
-    TURN_R = get_key(binds)
-    JUMP = get_key(binds)
-    CROUCH = get_key(binds)
-    FREE_LOOK = get_key(binds)
-    EXIT = get_key(binds)
-    SHOOT = get_key(binds)
-    RELOAD = get_key(binds)
-    CYCLE_NEXT = get_key(binds)
-    CYCLE_PREV = get_key(binds)
-    M_ZOOM_IN = get_key(binds)
-    M_ZOOM_OUT = get_key(binds)
-    INTERACT = get_key(binds)
-    MAP = get_key(binds)
-    PAUSE = get_key(binds)
-    UI = get_key(binds)
-    binds.close()
-    log.write("Successfully loaded key binds")
+    def load_binds(self):
+        self.BINDS = DB.get("*", "keybinds")
+
+    def load_label(self):
+        self.LABELS = []
+        for bind in self.BINDS:
+            self.LABELS.append(bind[self.LABEL])
+
+    def load_current(self):
+        self.FORWARD = self.BINDS[0][self.KEY]
+        self.BACK =self.BINDS[1][self.KEY]
+        self.S_LEFT = self.BINDS[2][self.KEY]
+        self.S_RIGHT = self.BINDS[3][self.KEY]
+        self.TURN_L = self.BINDS[4][self.KEY]
+        self.TURN_R = self.BINDS[5][self.KEY]
+        self.JUMP = self.BINDS[6][self.KEY]
+        self.CROUCH = self.BINDS[7][self.KEY]
+        self.FREE_LOOK = self.BINDS[8][self.KEY]
+        self.EXIT = self.BINDS[9][self.KEY]
+        self.SHOOT = self.BINDS[10][self.KEY]
+        self.RELOAD = self.BINDS[11][self.KEY]
+        self.CYCLE_NEXT = self.BINDS[12][self.KEY]
+        self.CYCLE_PREV = self.BINDS[13][self.KEY]
+        self.M_ZOOM_IN = self.BINDS[14][self.KEY]
+        self.M_ZOOM_OUT = self.BINDS[15][self.KEY]
+        self.INTERACT = self.BINDS[16][self.KEY]
+        self.MAP = self.BINDS[17][self.KEY]
+        self.PAUSE = self.BINDS[18][self.KEY]
+        self.UI = self.BINDS[19][self.KEY]
+
+    def load_defaults(self):
+        self.FORWARD = self.BINDS[0][self.DEF_KEY]
+        self.BACK =self.BINDS[1][self.DEF_KEY]
+        self.S_LEFT = self.BINDS[2][self.DEF_KEY]
+        self.S_RIGHT = self.BINDS[3][self.DEF_KEY]
+        self.TURN_L = self.BINDS[4][self.DEF_KEY]
+        self.TURN_R = self.BINDS[5][self.DEF_KEY]
+        self.JUMP = self.BINDS[6][self.DEF_KEY]
+        self.CROUCH = self.BINDS[7][self.DEF_KEY]
+        self.FREE_LOOK = self.BINDS[8][self.DEF_KEY]
+        self.EXIT = self.BINDS[9][self.DEF_KEY]
+        self.SHOOT = self.BINDS[10][self.DEF_KEY]
+        self.RELOAD = self.BINDS[11][self.DEF_KEY]
+        self.CYCLE_NEXT = self.BINDS[12][self.DEF_KEY]
+        self.CYCLE_PREV = self.BINDS[13][self.DEF_KEY]
+        self.M_ZOOM_IN = self.BINDS[14][self.DEF_KEY]
+        self.M_ZOOM_OUT = self.BINDS[15][self.DEF_KEY]
+        self.INTERACT = self.BINDS[16][self.DEF_KEY]
+        self.MAP = self.BINDS[17][self.DEF_KEY]
+        self.PAUSE = self.BINDS[18][self.DEF_KEY]
+        self.UI = self.BINDS[19][self.DEF_KEY]
+
+    def save_binds(self):
+        for bind in self.BINDS:
+            DB.update("key","keybinds",bind[self.KEY],("id",bind[self.ID]))
+
+    def __init__(self):
+        self.load_binds()
+        self.load_current()
+        self.load_label()
+        #print(self.BINDS)
+        #print(self.LABELS)
+        log.write("Successfully loaded key binds")
 
     PT_LOWER = 0
     PT_UPPER = 1
@@ -181,6 +216,8 @@ class Key:
     for i in range (ord('a'), ord('z')):
         PRINT_TABLE[i] = {PT_LOWER : chr(i), PT_UPPER : chr(i - 32), PT_PRINT_LOWER : chr(i), PT_PRINT_UPPER : chr(i-32)}
 
+
+Key = __Key__()
 
 class __Terminal__():
     POLL_KP = 0

@@ -341,7 +341,7 @@ class Options(ui.UI_Heirarchy):
         super().__init__(ext_disp,True,pygame.Color("bisque3"))
         self.control = control
         self.sub_composites.append(Config_Menu(125,25,ext_disp))
-        self.sub_composites.append(Binds_Menu(125,25,ext_disp))
+        self.sub_composites.append(Binds_Menu(125,25,ext_disp, self))
         self.sub_composites.append(Console(125,25,ext_disp, control))
         self.elements.append(screen_writer.Text_Button(10,10,110,40,ext_disp,utils.Ptr("'"+chr(options.Key.MAP) + "'. Back"),utils.Ptr(20), activation_key=options.Key.MAP, action = self.return_play))
         self.elements.append(screen_writer.Text_Button(10,60,110,40,ext_disp,utils.Ptr("OPTIONS"),utils.Ptr(20), action = self.focus, args=self.CONFIG_ID))
@@ -366,11 +366,16 @@ class Binds_Menu (ui.UI_Sub_Screen):
     BUTTON_H = 50
     RED = (150,0,0)
 
-    def __init__ (self, x, y, ext_display: pygame.surface):
+    def __modify_key__ (self, index):
+        index += self.elements[1].cursor.value
+        log.write("modifying key:" + str(index) + "->" + str(options.Key.BINDS[index]))
+
+    def __init__ (self, x, y, ext_display: pygame.surface, parent:ui.UI_Heirarchy):
         super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),False,True)
-        self.lines = []
+        self.lines = options.Key.LABELS
+        self.parent = parent
         self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 75,self.y+ normalize.SCALE_FACTOR_Y * 10,0, 0, ext_display,utils.Ptr("KEYBINDS (click to change):"),self.TITLE_SIZE,scale = False))
-        self.elements.append(screen_writer.Text_Menu(self.x + normalize.SCALE_FACTOR_X * 75, self.y + normalize.SCALE_FACTOR_Y * 50, 500, 475,ext_display,self.lines,max_display=10,scale=False,draw_background=False,box_color=ui.Element.DEFAULT_GREY))
+        self.elements.append(screen_writer.Text_Menu(self.x + normalize.SCALE_FACTOR_X * 75, self.y + normalize.SCALE_FACTOR_Y * 50, 500, 475,ext_display,self.lines,max_display=10,scale=False,draw_background=False,box_color=ui.Element.DEFAULT_GREY, action=self.__modify_key__))
 class Config_Menu (ui.UI_Sub_Screen):
     WIDTH = 650
     HEIGHT = 550
