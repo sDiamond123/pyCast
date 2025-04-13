@@ -316,7 +316,7 @@ class Typewriter(Text_Box):
                 self.slice += len(k_pressed[key_in.POLL_TXT])
                 if "\n" in k_pressed[key_in.POLL_TXT]:
                     checkEnd = True
-        char = " "
+        char = "."
         if self.flash:
             char =  "_"
         self.text.value = self.prompt + self.body[:self.slice] + char + self.body[self.slice:]
