@@ -80,7 +80,6 @@ class Text_Box (Text_Button):
                  if self.slider != None:
                     self.slider.max = len(self.lines)
                     self.slider.refresh.value = True
-                    print("!")
                  else:
                     self.slider = ui.Slider((self.x + self.w)/normalize.SCALE_FACTOR_X - self.b_w - 16, self.y/normalize.SCALE_FACTOR_Y + self.b_w, 16,self.h/normalize.SCALE_FACTOR_Y - 2 * self.b_w,self.ext_display,color = self.text_color,current=self.cursor, phantom_dist= 64, max=len(self.lines))
             else:
@@ -215,11 +214,11 @@ class Text_Menu (ui.UI_Sub_Screen):
             self.text[i].value = text
 
     def down(self):
-        self.cursor.value = utils.clamp_addition(self.cursor, 1, len(self.lines) - 1,0)
+        self.cursor.value = utils.clamp_addition(self.cursor.value, 1, len(self.lines) - 1,0)
         self.update_text()
 
     def up(self):
-        self.cursor.value = utils.clamp_addition(self.cursor, -1, len(self.lines) - 1,0)
+        self.cursor.value = utils.clamp_addition(self.cursor.value, -1, len(self.lines) - 1,0)
         self.update_text()
 
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
@@ -231,16 +230,19 @@ class Text_Menu (ui.UI_Sub_Screen):
             self.down()
         elif (mouse.mw > 0):
             self.up()
+        if self.has_slider and self.elements[self.max].moved:
+            self.update_text()
         return False
         
 
     def __init__ (self,x, y, w, h, ext_display: pygame.surface, lines, action:callable = None, max_display = MAX, 
                   color:tuple=(59,54,48), render = True, draw_background = True, x_off = 0, y_off = 0, size = DESC_SIZE, 
                   box_w = -1, box_spacing = 10, box_h = -1, cap_w = 10, draw_cur = True, char_per_line = 100, lines_per_box = 2, scale = True, has_slider = True):
+        self.cursor = utils.Ptr(0)
+        
         super().__init__(x,y,w,h,ext_display, color,render,draw_background, scale = scale)
         self.lines = lines
         self.text = []
-        self.cursor = utils.Ptr(0)
         self.max = max_display
         self.update_txt = []
         self.draw_numbers = draw_cur
@@ -261,9 +263,12 @@ class Text_Menu (ui.UI_Sub_Screen):
             self.elements.append(Text_Box(x + x_off, y+y_off + box_delta * i,box_w, box_h, ext_display,self.text[i],
                                           utils.Ptr(size),utils.Ptr(0),char_per_line,lines_per_box, color=self.DESC_COLOR, 
                                           update_text=self.update_txt[i], action=action, activation_key= 49 + i, args = i))
-        if has_slider and len(self.lines) > self.max:
-            self.elements.append(ui.Slider(self.x + 32, self.y - 5, 16, self.h-10,ext_display,current = self.cursor,max = len(self.lines)))
 
+        if has_slider and len(self.lines) >= self.max:
+             self.elements.append(ui.Slider(x + w - 32, y + 16, 16, h-32,ext_display,current = self.cursor, max=len(self.lines)))
+             self.has_slider = True
+        else:
+            self.has_slider = False
 
 class Log(Text_Box):
     def __init__(self, x, y, w, h, ext_display, size, cursor, max_char_per_line, max_lines, update_text = utils.FALSE_PTR, writer = DEFAULT_WRITER, action = None, color = ui.Element.DEFAULT_GREY, border_width = ui.Interactable_Element.DEFAULT_BORDER_W, p_button=ui.Interactable_Element.DEFAULT_MB, draw_border=True, activation_key=-1, x_offset=0, y_offset=0, args=None, text_color=pygame.Color("black"), scale=True):

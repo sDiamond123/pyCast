@@ -39,7 +39,17 @@ Game Start!
 
 switching stage to: MENU 
 
-switching stage to: OPTIONS 
+switching stage to: DIALOUGE 
+
+SELECT * FROM dialogue WHERE id = 0 
+
+Succesfully loaded dialouge 0 
+
+SELECT * FROM dialogue WHERE id = 1 
+
+SELECT * FROM npc WHERE id = 1 
+
+Succesfully loaded dialouge 1 
 
 Long's Word Succesfully Exited 
 

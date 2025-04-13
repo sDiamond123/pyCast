@@ -426,8 +426,8 @@ class Console (ui.UI_Sub_Screen):
     def __init__ (self, x, y, ext_display: pygame.surface, control):
         super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),True,True)
         self.cursor = utils.Ptr(0)
-        self.elements.append(screen_writer.Log(self.x +normalize.SCALE_FACTOR_X * 10, self.y +normalize.SCALE_FACTOR_Y * 10, self.w/normalize.SCALE_FACTOR_X-20, 440,ext_display,self.TEXT_SIZE,self.cursor,140,25,log.new, scale = False, color=(0,0,0), text_color=(50,200,50)))
-        self.elements.append(screen_writer.Typewriter(self.x +normalize.SCALE_FACTOR_X * 10, self.y + normalize.SCALE_FACTOR_Y * 450,self.w/normalize.SCALE_FACTOR_X - 20, 90, ext_display,utils.Ptr("> "),self.TITLE_SIZE,utils.Ptr(0),65,3,  color=(20,20,20), text_color=(50,200,50), action=self.execute, scale=False))
+        self.elements.append(screen_writer.Log(self.x +normalize.SCALE_FACTOR_X * 10, self.y +normalize.SCALE_FACTOR_Y * 10, self.w/normalize.SCALE_FACTOR_X-20, 440,ext_display,self.TEXT_SIZE,self.cursor,120,int(25 * normalize.SCALE_FACTOR_X),log.new, scale = False, color=(0,0,0), text_color=(50,200,50)))
+        self.elements.append(screen_writer.Typewriter(self.x +normalize.SCALE_FACTOR_X * 10, self.y + normalize.SCALE_FACTOR_Y * 450,self.w/normalize.SCALE_FACTOR_X - 20, 90, ext_display,utils.Ptr("> "),self.TITLE_SIZE,utils.Ptr(0),50,int(3*normalize.SCALE_FACTOR_X),  color=(20,20,20), text_color=(50,200,50), action=self.execute, scale=False))
         self.control = control
         self.execute("help") 
 
