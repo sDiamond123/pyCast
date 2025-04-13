@@ -170,6 +170,8 @@ class Text_Box (Text_Button):
         if self.state == utils.Mouse_State.NOT_PRESSED:
             if mouse.mw != 0:
                 self.cursor.value = utils.clamp_addition(self.cursor.value, -mouse.mw, len(self.lines) - 1, 0)
+                if self.slider != None:
+                    self.slider.refresh.value = True
         if self.refresh.value:
             self.refresh.value = False
             self.__parse_text__()
@@ -216,10 +218,14 @@ class Text_Menu (ui.UI_Sub_Screen):
     def down(self):
         self.cursor.value = utils.clamp_addition(self.cursor.value, 1, len(self.lines) - 1,0)
         self.update_text()
+        if self.has_slider:
+            self.elements[self.max].refresh.value = True
 
     def up(self):
         self.cursor.value = utils.clamp_addition(self.cursor.value, -1, len(self.lines) - 1,0)
         self.update_text()
+        if self.has_slider:
+            self.elements[self.max].refresh.value = True
 
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         super().update(m_x, m_y, mouse, keys)

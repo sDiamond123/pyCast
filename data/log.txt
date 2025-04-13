@@ -13,10 +13,10 @@ Loaded Chunks (data/maps/overworld/chunks.csv)
 Successfully loaded map: data/maps/chunks/empty_chunk 
 
 Started: Long's Word 
- Window: 800 by 600 
+ Window: 1280 by 720 
  Fullscreen: False 
- Internal Resolution: 1200 by 800 
- Targeting 240 FPS 
+ Internal Resolution: 1280 by 720 
+ Targeting 60 FPS 
 
 USER: help 
 
@@ -39,17 +39,15 @@ Game Start!
 
 switching stage to: MENU 
 
-switching stage to: DIALOUGE 
+switching stage to: OPTIONS 
 
-SELECT * FROM dialogue WHERE id = 0 
+Config loaded (data/config/profiles/default.txt) 
 
-Succesfully loaded dialouge 0 
+Config updated 
 
-SELECT * FROM dialogue WHERE id = 1 
+reverting stage to: MENU 
 
-SELECT * FROM npc WHERE id = 1 
-
-Succesfully loaded dialouge 1 
+switching stage to: EXIT 
 
 Long's Word Succesfully Exited 
 

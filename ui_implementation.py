@@ -149,11 +149,11 @@ class Main_Menu (ui.UI_Composite):
         text = utils.Ptr(test.readlines())
         test.close()
         size = utils.Ptr(12)
-        self.cursor = utils.Ptr(3)
+        self.cursor = utils.Ptr(0)
         self.phase = utils.Ptr(0)
         self.elements.append(ui.Rolling_Image(0,0,display.size[0], display.size[1],display, "/menu/main_menu.png",self.phase,fov = math.pi ))
         self.elements.append(screen_writer.Text_Button(15,15,0,0,display,utils.Ptr("Long's Word"),utils.Ptr(50),draw_border=False, text_color = (0, 70, 20),writer=screen_writer.GOTHIC))
-        self.elements.append(screen_writer.Text_Box(10,450,400,140,self.display,text,size,self.cursor,68,7))
+        self.elements.append(screen_writer.Text_Box(10,450,400,140,self.display,text,size,self.cursor,65,7))
         self.elements.append(ui.Element(595,280,195,310,display, color=(20,20,20)))
         self.elements.append(screen_writer.Text_Button(605,290,175,40,display,utils.Ptr("1. New"),utils.Ptr(20), color = (155,130,15), activation_key=49, action = self.new_game,writer=screen_writer.GOTHIC))
         self.elements.append(screen_writer.Text_Button(605,340,175,40,display,utils.Ptr("2. Continue"),utils.Ptr(20), color = (155,130,15), activation_key=50, action = self.reload_last_save,writer=screen_writer.GOTHIC))
@@ -338,7 +338,7 @@ class Options(ui.UI_Heirarchy):
         self.sub_composites.append(Binds_Menu(125,25,ext_disp))
         self.sub_composites.append(Console(125,25,ext_disp, control))
         self.elements.append(screen_writer.Text_Button(10,10,110,40,ext_disp,utils.Ptr("'"+chr(options.Key.MAP) + "'. Back"),utils.Ptr(20), activation_key=options.Key.MAP, action = self.return_play))
-        self.elements.append(screen_writer.Text_Button(10,60,110,40,ext_disp,utils.Ptr("GRAPHICS"),utils.Ptr(20), action = self.focus, args=self.CONFIG_ID))
+        self.elements.append(screen_writer.Text_Button(10,60,110,40,ext_disp,utils.Ptr("OPTIONS"),utils.Ptr(20), action = self.focus, args=self.CONFIG_ID))
         self.elements.append(screen_writer.Text_Button(10,110,110,40,ext_disp,utils.Ptr("BINDS"),utils.Ptr(20),  action = self.focus,args=self.BINDS_ID))
         self.elements.append(screen_writer.Text_Button(10,160,110,40,ext_disp,utils.Ptr("CONSOLE"),utils.Ptr(20),  action = self.focus,args=self.CONSOLE_ID))
         self.focus(self.CONFIG_ID)
@@ -374,12 +374,6 @@ class Binds_Menu (ui.UI_Sub_Screen):
     def __init__ (self, x, y, ext_display: pygame.surface):
         super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),False,True)
         self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 250,self.y,0, 0, ext_display,utils.Ptr("MOUSE Sensitivity"),self.TITLE_SIZE,y_offset=-5,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 20,self.y +normalize.SCALE_FACTOR_Y * 30,0, 0, ext_display,utils.Ptr("X:"),self.TITLE_SIZE, text_color=self.RED,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 20,self.y+normalize.SCALE_FACTOR_Y * 55,0, 0, ext_display,utils.Ptr("Y:"),self.TITLE_SIZE, text_color=self.RED,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 40,self.y +normalize.SCALE_FACTOR_Y * 30,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.X_SENSE],self.TITLE_SIZE,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 40,self.y +normalize.SCALE_FACTOR_Y * 55,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.Y_SENSE],self.TITLE_SIZE,scale = False))
-        self.elements.append(ui.Slider(self.x + 200 * normalize.SCALE_FACTOR_X, self.y + 45 * normalize.SCALE_FACTOR_Y,400,10,ext_display,False,current = options.CONFIG.contents[options.CONFIG.X_SENSE],max=300, min = 1,scale=False, step = 3))
-        self.elements.append(ui.Slider(self.x + 200 * normalize.SCALE_FACTOR_X, self.y + 65 * normalize.SCALE_FACTOR_Y,400,10,ext_display,False,current = options.CONFIG.contents[options.CONFIG.Y_SENSE],max=300, min = 1,scale=False, step = 3))
         
         # save changes
         self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *300,self.y + normalize.SCALE_FACTOR_Y *475,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10,scale = False))
@@ -393,24 +387,99 @@ class Config_Menu (ui.UI_Sub_Screen):
     BUTTON_H = 50
     RED = (150,0,0)
 
+    def __check_w_res_(self):
+        self.w_res.value = str(options.CONFIG.contents[options.CONFIG.W]) + "x" + str(options.CONFIG.contents[options.CONFIG.H]) 
+    
+    def __check_I_res_(self):
+        self.I_res.value = str(options.CONFIG.contents[options.CONFIG.I_W]) + "x" + str(options.CONFIG.contents[options.CONFIG.I_H]) 
+    
+
+    def __update_window_resolution(self, scale):
+        options.CONFIG.contents[options.CONFIG.W] = scale[0]
+        options.CONFIG.contents[options.CONFIG.H] = scale[1]
+        self.__changed_UI__()
+
+    def __update_I_resolution(self, scale):
+        options.CONFIG.contents[options.CONFIG.I_W] = scale[0]
+        options.CONFIG.contents[options.CONFIG.I_H] = scale[1]
+        self.__changed_UI__()
+
     def __changed_UI__ (self):
         options.CONFIG.contents[options.CONFIG.PROF_NAME].value = "CUSTOM"
+
+    def __update_fs__ (self):
+        options.CONFIG.contents[options.CONFIG.FULLSCREEN] = not options.CONFIG.contents[options.CONFIG.FULLSCREEN]
+        self.__changed_UI__()
 
     def __init__ (self, x, y, ext_display: pygame.surface):
         super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),True,True)
         # load profiles
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 5,self.y,0, 0, ext_display,utils.Ptr("PROFILE:"),self.TITLE_SIZE,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *100,self.y,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.PROF_NAME],self.TITLE_SIZE, text_color=self.RED,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *10,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Nasa"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.NASA,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 90,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("High"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.HIGH,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 170,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Medium"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.MED,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 250,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Low"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.LOW,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 330,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Potato"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.POTATO,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 410,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Current"),self.TEXT_SIZE,action=options.CONFIG.load_config,x_offset=5, y_offset=10,scale = False))
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 490,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Default"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.DEFAULT,scale = False))
-        # save changes
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *300,self.y + normalize.SCALE_FACTOR_Y *475,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10,scale = False))
-        
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 20,self.y,0, 0, ext_display,utils.Ptr("PROFILE:"),self.TITLE_SIZE,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *120,self.y,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.PROF_NAME],self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *30,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Nasa"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.NASA,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 110,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("High"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.HIGH,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 190,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Medium"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.MED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 270,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Low"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.LOW,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 350,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Potato"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.POTATO,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 430,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Current"),self.TEXT_SIZE,action=options.CONFIG.load_config,x_offset=5, y_offset=10,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 510,self.y + normalize.SCALE_FACTOR_Y * 40,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("Default"),self.TEXT_SIZE,action=options.CONFIG.load_custom,x_offset=5, y_offset=10, args = options.CONFIG.DEFAULT,scale = False))
+        # set camerasettings
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 20,self.y +normalize.SCALE_FACTOR_Y * 90,0, 0, ext_display,utils.Ptr("FPS:"),self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 20,self.y+normalize.SCALE_FACTOR_Y * 120,0, 0, ext_display,utils.Ptr("FOV:"),self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 80,self.y +normalize.SCALE_FACTOR_Y * 90,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.FPS],self.TITLE_SIZE,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 80,self.y +normalize.SCALE_FACTOR_Y * 120,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.FOV],self.TITLE_SIZE,scale = False))
+        self.elements.append(ui.Slider(self.x + 200 * normalize.SCALE_FACTOR_X, self.y + 105 * normalize.SCALE_FACTOR_Y,400,10,ext_display,False,current = options.CONFIG.contents[options.CONFIG.FPS],max=243, min = 20,scale=False, step = 2))
+        self.elements.append(ui.Slider(self.x + 200 * normalize.SCALE_FACTOR_X, self.y + 135 * normalize.SCALE_FACTOR_Y,400,10,ext_display,False,current = options.CONFIG.contents[options.CONFIG.FOV],max=180, min = 30,scale=False, step = 3))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 20,self.y +normalize.SCALE_FACTOR_Y * 150,0, 0, ext_display,utils.Ptr("RAYS:"),self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 20,self.y+normalize.SCALE_FACTOR_Y * 180,0, 0, ext_display,utils.Ptr("DRAW_DIST:"),self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 80,self.y +normalize.SCALE_FACTOR_Y * 150,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.RAYS],self.TITLE_SIZE,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 140,self.y +normalize.SCALE_FACTOR_Y * 180,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.DRAW_DIST],self.TITLE_SIZE,scale = False))
+        self.elements.append(ui.Slider(self.x + 200 * normalize.SCALE_FACTOR_X, self.y + 165 * normalize.SCALE_FACTOR_Y,400,10,ext_display,False,current = options.CONFIG.contents[options.CONFIG.RAYS],max=1024, min = 16,scale=False, step = 8, phantom_dist=64))
+        self.elements.append(ui.Slider(self.x + 200 * normalize.SCALE_FACTOR_X, self.y + 195 * normalize.SCALE_FACTOR_Y,400,10,ext_display,False,current = options.CONFIG.contents[options.CONFIG.DRAW_DIST],max=17, min = 1,scale=False, step = 1, phantom_dist= 64))
+        # mouse 
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 20,self.y +normalize.SCALE_FACTOR_Y * 210,0, 0, ext_display,utils.Ptr("MOUSE X SENSETIVITY:"),self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 20,self.y+normalize.SCALE_FACTOR_Y * 240,0, 0, ext_display,utils.Ptr("MOUSE Y SENSETIVITY:"),self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 240,self.y +normalize.SCALE_FACTOR_Y * 210,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.X_SENSE],self.TITLE_SIZE,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 240,self.y +normalize.SCALE_FACTOR_Y * 240,0, 0, ext_display,options.CONFIG.contents[options.CONFIG.Y_SENSE],self.TITLE_SIZE,scale = False))
+        self.elements.append(ui.Slider(self.x + 300 * normalize.SCALE_FACTOR_X, self.y + 225 * normalize.SCALE_FACTOR_Y,300,10,ext_display,False,current = options.CONFIG.contents[options.CONFIG.X_SENSE],max=300, min = 1,scale=False, step = 5, phantom_dist=64))
+        self.elements.append(ui.Slider(self.x + 300 * normalize.SCALE_FACTOR_X, self.y + 255 * normalize.SCALE_FACTOR_Y,300,10,ext_display,False,current = options.CONFIG.contents[options.CONFIG.Y_SENSE],max=300, min = 1,scale=False, step = 5,phantom_dist=64))
+       # update window resolution
+        self.w_res = utils.Ptr("")
+        self.__check_w_res_()
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 20,self.y + normalize.SCALE_FACTOR_Y * 270,0, 0, ext_display,utils.Ptr("RESOLUTION:"),self.TITLE_SIZE,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *160,self.y + normalize.SCALE_FACTOR_Y * 270,0, 0, ext_display,self.w_res,self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *30,self.y + normalize.SCALE_FACTOR_Y * 310,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("400x300"),self.TEXT_SIZE,action=self.__update_window_resolution,x_offset=5, y_offset=10, args = (400, 300),scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 110,self.y + normalize.SCALE_FACTOR_Y * 310,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("640x480"),self.TEXT_SIZE,action=self.__update_window_resolution,x_offset=5, y_offset=10, args = (640, 480),scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 190,self.y + normalize.SCALE_FACTOR_Y * 310,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("800x600"),self.TEXT_SIZE,action=self.__update_window_resolution,x_offset=5, y_offset=10, args =(800, 600),scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 270,self.y + normalize.SCALE_FACTOR_Y * 310,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("1024x768"),self.TEXT_SIZE,action=self.__update_window_resolution,x_offset=-1, y_offset=10, args = (1024,768),scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 350,self.y + normalize.SCALE_FACTOR_Y * 310,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("1152x870"),self.TEXT_SIZE,action=self.__update_window_resolution,x_offset=-1, y_offset=10, args = (1152,870),scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 430,self.y + normalize.SCALE_FACTOR_Y * 310,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("1280x720"),self.TEXT_SIZE,action=self.__update_window_resolution,x_offset=-1, y_offset=10, args = (1280, 720), scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 510,self.y + normalize.SCALE_FACTOR_Y * 310,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("2560x1440"),self.TEXT_SIZE,action=self.__update_window_resolution,x_offset=-1, y_offset=10, args = (2560,1440),scale = False))
+         # set fullscreen
+        self.fs = utils.Ptr(options.CONFIG.contents[options.CONFIG.FULLSCREEN])
+        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 20,self.y+normalize.SCALE_FACTOR_Y * 360,0, 0, ext_display,utils.Ptr("FULLSCREEN:"),self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *160,self.y + normalize.SCALE_FACTOR_Y * 364,40, 30, ext_display,self.fs,self.TEXT_SIZE,action=self.__update_fs__,x_offset=0, y_offset=0,scale = False))
+        # update internal resolution
+        self.I_res = utils.Ptr("")
+        self.__check_I_res_()
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 20,self.y + normalize.SCALE_FACTOR_Y * 390,0, 0, ext_display,utils.Ptr("UI RESOLUTION:"),self.TITLE_SIZE,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *190,self.y + normalize.SCALE_FACTOR_Y * 390,0, 0, ext_display,self.I_res,self.TITLE_SIZE, text_color=self.RED,scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *30,self.y + normalize.SCALE_FACTOR_Y * 430,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("400x300"),self.TEXT_SIZE,action=self.__update_I_resolution,x_offset=5, y_offset=10, args = (400, 300),scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 110,self.y + normalize.SCALE_FACTOR_Y * 430,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("640x480"),self.TEXT_SIZE,action=self.__update_I_resolution,x_offset=5, y_offset=10, args = (640, 480),scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 190,self.y + normalize.SCALE_FACTOR_Y * 430,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("800x600"),self.TEXT_SIZE,action=self.__update_I_resolution,x_offset=5, y_offset=10, args =(800, 600),scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 270,self.y + normalize.SCALE_FACTOR_Y * 430,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("1024x768"),self.TEXT_SIZE,action=self.__update_I_resolution,x_offset=-1, y_offset=10, args = (1024,768),scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 350,self.y + normalize.SCALE_FACTOR_Y * 430,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("1152x870"),self.TEXT_SIZE,action=self.__update_I_resolution,x_offset=-1, y_offset=10, args = (1152,870),scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 430,self.y + normalize.SCALE_FACTOR_Y * 430,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("1280x720"),self.TEXT_SIZE,action=self.__update_I_resolution,x_offset=-1, y_offset=10, args = (1280, 720), scale = False))
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 510,self.y + normalize.SCALE_FACTOR_Y * 430,self.BUTTON_W, self.BUTTON_H, ext_display,utils.Ptr("2560x1440"),self.TEXT_SIZE,action=self.__update_I_resolution,x_offset=-1, y_offset=10, args = (2560,1440),scale = False))
+         # save changes
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *300,self.y + normalize.SCALE_FACTOR_Y *490,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10,scale = False))
+
+    def update(self, m_x, m_y, mouse, keys):
+        self.fs.value = (options.CONFIG.contents[options.CONFIG.FULLSCREEN])
+        self.__check_w_res_()
+        self.__check_I_res_()
+        return super().update(m_x, m_y, mouse, keys)
+    
 class Console (ui.UI_Sub_Screen):
     WIDTH = 650
     HEIGHT = 550

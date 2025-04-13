@@ -1,14 +1,28 @@
-nothing up here 
-| | | | 
-v v v v 
-Info:
-Nothing to see here yet 
-Be sure to check out the keybinds 
-This is a really long line which streches to the end of the textbox! It ends of a loooooooooooooooooooooooooong word 
-Thanks for checking out my game 
-S. K. D. 
+THE STORY SO FAR: 
+ 
+ 
+WAR
+The fourteen years war ended not with a victor. The wartime economic strain, exacerbated by plague and poor harvests, caused both the Dominion and Empire to collapse on themselves. With neither side able to continue the war effort, a tentative ceasefire was signed. There was nothing to show for the loss of a generation, no major gains were had by either party. Neither side is satisfied and both see the other as on death's door. It is only a matter of time until one side or the other violates it.
 
-^ ^ ^ ^ 
-| | | | 
-nothing to see here 
-scroll up for more
+CHAOS
+With her empire in flames, the Empress Dowager has retreated to her summer palace on her ancestral homeland, bringing her three daughters and future heirs to the throne in tow. She has not held court since and has been ruling via decree in her isolation. Unsubstantiated rumors have begun to circulate about her health or demise. 
+
+Peasant revolts have become commonplace. All stores have been exhausted by the war and harvests have been poor. Famine is inevitable and all know it. 
+
+CHANGE
+Much has changed since the first shot rang out. A common enemy and war effort has united all provinces of the Empire as the Empire. The war saw feudal lords bankrupt and serfs enfranchised. The old ways are dead. From the ashes of feudalism rise a nation.
+
+SWORD
+The oldest daughter and current heir to the throne. As the oldest she had served in the war as one of the Empire's foremost generals. However, the humiliation of the stalemate under her leadership has caused her grasp on the Throne to weaken. With the wartime unification of the Empire came a wave of nationalism. She seeks to leverage this sentiment to restart the war and secure her birthright. Her powerbase consists mostly of the martial class of lords to which her word still holds immense sway.
+
+PURSE
+To a select few, the war had been a massive boon. New trade routes were solidified and merchants made fortunes shipping everything from grain to fineries. The war saw the merchants guild gain power rivaling that of even the most powerful lords. The guild fears this power is not to last. There is turmoil in the North and the disenfranchised lord's jealousy grows every day. Most importantly, the war saw the Imperial groshen become the currency of international trade, but gossip has it that the Empire has begun devaluing it. This cannot stand. The merchants guild seek stability and have backed the second daughter, a recluse academic, in her current bid for the throne. It is unclear whether she is their puppet or them hers. 
+
+IDOL
+Seeing as she would never inherit the throne, the youngest daughter renounced her birthright and dedicated her life to a higher power. Seen as the lamb of the heavens, she has been crowned an unofficial prophet by the church. Her church grows more and more powerful with each passing day as the desperate seek salvation. Her service to the throne of god has put the throne of man within reach. Her gospel is being heard mainly by the serfs, slaves, widows, and dispossessed of the Empire.
+
+WEAPON
+A weapon of the old war has been rumored to have been lost on the island. It is unclear who has possession of it or if it even exists.
+
+SUMMONS
+In her self-imposed exile the Empress Dowager has sent for you. Her letter did not state why. You now find yourself as a prisoner aboard a ship heard towards the summer palace and the Empire's home islands. 

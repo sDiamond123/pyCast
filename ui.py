@@ -261,7 +261,8 @@ class Swtich(Button):
             super().activate()
 
 class Slider (Interactable_Element):
-    def __init__(self, x, y, w, h, ext_display, is_vertical = True, update = utils.Ptr(False), current:utils.Ptr = utils.Ptr(5), max = 10, min = 0, phantom_dist = 100, color = Element.DEFAULT_GREY, border_width = Interactable_Element.DEFAULT_BORDER_W, p_button=Interactable_Element.DEFAULT_MB, draw_border=True, activation_key=-1, scale=True, step =1):
+    MIN_DIM = 5
+    def __init__(self, x, y, w, h, ext_display, is_vertical = True, update = utils.Ptr(False), current:utils.Ptr = utils.Ptr(5), max = 10, min = 0, phantom_dist = 32, color = Element.DEFAULT_GREY, border_width = Interactable_Element.DEFAULT_BORDER_W, p_button=Interactable_Element.DEFAULT_MB, draw_border=True, activation_key=-1, scale=True, step =1):
         self.current = current
         self.max = max
         self.min = min
@@ -272,21 +273,29 @@ class Slider (Interactable_Element):
         self.orientation = is_vertical
         self.refresh = update
         if is_vertical:
-            self.slider = Sticky(x,current_pos * h + y,w, h/self.range,ext_display,color = color,lock_x=True, phantom_dist=phantom_dist,border_width=0, scale=scale)
+            height = h /self.range
+            if height < self.MIN_DIM:
+                height = self.MIN_DIM
+            self.slider = Sticky(x,current_pos * h + y,w, height,ext_display,color = color,lock_x=True, phantom_dist=phantom_dist,border_width=0, scale=scale)
         else:
-            self.slider = Sticky(current_pos * w + x,y,w/self.range,h,ext_display,color = color, lock_y=True,phantom_dist=phantom_dist,border_width=0,scale = scale)
+            width = w /self.range
+            if width < self.MIN_DIM:
+                width = self.MIN_DIM
+            self.slider = Sticky(current_pos * w + x,y,width,h,ext_display,color = color, lock_y=True,phantom_dist=phantom_dist,border_width=0,scale = scale)
         super().__init__(x, y, w, h, ext_display, color, border_width, p_button, draw_border, activation_key, scale)
         self.moved = utils.Ptr(False)
+        self.old = self.current.value
 
 
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         super().update(m_x,m_y,mouse,keys)
         if self.moved.value:
             self.moved.value = False
-        if self.refresh.value:
+        if self.refresh.value or self.current.value != self.old:
+            self.old = self.current.value
             self.refresh.value = False
             self.range = (self.max - self.min)/self.step
-            factor = (self.current.value-self.min)/self.range
+            factor = ((self.current.value-self.min)/self.range)/self.step
             if self.orientation:
                 self.slider.y = self.y + self.h * factor
             else:
@@ -301,6 +310,7 @@ class Slider (Interactable_Element):
                     self.slider.x = utils.clamp(self.slider.x,self.x+self.w  - self.slider.w,self.x)
                     self.current.value = int(self.step * (self.slider.x - self.x)/self.w * self.range + self.min)
                 self.moved.value = True
+                self.old = self.current.value
 
     def render(self):
         if self.orientation:
