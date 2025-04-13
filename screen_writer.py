@@ -243,7 +243,7 @@ class Text_Menu (ui.UI_Sub_Screen):
 
     def __init__ (self,x, y, w, h, ext_display: pygame.surface, lines, action:callable = None, max_display = MAX, 
                   color:tuple=(59,54,48), render = True, draw_background = True, x_off = 0, y_off = 0, size = DESC_SIZE, 
-                  box_w = -1, box_spacing = 10, box_h = -1, cap_w = 10, draw_cur = True, char_per_line = 100, lines_per_box = 2, scale = True, has_slider = True):
+                  box_w = -1, box_spacing = 10, box_h = -1, cap_w = 40, draw_cur = True, char_per_line = 100, lines_per_box = 2, scale = True, has_slider = True,box_color = DESC_COLOR):
         self.cursor = utils.Ptr(0)
         
         super().__init__(x,y,w,h,ext_display, color,render,draw_background, scale = scale)
@@ -267,11 +267,11 @@ class Text_Menu (ui.UI_Sub_Screen):
             else:
                 self.text.append(self.DEFAULT_TEXT)
             self.elements.append(Text_Box(x + x_off, y+y_off + box_delta * i,box_w, box_h, ext_display,self.text[i],
-                                          utils.Ptr(size),utils.Ptr(0),char_per_line,lines_per_box, color=self.DESC_COLOR, 
+                                          utils.Ptr(size),utils.Ptr(0),char_per_line,lines_per_box, color=box_color, 
                                           update_text=self.update_txt[i], action=action, activation_key= 49 + i, args = i))
 
         if has_slider and len(self.lines) >= self.max:
-             self.elements.append(ui.Slider(x + w - 32, y + 16, 16, h-32,ext_display,current = self.cursor, max=len(self.lines)))
+             self.elements.append(ui.Slider(x + w - 32, y + 16, 16, h-32,ext_display,current = self.cursor, max=len(self.lines),phantom_dist=64))
              self.has_slider = True
         else:
             self.has_slider = False

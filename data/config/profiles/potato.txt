@@ -1,5 +1,5 @@
 # profile
-LOW
+POTATO
 # name
 Long's Word
 # icon

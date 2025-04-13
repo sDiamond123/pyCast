@@ -158,7 +158,7 @@ class Main_Menu (ui.UI_Composite):
         self.elements.append(screen_writer.Text_Button(605,290,175,40,display,utils.Ptr("1. New"),utils.Ptr(20), color = (155,130,15), activation_key=49, action = self.new_game,writer=screen_writer.GOTHIC))
         self.elements.append(screen_writer.Text_Button(605,340,175,40,display,utils.Ptr("2. Continue"),utils.Ptr(20), color = (155,130,15), activation_key=50, action = self.reload_last_save,writer=screen_writer.GOTHIC))
         self.elements.append(screen_writer.Text_Button(605,390,175,40,display,utils.Ptr("3. Load"),utils.Ptr(20), color = (155,130,15), activation_key=51,action=self.load,writer=screen_writer.GOTHIC))
-        self.elements.append(screen_writer.Text_Button(605,440,175,40,display,utils.Ptr("4. Options"),utils.Ptr(20), color = (155,130,15), activation_key=52, action = self.options,writer=screen_writer.GOTHIC))
+        self.elements.append(screen_writer.Text_Button(605,440,175,40,display,utils.Ptr("4. Settings"),utils.Ptr(20), color = (155,130,15), activation_key=52, action = self.options,writer=screen_writer.GOTHIC))
         self.elements.append(screen_writer.Text_Button(605,490,175,40,display,utils.Ptr("5. Extras"),utils.Ptr(20), color = (155,130,15), activation_key=53, action = self.extras,writer=screen_writer.GOTHIC))
         self.elements.append(screen_writer.Text_Button(605,540,175,40,display,utils.Ptr("6. Exit Game"),utils.Ptr(20), color = (155,130,15), activation_key=54, action = self.exit_game,writer=screen_writer.GOTHIC))
 
@@ -233,8 +233,8 @@ class Load (ui.UI_Composite):
     NAME_W = 250
     NAME_H = 30
     DESC_H = 130
-    DESC_W = 500
-    DESC_CHAR = 40
+    DESC_W = 630
+    DESC_CHAR = 80
     DESC_CHAR_H = 4
     BOX_SPACING = 10
     BOX_DELTA = BOX_SPACING + DESC_H + NAME_H
@@ -258,27 +258,27 @@ class Load (ui.UI_Composite):
         for i in range (self.max):
             self.update_txt[i].value = True
             self.update_name[i].value = True
-            if i + self.cursor < len(self.lines) and self.cursor >= 1:
-                  self.text[i].value = self.lines[i + self.cursor ][self.DESC]
-                  self.name[i].value = self.__name__(self.lines[i + self.cursor ][self.ID], self.lines[i + self.cursor ][self.NAME], i)
+            if i + self.cursor.value < len(self.lines) and self.cursor.value >= 1:
+                  self.text[i].value = self.lines[i + self.cursor.value ][self.DESC]
+                  self.name[i].value = self.__name__(self.lines[i + self.cursor.value ][self.ID], self.lines[i + self.cursor.value ][self.NAME], i)
             else:
                 self.text[i].value = self.DEFAULT_TEXT.value
                 self.name[i].value = self.DEFAULT_NAME.value
 
     def down(self):
-        self.cursor = utils.clamp_addition(self.cursor, 1, len(self.lines) - 1,1)
+        self.cursor.value = utils.clamp_addition(self.cursor.value, 1, len(self.lines) - 1,1)
         self.update_text()
 
     def up(self):
-        self.cursor = utils.clamp_addition(self.cursor, -1, len(self.lines) - 1,1)
+        self.cursor.value = utils.clamp_addition(self.cursor.value, -1, len(self.lines) - 1,1)
         self.update_text()
 
     def return_play (self):
         self.control.last_state()
 
     def __load__ (self, i):
-        if self.cursor + i>= 1 and self.cursor  +i < len(self.lines):
-            self.control.load_state(self.lines[self.cursor + i][self.PATH])
+        if self.cursor.value + i>= 1 and self.cursor.value  +i < len(self.lines):
+            self.control.load_state(self.lines[self.cursor.value + i][self.PATH])
             self.control.update_game_state(self.control.GAME_STATES.FPS)
 
     def load(self):
@@ -286,6 +286,8 @@ class Load (ui.UI_Composite):
 
     def update(self, mouse, keys):
         super().update(mouse, keys)
+        if self.has_scroll and self.elements[2 * self.max+4].moved:
+            self.update_text()
         for element in self.elements:
             if element.state != utils.Mouse_State.UNDEFINED:
                 return False
@@ -302,27 +304,31 @@ class Load (ui.UI_Composite):
         self.text = []
         self.name = []
         self.control = control
-        self.cursor = 1
+        self.cursor = utils.Ptr(1)
         self.max = max_display
         self.update_txt = []
         self.update_name = []
         self.lines = utils.bottomless_csv_load(path)
-        self.elements.append(screen_writer.Text_Button(15,15,175,40,display,utils.Ptr("'"+chr(options.Key.MAP) + "'. Back"),utils.Ptr(20), activation_key=options.Key.MAP, action = self.return_play))
-        self.elements.append(screen_writer.Text_Button(600,300,175,40,display,utils.Ptr("'"+chr(options.Key.BACK) + "'. Down"),utils.Ptr(20), activation_key=options.Key.BACK, action = self.down))
-        self.elements.append(screen_writer.Text_Button(600,200,175,40,display,utils.Ptr("'"+chr(options.Key.FORWARD) + "'. Up"),utils.Ptr(20), activation_key=options.Key.FORWARD, action = self.up))
-        self.elements.append(screen_writer.Text_Button(600,250,175,40,display,utils.Ptr("'"+chr(options.Key.INTERACT) + "'. Load TOP"),utils.Ptr(20), activation_key=options.Key.INTERACT, action = self.load))
+        self.elements.append(screen_writer.Text_Button(15,15,150,40,display,utils.Ptr("'"+chr(options.Key.MAP) + "'. Back"),utils.Ptr(20), activation_key=options.Key.MAP, action = self.return_play))
+        self.elements.append(screen_writer.Text_Button(510,15,150,40,display,utils.Ptr("'"+chr(options.Key.BACK) + "'. Down"),utils.Ptr(20), activation_key=options.Key.BACK, action = self.down))
+        self.elements.append(screen_writer.Text_Button(345,15,150,40,display,utils.Ptr("'"+chr(options.Key.FORWARD) + "'. Up"),utils.Ptr(20), activation_key=options.Key.FORWARD, action = self.up))
+        self.elements.append(screen_writer.Text_Button(180,15,150,40,display,utils.Ptr("'"+chr(options.Key.INTERACT) + "'. Load TOP"),utils.Ptr(20), activation_key=options.Key.INTERACT, action = self.load))
         for i in range(self.max):
             self.update_txt.append(utils.Ptr(False))
             self.update_name.append(utils.Ptr(False))
-            if i + self.cursor < len(self.lines) and self.cursor >= 1:
-                  self.text.append(utils.Ptr(self.lines[i + self.cursor][self.DESC]))
-                  self.name.append(utils.Ptr(self.__name__(self.lines[i + self.cursor ][self.ID], self.lines[i + self.cursor ][self.NAME], i)))
+            if i + self.cursor.value < len(self.lines) and self.cursor.value >= 1:
+                  self.text.append(utils.Ptr(self.lines[i + self.cursor.value][self.DESC]))
+                  self.name.append(utils.Ptr(self.__name__(self.lines[i + self.cursor.value ][self.ID], self.lines[i + self.cursor.value ][self.NAME], i)))
             else:
                 self.text.append(self.DEFAULT_TEXT)
                 self.name.append(self.DEFAULT_NAME)
             self.elements.append(screen_writer.Text_Box(self.BOX_X0, self.BOX_Y0 + self.BOX_DELTA * i, self.NAME_W, self.NAME_H, display,self.name[i],self.NAME_SIZE,utils.Ptr(0),self.DESC_CHAR, 1 ,color=self.NAME_COLOR, border_width= 0, update_text=self.update_name[i], action=self.__load__, activation_key= 49 + i, args = i))
             self.elements.append(screen_writer.Text_Box(self.BOX_X0, self.BOX_Y0 + self.BOX_DELTA * i + self.NAME_H,self.DESC_W, self.DESC_H, display,self.text[i],self.DESC_SIZE,utils.Ptr(0),self.DESC_CHAR, self.DESC_W, color=self.DESC_COLOR, update_text=self.update_txt[i], action=self.__load__, activation_key= 49 + i, args = i))
-
+        if len(self.lines) > self.max:
+            self.has_scroll = True
+            self.elements .append(ui.Slider(700,110,32,450,display,current=self.cursor,min = 1, max = len(self.lines),phantom_dist=64))
+        else:
+            self.has_scroll = False
 class Options(ui.UI_Heirarchy):
     def return_play (self):
         self.control.last_state()
@@ -360,24 +366,11 @@ class Binds_Menu (ui.UI_Sub_Screen):
     BUTTON_H = 50
     RED = (150,0,0)
 
-    def __changed_UI__ (self):
-        options.CONFIG.contents[options.CONFIG.PROF_NAME].value = "CUSTOM"
-
-    def __increment_x__(self, delta):
-        options.CONFIG.contents[options.CONFIG.X_SENSE].value = utils.clamp_addition(options.CONFIG.contents[options.CONFIG.X_SENSE].value, delta, utils.Mouse_Manager.MOUSE_FACTOR,0)
-        self.__changed_UI__()
-
-    def __increment_y__(self, delta):
-        options.CONFIG.contents[options.CONFIG.Y_SENSE].value = utils.clamp_addition(options.CONFIG.contents[options.CONFIG.Y_SENSE].value, delta, utils.Mouse_Manager.MOUSE_FACTOR,0)
-        self.__changed_UI__()
-
     def __init__ (self, x, y, ext_display: pygame.surface):
         super().__init__(x,y,self.WIDTH,self.HEIGHT,ext_display,pygame.Color("bisque4"),False,True)
-        self.elements.append(screen_writer.Text_Button(self.x +normalize.SCALE_FACTOR_X * 250,self.y,0, 0, ext_display,utils.Ptr("MOUSE Sensitivity"),self.TITLE_SIZE,y_offset=-5,scale = False))
-        
-        # save changes
-        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *300,self.y + normalize.SCALE_FACTOR_Y *475,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.CONFIG.save_config,x_offset=12, y_offset=10,scale = False))
-
+        self.lines = []
+        self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X * 75,self.y+ normalize.SCALE_FACTOR_Y * 10,0, 0, ext_display,utils.Ptr("KEYBINDS (click to change):"),self.TITLE_SIZE,scale = False))
+        self.elements.append(screen_writer.Text_Menu(self.x + normalize.SCALE_FACTOR_X * 75, self.y + normalize.SCALE_FACTOR_Y * 50, 500, 475,ext_display,self.lines,max_display=10,scale=False,draw_background=False,box_color=ui.Element.DEFAULT_GREY))
 class Config_Menu (ui.UI_Sub_Screen):
     WIDTH = 650
     HEIGHT = 550

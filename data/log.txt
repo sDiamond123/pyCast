@@ -13,9 +13,9 @@ Loaded Chunks (data/maps/overworld/chunks.csv)
 Successfully loaded map: data/maps/chunks/empty_chunk 
 
 Started: Long's Word 
- Window: 1280 by 720 
+ Window: 800 by 600 
  Fullscreen: False 
- Internal Resolution: 1280 by 720 
+ Internal Resolution: 800 by 600 
  Targeting 60 FPS 
 
 USER: help 
@@ -41,13 +41,19 @@ switching stage to: MENU
 
 switching stage to: OPTIONS 
 
-Config loaded (data/config/profiles/default.txt) 
+reverting stage to: MENU 
 
-Config updated 
+switching stage to: OPTIONS 
 
 reverting stage to: MENU 
 
-switching stage to: EXIT 
+switching stage to: LOAD 
+
+reverting stage to: MENU 
+
+switching stage to: EXTRAS 
+
+reverting stage to: MENU 
 
 Long's Word Succesfully Exited 
 
