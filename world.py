@@ -8,7 +8,9 @@ class World:
     STATE_H = 9
     LINES_PER_OBJ = 6
     OBJ_W = 2
-    GAME_STATES = enum.Enum('State', [('EXIT', 12), ('DEAD', 11), ('EXTRAS', 10), ('OPTIONS', 9),('LOAD', 8), ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), ("PAUSE_MENU", 5), ("MAP", 6)])
+    GAME_STATES = enum.Enum('State', [('EXIT', 12), ('DEAD', 11), ('EXTRAS', 10), ('OPTIONS', 9),('LOAD', 8), 
+                                      ('SPLASH_SCREEN', 7),('FPS', 1), ('MENU', 2), ('DIALOUGE', 3), ("PLAYER_MENU", 4), 
+                                      ("PAUSE_MENU", 5), ("MAP", 6), ("KEY_PROMPT", 13)])
 
     state = None
     state_data = []
@@ -60,6 +62,7 @@ class World:
         self.UI[self.game_state.DIALOUGE.value] = dialogue.Dialogue_Window(self.internal_display, self)
         self.UI[self.game_state.DEAD.value] = ui_implementation.Death_Menu(self.internal_display, self)
         self.UI[self.game_state.EXIT.value] = ui_implementation.Exit_Popup(self.internal_display, self)
+        self.UI[self.game_state.KEY_PROMPT.value] = ui_implementation.Key_Prompt(self,self.internal_display)
 
     def load_state(self, state):
         self.state = state
@@ -266,6 +269,10 @@ class World:
 
     def set_dialouge_entry_point(self, point):
         self.UI[self.game_state.DIALOUGE.value].load(point)
+
+    def modify_key_bind(self, key):
+        self.UI[self.game_state.KEY_PROMPT.value].set_key(key)
+        self.update_game_state(self.game_state.KEY_PROMPT)
 
     def execute (self, command):
         log.write("USER: " + command)

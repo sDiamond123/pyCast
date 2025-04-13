@@ -117,6 +117,7 @@ class __Key__:
             self.LABELS.append(bind[self.LABEL])
 
     def load_current(self):
+        self.load_binds()
         self.FORWARD = self.BINDS[0][self.KEY]
         self.BACK =self.BINDS[1][self.KEY]
         self.S_LEFT = self.BINDS[2][self.KEY]
@@ -162,7 +163,7 @@ class __Key__:
 
     def save_binds(self):
         for bind in self.BINDS:
-            DB.update("key","keybinds",bind[self.KEY],("id",bind[self.ID]))
+            DB.update("key","keybinds",str(bind[self.KEY]),("id",bind[self.ID]))
 
     def __init__(self):
         self.load_binds()
@@ -237,7 +238,14 @@ class __Terminal__():
             self.old[key] = False
         self.caps_lock = False
 
-    def poll_keys(self, keys, get_sanatized = False):
+    def poll_keys(self, keys, get_sanatized = False, raw = False):
+        if raw:
+            for key in Key.PRINT_TABLE:
+                if keys[key] and not self.old[key]:
+                    self.old = keys
+                    return (key, Key.PRINT_TABLE[key][Key.PT_PRINT_LOWER])
+            self.old = keys
+            return None
         out = ""
         hit = False
         if keys[pygame.K_CAPSLOCK] and not self.old[pygame.K_CAPSLOCK]:
