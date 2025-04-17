@@ -143,26 +143,8 @@ class __Key__:
         self.UI = self.BINDS[19][self.KEY]
 
     def load_defaults(self):
-        self.FORWARD = self.BINDS[0][self.DEF_KEY]
-        self.BACK =self.BINDS[1][self.DEF_KEY]
-        self.S_LEFT = self.BINDS[2][self.DEF_KEY]
-        self.S_RIGHT = self.BINDS[3][self.DEF_KEY]
-        self.TURN_L = self.BINDS[4][self.DEF_KEY]
-        self.TURN_R = self.BINDS[5][self.DEF_KEY]
-        self.JUMP = self.BINDS[6][self.DEF_KEY]
-        self.CROUCH = self.BINDS[7][self.DEF_KEY]
-        self.FREE_LOOK = self.BINDS[8][self.DEF_KEY]
-        self.EXIT = self.BINDS[9][self.DEF_KEY]
-        self.SHOOT = self.BINDS[10][self.DEF_KEY]
-        self.RELOAD = self.BINDS[11][self.DEF_KEY]
-        self.CYCLE_NEXT = self.BINDS[12][self.DEF_KEY]
-        self.CYCLE_PREV = self.BINDS[13][self.DEF_KEY]
-        self.M_ZOOM_IN = self.BINDS[14][self.DEF_KEY]
-        self.M_ZOOM_OUT = self.BINDS[15][self.DEF_KEY]
-        self.INTERACT = self.BINDS[16][self.DEF_KEY]
-        self.MAP = self.BINDS[17][self.DEF_KEY]
-        self.PAUSE = self.BINDS[18][self.DEF_KEY]
-        self.UI = self.BINDS[19][self.DEF_KEY]
+        for bind in self.BINDS:
+            bind[self.KEY] = bind[self.DEF_KEY]
 
     def save_binds(self):
         for bind in self.BINDS:
@@ -196,6 +178,7 @@ class __Key__:
                    pygame.K_LALT : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'ALT', PT_PRINT_UPPER : 'ALT'},
                    ord('\r') : {PT_LOWER : ' \n ', PT_UPPER : ' \n ', PT_PRINT_LOWER : 'ENTER', PT_PRINT_UPPER : 'ENTER'},
                    ord('\n') : {PT_LOWER : ' \n ', PT_UPPER : ' \n ', PT_PRINT_LOWER : 'ENTER', PT_PRINT_UPPER : 'ENTER'},
+                   -1 : {PT_LOWER : '', PT_UPPER : '', PT_PRINT_LOWER : 'NONE', PT_PRINT_UPPER : 'NONE'},
                    ord("`") : {PT_LOWER : '`', PT_UPPER : '~', PT_PRINT_LOWER : '`', PT_PRINT_UPPER : '~'},
                    ord("1") : {PT_LOWER : '1', PT_UPPER : '!', PT_PRINT_LOWER : '1', PT_PRINT_UPPER : '!'},
                    ord("2") : {PT_LOWER : '2', PT_UPPER : '@', PT_PRINT_LOWER : '2', PT_PRINT_UPPER : '@'},

@@ -45,36 +45,6 @@ switching stage to: MENU
 
 switching stage to: OPTIONS 
 
-modifying key:1->[1, 115, 'move backward', 115] 
-
-switching stage to: KEY_PROMPT 
-
-reverting stage to: OPTIONS 
-
-modifying key:15->[15, 46, 'zoom out (map)', 46] 
-
-switching stage to: KEY_PROMPT 
-
-reverting stage to: OPTIONS 
-
-modifying key:13->[13, 101, 'cycle prev', 101] 
-
-switching stage to: KEY_PROMPT 
-
-reverting stage to: OPTIONS 
-
-modifying key:12->[12, 113, 'cycle next', 113] 
-
-switching stage to: KEY_PROMPT 
-
-reverting stage to: OPTIONS 
-
-modifying key:10->[10, 32, 'shoot', 32] 
-
-switching stage to: KEY_PROMPT 
-
-reverting stage to: OPTIONS 
-
 modifying key:19->[19, 120, 'bring up UI', 120] 
 
 switching stage to: KEY_PROMPT 
@@ -83,87 +53,7 @@ reverting stage to: OPTIONS
 
 reverting stage to: MENU 
 
-switching stage to: OPTIONS 
-
-modifying key:0->[0, 119, 'move forward', 119] 
-
-switching stage to: KEY_PROMPT 
-
-reverting stage to: OPTIONS 
-
-modifying key:6->[6, 118, 'jump', 118] 
-
-switching stage to: KEY_PROMPT 
-
-reverting stage to: OPTIONS 
-
-modifying key:8->[8, 122, 'm_look', 122] 
-
-switching stage to: KEY_PROMPT 
-
-reverting stage to: OPTIONS 
-
-reverting stage to: MENU 
-
-switching stage to: OPTIONS 
-
-modifying key:5->[5, 93, 'look right', 93] 
-
-switching stage to: KEY_PROMPT 
-
-reverting stage to: OPTIONS 
-
-reverting stage to: MENU 
-
-Successfully loaded map: data/maps/singleton/test_town 
-
-Successfully spawned player: (12.567,6.5,152.9797312999298) 
-
-Set up camera at (12.567,6.5) with a 90.0 degree FOV and casting 500 rays out to 15 cells 
-
-PISTOL added to inventory 
-
-SHOTGUN added to inventory 
-
-MG added to inventory 
-
-Successfully loaded save: built_in/town.csv 
-
-switching stage to: FPS 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
-
-switching stage to: MAP 
-
-reverting stage to: FPS 
-
-switching stage to: PAUSE_MENU 
-
 switching stage to: EXIT 
-
-reverting stage to: PAUSE_MENU 
-
-switching stage to: MENU 
-
-switching stage to: OPTIONS 
-
-modifying key:7->[7, 99, 'crouch', 99] 
-
-switching stage to: KEY_PROMPT 
-
-setting crouch to \ 
-
-reverting stage to: OPTIONS 
 
 Long's Word Succesfully Exited 
 

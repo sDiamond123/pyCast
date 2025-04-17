@@ -215,6 +215,14 @@ class Text_Menu (ui.UI_Sub_Screen):
                 text = self.DEFAULT_TEXT.value
             self.text[i].value = text
 
+    def update_contents(self, new_lines):
+        self.lines = new_lines
+        if self.has_slider :
+            self.elements[self.max].max = len(self.lines) - 1
+            self.elements[self.max].refresh_value = True
+        self.update_text()
+        
+
     def down(self):
         self.cursor.value = utils.clamp_addition(self.cursor.value, 1, len(self.lines) - 1,0)
         self.update_text()
