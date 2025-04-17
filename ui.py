@@ -283,14 +283,14 @@ class Slider (Interactable_Element):
                 width = self.MIN_DIM
             self.slider = Sticky(current_pos * w + x,y,width,h,ext_display,color = color, lock_y=True,phantom_dist=phantom_dist,border_width=0,scale = scale)
         super().__init__(x, y, w, h, ext_display, color, border_width, p_button, draw_border, activation_key, scale)
-        self.moved = utils.Ptr(False)
+        self.moved = False
         self.old = self.current.value
 
 
     def update (self, m_x, m_y, mouse : utils.Mouse_Manager, keys):
         super().update(m_x,m_y,mouse,keys)
-        if self.moved.value:
-            self.moved.value = False
+        if self.moved:
+            self.moved = False
         if self.refresh.value or self.current.value != self.old:
             self.old = self.current.value
             self.refresh.value = False
@@ -309,7 +309,7 @@ class Slider (Interactable_Element):
                 else:
                     self.slider.x = utils.clamp(self.slider.x,self.x+self.w  - self.slider.w,self.x)
                     self.current.value = int(self.step * (self.slider.x - self.x)/self.w * self.range + self.min)
-                self.moved.value = True
+                self.moved = True
                 self.old = self.current.value
 
     def render(self):

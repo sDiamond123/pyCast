@@ -43,17 +43,11 @@ Game Start!
 
 switching stage to: MENU 
 
-switching stage to: OPTIONS 
-
-modifying key:19->[19, 120, 'bring up UI', 120] 
-
-switching stage to: KEY_PROMPT 
-
-reverting stage to: OPTIONS 
+switching stage to: EXTRAS 
 
 reverting stage to: MENU 
 
-switching stage to: EXIT 
+switching stage to: OPTIONS 
 
 Long's Word Succesfully Exited 
 
