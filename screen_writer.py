@@ -246,6 +246,7 @@ class Text_Menu (ui.UI_Sub_Screen):
             self.up()
         if self.has_slider and self.elements[self.max].moved:
             self.update_text()
+        self.update_text()
         return False
         
 

@@ -20,6 +20,8 @@ def load_chunk_palette (path):
 
 load_chunk_palette(DEFAULT_PALETTE)
 
+# down left good, right up bad
+
 class M_Chunk():
     def __init__ (self, chunk_index, neighbors):
         self.id = chunk_index
@@ -48,6 +50,7 @@ class M_Chunk():
         if (x < 0):
             out[0] = x + CHUNK_W
             out[1] = 0
+           #print (x, out[0])
         elif (x >= CHUNK_W):
             out[0] = x- CHUNK_W
             out[1] = 2
@@ -60,6 +63,7 @@ class M_Chunk():
         x_adj = self.__adjust_coor(x)
         y_adj = self.__adjust_coor(y)
         chunk = self.neighbors[y_adj[1]][x_adj[1]].get_map()
+        #print(x,y,x_adj, y_adj)
         return [x_adj[0], y_adj[0], chunk]
 
 
@@ -121,11 +125,12 @@ class Overmap():
         self.primary_y = start_chunk_y
         self.grid = utils.bottomless_csv_load(path)
         self.chunks = [MAX_CHUNKS]
-        log.write((start_chunk_x, start_chunk_y))
+        log.write(str((start_chunk_x, start_chunk_y)))
        
         for i in range ((self.SUPPORT_W)):
             for j in range((self.SUPPORT_W)):
-                log.write("added: "+ str((i + self.primary_x - self.MID_VALUE, j + self.primary_y - self.MID_VALUE))+ "to" + str((i, j)))
+                log.write("added: "+ str((i + self.primary_x - self.MID_VALUE, j + self.primary_y - self.MID_VALUE))+ " to " + str((i, j)))
+                print(("added: "+ str((i + self.primary_x - self.MID_VALUE, j + self.primary_y - self.MID_VALUE))+ " to " + str((i, j))))
                 self.render_world[j][i] = self.init_chunk(i + self.primary_x - self.MID_VALUE, j + self.primary_y - self.MID_VALUE)
         return self.render_world[self.MID_VALUE][self.MID_VALUE]
 
@@ -152,29 +157,29 @@ class Overmap():
 
     def update (self, p: player.Player):
         if not self.render_world[self.primary_y][self.primary_x].in_chunk(p):
-            log.write(self.primary_x, self.primary_y)
+            log.write(str((self.primary_x, self.primary_y)))
             if (p.x < 0):
                 p.x += CHUNK_W
                 self.primary_x -= 1
                 #self.delete_group(0, self.SUPPORT_W - 1, 0, 1)
-                log.write("a")
+                print("a")
                # self.shift_group(1, 0, self.SUPPORT_W - 1 ,-1)
             elif (p.x >= CHUNK_W):
                 p.x -= CHUNK_W
                 self.primary_x += 1
                 #self.delete_group(0, 0, 0, 1)
-                log.write("b")
+                print("b")
                # self.shift_group(-1, 0, 0,-1)
             if (p.y < 0):
                 p.y += CHUNK_W
                 self.primary_y -= 1
                 #self.delete_group(self.SUPPORT_W - 1, 0, 1, 0)
-                log.write("c")
+                print("c")
             elif (p.y >= CHUNK_W):
                 p.y -= CHUNK_W
                 self.primary_y += 1
                 #self.delete_group(0, 0, 1, 0)
-                log.write("d")
+                print("d")
             
         return self.render_world[self.primary_y][self.primary_x]
 

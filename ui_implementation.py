@@ -401,7 +401,6 @@ class Binds_Menu (ui.UI_Sub_Screen):
         self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *300,self.y + normalize.SCALE_FACTOR_Y *490,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("SAVE"),self.TEXT_SIZE,action= options.Key.save_binds,x_offset=12, y_offset=10,scale = False))
         self.elements.append(screen_writer.Text_Button(self.x + normalize.SCALE_FACTOR_X *110,self.y + normalize.SCALE_FACTOR_Y *490,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("RELOAD"),self.TEXT_SIZE,action= self.__load_cur__,x_offset=5, y_offset=10,scale = False))
         self.elements.append(screen_writer.Text_Button(self.x + self.w - normalize.SCALE_FACTOR_X *180,self.y + normalize.SCALE_FACTOR_Y *490,self.BUTTON_W,self.BUTTON_H,ext_display,utils.Ptr("DEFAULT"),self.TEXT_SIZE,action= self.__load_def__,x_offset=1, y_offset=10,scale = False))
-        self.BIND_SET = False
 
 class Key_Prompt (ui.UI_Composite):
     TEXT_SIZE = utils.Ptr(20)

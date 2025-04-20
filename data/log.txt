@@ -45,9 +45,109 @@ switching stage to: MENU
 
 switching stage to: EXTRAS 
 
-reverting stage to: MENU 
+Successfully loaded map: data/maps/chunks/town_square_chunk 
 
-switching stage to: OPTIONS 
+Successfully spawned player: (12.567,6.5,152.9797312999298) 
+
+Set up camera at (12.567,6.5) with a 90.0 degree FOV and casting 300 rays out to 16 cells 
+
+PISTOL added to inventory 
+
+SHOTGUN added to inventory 
+
+MG added to inventory 
+
+Successfully loaded save: built_in/test_chunk.csv 
+
+switching stage to: FPS 
+
+switching stage to: EXIT 
+
+reverting stage to: FPS 
+
+switching stage to: EXIT 
+
+reverting stage to: FPS 
+
+switching stage to: EXIT 
+
+reverting stage to: FPS 
+
+switching stage to: EXIT 
+
+reverting stage to: FPS 
+
+switching stage to: EXIT 
+
+reverting stage to: FPS 
+
+switching stage to: EXIT 
+
+reverting stage to: FPS 
+
+switching stage to: EXIT 
+
+reverting stage to: FPS 
+
+switching stage to: EXIT 
+
+reverting stage to: FPS 
+
+switching stage to: PAUSE_MENU 
+
+switching stage to: MENU 
+
+switching stage to: EXTRAS 
+
+(2, 2) 
+
+added: (1, 1) to (0, 0) 
+
+Successfully loaded map: data/maps/chunks/town_square_chunk 
+
+added: (1, 2) to (0, 1) 
+
+Successfully loaded map: data/maps/chunks/road_chunk 
+
+added: (1, 3) to (0, 2) 
+
+added: (2, 1) to (1, 0) 
+
+added: (2, 2) to (1, 1) 
+
+added: (2, 3) to (1, 2) 
+
+added: (3, 1) to (2, 0) 
+
+added: (3, 2) to (2, 1) 
+
+Successfully loaded map: data/maps/chunks/mansion_chunk 
+
+added: (3, 3) to (2, 2) 
+
+Successfully spawned player: (12.567,6.5,152.9797312999298) 
+
+Set up camera at (12.567,6.5) with a 90.0 degree FOV and casting 300 rays out to 16 cells 
+
+PISTOL added to inventory 
+
+SHOTGUN added to inventory 
+
+MG added to inventory 
+
+Successfully loaded save: built_in/world1.csv 
+
+switching stage to: FPS 
+
+switching stage to: EXIT 
+
+reverting stage to: FPS 
+
+switching stage to: EXIT 
+
+reverting stage to: FPS 
+
+switching stage to: EXIT 
 
 Long's Word Succesfully Exited 
 

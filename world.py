@@ -73,7 +73,8 @@ class World:
                               utils.convert_csv_to_float(self.state_data,1),
                               utils.convert_csv_to_float(self.state_data,4))
         # load map
-        if (self.state_data[7][0].strip().lower() != "true"):
+        is_basic = self.state_data[7][0].strip().lower() != "true"
+        if (is_basic):
             self.m = map.Map(self.state_data[0][0])
             self.is_overworld = False
         else:
@@ -102,7 +103,7 @@ class World:
          # load camera
         self.c = camera.Camera(self.m, self.p, self.internal_w, self.internal_h, 
                                self.fps_rays.value, math.radians(self.fps_fov.value), 
-                               self.draw_dist.value, self.state_objects)
+                               self.draw_dist.value, self.state_objects, ignore_bounds=not is_basic)
         self.UI[self.GAME_STATES.FPS.value] =ui_implementation.HUD(self.internal_display, self.m, self.p)
         self.UI[self.GAME_STATES.MAP.value] = ui_implementation.Map_Screen(self.internal_display,self.m, self.p, has_buttons=True)
         self.p.load_inv(self.state_data[6][0])

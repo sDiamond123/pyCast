@@ -6,4 +6,4 @@ data/maps/overworld/world1.csv
 built_in/town_obj.csv, 0,  OBJECT MANIFEST NAME, OBJECT MANIFEST SIZE
 data/state/built_in/inventory.csv
 True,
-1, 0
+1, 2

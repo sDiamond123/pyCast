@@ -35,7 +35,7 @@ class Camera:
     external_surface = None
     x_ray = False
 
-    def __init__(self, map, camera_man, w, h, ray_count, fov, draw_dist, sprites):
+    def __init__(self, map, camera_man, w, h, ray_count, fov, draw_dist, sprites, ignore_bounds = False):
         # set up location
         self.position_vector = camera_man
         self.map = map
@@ -57,6 +57,7 @@ class Camera:
         self.z_buffer = [0] * self.raycount
         self.objects = sprites
         self.object_w_factor = (math.pi/(self.fov * 4))
+        self.ignore_bounds = ignore_bounds
         if self.map.has_skybox:
             sky = self.map.get_skybox()
             self.skybox = texture.RollingTexture(sky[0],sky[1],self.fov, self.int_w, self.int_h/2)
@@ -130,6 +131,7 @@ class Camera:
             prev_color_down = self.map.get_ceil_text(x,y)
         correction = math.cos(self.__CORRECTION_FACTOR * (0.5 - ray_offset/self.raycount))
         # enter cast
+        #print("\n\nstart:")
         while distance <= self.draw_dist and step > 0:
             step -= 1
             if self.map.is_valid(x,y):
@@ -161,24 +163,29 @@ class Camera:
                 prev_color_up = self.map.get_floor_text(x,y)
                 if self.map.has_ceil:
                     prev_color_down = self.map.get_ceil_text(x,y)
+            else:
+                self.z_buffer[ray_offset] = -1
+                return
             # move on to next grid cell
                 
-            x_n = 1 + int(x) - x
+            x_n = 1 + math.floor(x) - x
             if x_increase < 0:
-                x_n = x - int(x)
+                x_n = x -  math.floor(x)
             proj_y = y + dy * x_n * y_increase
-            x = int(x)
+            x =  math.floor(x)
             if (x_increase > 0):
                 x += 1
-            if proj_y < int(y) + 1 and proj_y > int(y):
+            if proj_y <  math.floor(y) + 1 and proj_y >  math.floor(y):
                 y = proj_y
             else:
-                y = int(y)
+                y =  math.floor(y)
                 if (y_increase > 0):
                     y += 1
                 x -= abs(y-proj_y) * dx * x_increase
+            #print(x,y)
             x += d2x
             y += d2y
+            #print(x,y)
             distance = self.__distance__(x,y,x0,y0) * correction
             draw_height = self.int_h/(2 * distance)
             if draw_height > self.midpoint:
