@@ -196,7 +196,7 @@ class World:
             self.p.update()
             # update over_world (if needed)
             if (self.is_overworld):
-                self.m = overworld.update(self.p)
+                overworld.update(self.p)
 
             to_pop = []
             #update objects

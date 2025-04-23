@@ -37,7 +37,6 @@ class M_Chunk():
         return self.name
 
     def destroy(self):
-        log.write("deleted: " + str((self.x, self.y)))
         CHUNK_PALETTE[self.id][CHUNK_COUNT] -= 1
         if (CHUNK_PALETTE[self.id][CHUNK_COUNT] <= 0):
             CHUNK_PALETTE[self.id][CHUNK_MAP] = None
@@ -119,6 +118,11 @@ class Overmap():
         self.primary_y = 0
         self.render_world = [[0] * self.SUPPORT_W for i in range(self.SUPPORT_W)]
         self.empty = M_Chunk(self.EMPTY_CHUNK, self.render_world)
+        self.map_ptr = M_Wrapper(self.empty)
+
+    def __update_m_ptr__ (self):
+        self.map_ptr.update_map( self.render_world[self.MID_VALUE][self.MID_VALUE])
+        return self.map_ptr
 
     def load (self, path, start_chunk_x, start_chunk_y):
         self.primary_x = start_chunk_x
@@ -132,7 +136,9 @@ class Overmap():
                 log.write("added: "+ str((i + self.primary_x - self.MID_VALUE, j + self.primary_y - self.MID_VALUE))+ " to " + str((i, j)))
                 print(("added: "+ str((i + self.primary_x - self.MID_VALUE, j + self.primary_y - self.MID_VALUE))+ " to " + str((i, j))))
                 self.render_world[j][i] = self.init_chunk(i + self.primary_x - self.MID_VALUE, j + self.primary_y - self.MID_VALUE)
-        return self.render_world[self.MID_VALUE][self.MID_VALUE]
+        self.print_map()
+        self.__update_m_ptr__()
+        return self.map_ptr
 
     def init_chunk(self, x, y):
         if (y < 0 or y >= len(self.grid) or x < 0 or x >= len(self.grid[y])):
@@ -141,7 +147,7 @@ class Overmap():
 
     def delete_group(self, x0, y0, dx, dy):
         for i in range(self.SUPPORT_W):
-            log.write("deleted: " + str((x0 + i * dx, y0 + i * dy)))
+            print("deleted: " + str((x0 + i * dx, y0 + i * dy)))
             del_me = self.render_world[y0 + i * dy][x0 + i * dx]
             if (del_me != self.empty):
                 del_me.destroy()
@@ -149,38 +155,93 @@ class Overmap():
     def shift_group(self, dx, dy, targ_x, targ_y):
         for y in range (self.SUPPORT_W):
             for x in range(self.SUPPORT_W):
-                if (x == targ_x or y == targ_y):
-                    self.render_world[y][x] = self.init_chunk(self.primary_x + dx, self.primary_y + dy)
-                else:
-                    log.write("shifted " + str((x,y)) + " to " + str((x+dx, y + dy)))
+                if (x + dx >=0 and y + dy >= 0 and x + dx < self.SUPPORT_W and y + dy < self.SUPPORT_W):
+                    print("shifted " + str((x,y)) + " to " + str((x+dx, y + dy)))
                     self.render_world[y + dy][x + dx] = self.render_world[y][x]
 
+        for i in range (self.SUPPORT_W):
+            if (targ_x >= 0):
+                    print("added (x)" + str((targ_x,i)))
+                    self.render_world[i][targ_x] = self.init_chunk(self.primary_x + i - self.MID_VALUE, self.primary_y)
+            elif (targ_y >= 0):
+                print("added (y)" + str((i, targ_y)))
+                self.render_world[targ_y][i] = self.init_chunk(self.primary_x, self.primary_y + i -self.MID_VALUE)
+
+    def print_map (self):
+        print(str((self.primary_x, self.primary_y)))
+        for y in range(self.SUPPORT_W):
+            line = "["
+            line += str(self.render_world[y][0].id)
+            for x in range(1, self.SUPPORT_W):
+                line += "," + str(self.render_world[y][x].id)
+            print(line + "]")
+
     def update (self, p: player.Player):
-        if not self.render_world[self.primary_y][self.primary_x].in_chunk(p):
+        if not self.render_world[self.MID_VALUE][self.MID_VALUE].in_chunk(p):
             log.write(str((self.primary_x, self.primary_y)))
             if (p.x < 0):
                 p.x += CHUNK_W
                 self.primary_x -= 1
-                #self.delete_group(0, self.SUPPORT_W - 1, 0, 1)
-                print("a")
-               # self.shift_group(1, 0, self.SUPPORT_W - 1 ,-1)
+                #print("a")
+                self.delete_group(0, self.SUPPORT_W - 1, 0, -1)
+                self.shift_group(1, 0, 0 ,-1)
             elif (p.x >= CHUNK_W):
                 p.x -= CHUNK_W
                 self.primary_x += 1
-                #self.delete_group(0, 0, 0, 1)
-                print("b")
-               # self.shift_group(-1, 0, 0,-1)
+                #print("b")
+                self.delete_group(0, 0, 0, 1)
+                self.shift_group(-1, 0,self.SUPPORT_W - 1, -1)
             if (p.y < 0):
                 p.y += CHUNK_W
                 self.primary_y -= 1
-                #self.delete_group(self.SUPPORT_W - 1, 0, 1, 0)
-                print("c")
+                #print("c")
+                self.delete_group(self.SUPPORT_W - 1, 0, -1, 0)
+                self.shift_group(0, 1, -1 ,0)
             elif (p.y >= CHUNK_W):
                 p.y -= CHUNK_W
                 self.primary_y += 1
-                #self.delete_group(0, 0, 1, 0)
-                print("d")
-            
-        return self.render_world[self.primary_y][self.primary_x]
+                #print("d")
+                self.delete_group(0, 0, 1, 0)
+                self.shift_group(0, -1,-1, self.SUPPORT_W - 1)
+            self.print_map()
+            self.__update_m_ptr__()
+
+class M_Wrapper(map.Map):
+    def __init__(self, map):
+        self.map = map
+        self.has_skybox = map.has_skybox
+        self.has_ceil = map.has_ceil
+    
+    def __str__(self):
+        return str(self.map)
+
+    def is_valid (self, x, y):
+        return self.map.is_valid(x,y)
+
+    def is_empty (self, x, y):
+        return self.map.is_empty(x,y)
+    
+    def get_floor_text (self, x, y):
+        return self.map.get_floor_text(x,y)
+    
+    def get_ceil_text (self, x, y):
+        return self.map.get_ceil_text(x,y)
+    
+    def get_height(self, x, y):
+        return self.map.get_height(x,y)
+    
+    def get_text(self, x, y, off):
+        return self.map.get_text(x,y,off)
+    
+    def get_skybox(self):
+        return self.map.get_skybox()
+    
+    def rendermap(self, screen, Player, fill_w, fill_h, x0, y0, w, h, x_off = 0, y_off = 0):
+        self.map.rendermap(screen, Player, fill_w, fill_h, x0, y0, w, h, x_off, y_off)
+
+    def update_map (self, new_map):
+        self.map = new_map
+        self.has_skybox = new_map.has_skybox
+        self.has_ceil = new_map.has_ceil
 
 OVER_MAP = Overmap()
