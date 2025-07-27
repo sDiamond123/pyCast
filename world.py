@@ -260,7 +260,7 @@ class World:
             if prev_s == self.GAME_STATES.FPS:
                 self.c.render()
                 #push camera's display onto main display
-                self.internal_display.blit(self.c.external_surface)
+                self.internal_display.blit(self.c.external_surface,(0,0))
             self.UI[prev_s.value].render()
         if self.UI[self.game_state.value].want_mouse:
             if self.mouse.alive:

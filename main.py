@@ -69,7 +69,7 @@ if __name__ == "__main__":
             pygame.display.flip()
 
             # limits FPS
-            #dt = clock.CLOCK.tick(fps.value) / 1000
+            dt = clock.CLOCK.tick(fps.value) / 1000
             #print(clock.get_fps())
     log.write(name + " Succesfully Exited")
     print(name + " exited\nsee data/log.txt for more info")

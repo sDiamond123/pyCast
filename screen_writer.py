@@ -60,8 +60,7 @@ class FPS_UI (ui.Button):
         self.y_offset = y_offset + 2 * self.b_w 
         self.text_color = text_color
     def render(self):
-        #self.ext_display.blit(self.writer.render(str(clock.CLOCK.get_fps())[:self.FPS_LEN], self.size.value,color =self.text_color),(self.x + self.x_offset,self.y + self.y_offset))
-        pass
+        self.ext_display.blit(self.writer.render(str(clock.CLOCK.get_fps())[:self.FPS_LEN], self.size.value,color =self.text_color),(self.x + self.x_offset,self.y + self.y_offset))
 
 class Text_Box (Text_Button):
     ABS_BREAK_CHARS = ["\r\n", "\n", "\r"]
