@@ -72,7 +72,7 @@ class Camera:
         # render skybox (if applicable)
         if self.map.has_skybox:
             self.skybox.render(self.position_vector.ang)
-            self.internal_surface.blit(self.skybox.external_screen)
+            self.internal_surface.blit(self.skybox.external_screen,(0,0))
         # render walls/floor/ceiling
         ang = self.position_vector.ang - self.half_fov
         for i in range(self.raycount):

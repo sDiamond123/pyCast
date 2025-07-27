@@ -12,7 +12,7 @@ class Texture:
     def __init__ (self, file):
         file = self.PATH + file
         base_image = pygame.image.load(file)
-        dimensions = base_image.size
+        dimensions = base_image.get_size()
         self.slice_count = dimensions[0]
         self.slices = [None] * self.slice_count
         for i in range(self.slice_count):
@@ -85,8 +85,8 @@ class RollingTexture:
         self.fov = fov
         self.external_screen = pygame.Surface((w,h))
         self.base_image = pygame.image.load(file)
-        self.height = self.base_image.size[1]
-        self.width = self.base_image.size[0]
+        self.height = self.base_image.get_size()[1]
+        self.width = self.base_image.get_size()[0]
         self.scale = self.width/(2 * math.pi)
         self.internal_screen = pygame.Surface((fov * self.scale, self.height))
 
@@ -98,11 +98,11 @@ class RollingTexture:
         if (lower > upper):
             front = pygame.Rect(lower, 0, self.width - lower, self.height)
             back = pygame.Rect(0,0,upper, self.height)
-            self.internal_screen.blit(self.base_image.subsurface(front))
+            self.internal_screen.blit(self.base_image.subsurface(front), (0,0))
             self.internal_screen.blit(self.base_image.subsurface(back),(self.width - lower, 0))
         else:
             whole = pygame.Rect(lower, 0, upper - lower, self.height)
-            self.internal_screen.blit(self.base_image.subsurface(whole))
-        pygame.transform.scale(self.internal_screen, self.external_screen.size, self.external_screen)
+            self.internal_screen.blit(self.base_image.subsurface(whole), (0,0))
+        pygame.transform.scale(self.internal_screen, self.external_screen.get_size(), self.external_screen)
         
         

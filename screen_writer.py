@@ -21,7 +21,7 @@ class Screen_Writer:
 
     def render (self, text : str, size : int = default_size, color = "black", antialias = True):
         font = self.fonts[size]
-        return font.render(text, antialias = antialias, color = color)
+        return font.render(text,antialias, color)
     
 DEFAULT_WRITER = Screen_Writer()
 GOTHIC = Screen_Writer(FONT_PATH + "/Jacquard_12/Jacquard12-Regular.ttf")
@@ -60,7 +60,8 @@ class FPS_UI (ui.Button):
         self.y_offset = y_offset + 2 * self.b_w 
         self.text_color = text_color
     def render(self):
-        self.ext_display.blit(self.writer.render(str(clock.CLOCK.get_fps())[:self.FPS_LEN], self.size.value,color =self.text_color),(self.x + self.x_offset,self.y + self.y_offset))
+        #self.ext_display.blit(self.writer.render(str(clock.CLOCK.get_fps())[:self.FPS_LEN], self.size.value,color =self.text_color),(self.x + self.x_offset,self.y + self.y_offset))
+        pass
 
 class Text_Box (Text_Button):
     ABS_BREAK_CHARS = ["\r\n", "\n", "\r"]
@@ -190,7 +191,7 @@ class Text_Box (Text_Button):
              if line_count >= len(self.lines):
                  break
              rendered =  (self.writer.render(self.lines[line_count], self.size.value,self.text_color))
-             delta_y = rendered.size[1]
+             delta_y = rendered.get_size()[1]
              self.ext_display.blit(rendered,(self.x_offset + self.x, draw_y))
              draw_y += delta_y
              if self.slider != None:

@@ -1,2 +1,2 @@
 import pygame
-CLOCK = pygame.Clock()
+CLOCK = pygame.time.Clock

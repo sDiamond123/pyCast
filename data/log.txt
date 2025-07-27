@@ -43,37 +43,7 @@ Game Start!
 
 switching stage to: MENU 
 
-switching stage to: OPTIONS 
-
-reverting stage to: MENU 
-
-switching stage to: EXTRAS 
-
-(1, 2) 
-
-added: (0, 1) to (0, 0) 
-
-added: (0, 2) to (0, 1) 
-
-added: (0, 3) to (0, 2) 
-
-Successfully loaded map: data/maps/chunks/mansion_chunk 
-
-added: (1, 1) to (1, 0) 
-
-Successfully loaded map: data/maps/chunks/town_square_chunk 
-
-added: (1, 2) to (1, 1) 
-
-Successfully loaded map: data/maps/chunks/road_chunk 
-
-added: (1, 3) to (1, 2) 
-
-added: (2, 1) to (2, 0) 
-
-added: (2, 2) to (2, 1) 
-
-added: (2, 3) to (2, 2) 
+Successfully loaded map: data/maps/singleton/test_town 
 
 Successfully spawned player: (12.567,6.5,152.9797312999298) 
 
@@ -85,85 +55,23 @@ SHOTGUN added to inventory
 
 MG added to inventory 
 
-Successfully loaded save: built_in/world1.csv 
+Successfully loaded save: built_in/town.csv 
 
 switching stage to: FPS 
 
-(1, 2) 
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
 
-(1, 1) 
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
 
-(1, 2) 
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
 
-(1, 3) 
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
 
-(1, 2) 
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
 
-(1, 1) 
+fire_ball hit obj test_object for 0.5 dmg with 1.5 decay 
 
-(1, 0) 
-
-(1, -1) 
-
-(1, 0) 
-
-(1, 1) 
-
-(1, 2) 
-
-Successfully loaded map: data/maps/chunks/empty_chunk 
-
-(0, 2) 
-
-Successfully loaded map: data/maps/chunks/empty_chunk 
-
-(1, 2) 
-
-(1, 1) 
-
-(1, 2) 
-
-(1, 3) 
-
-(0, 3) 
-
-(-1, 3) 
-
-(-1, 4) 
-
-(0, 4) 
-
-Successfully loaded map: data/maps/chunks/empty_chunk 
-
-Successfully loaded map: data/maps/chunks/mansion_chunk 
-
-(0, 3) 
-
-Successfully loaded map: data/maps/chunks/empty_chunk 
-
-Successfully loaded map: data/maps/chunks/mansion_chunk 
-
-(0, 2) 
-
-Successfully loaded map: data/maps/chunks/empty_chunk 
-
-(0, 1) 
-
-Successfully loaded map: data/maps/chunks/empty_chunk 
-
-(0, 0) 
-
-(0, -1) 
-
-(-1, -1) 
-
-(0, -1) 
-
-(-1, -1) 
-
-(0, -1) 
-
-Successfully loaded map: data/maps/chunks/empty_chunk 
+test_object hit player for 15.2 dmg 
 
 switching stage to: EXIT 
 

@@ -225,7 +225,7 @@ class World:
             # render 
             self.c.render()
             #push camera's display onto main display
-            self.internal_display.blit(self.c.external_surface)
+            self.internal_display.blit(self.c.external_surface,(0,0))
 
         # render UI
         if self.game_state.value in self.UI and self.UI[self.game_state.value] != None:
@@ -233,7 +233,7 @@ class World:
 
 
         # output rendered frame (push to external display)
-        pygame.transform.smoothscale(self.internal_display, self.out_display.size, self.out_display)
+        pygame.transform.smoothscale(self.internal_display, self.out_display.get_size(), self.out_display)
 
     MAX_SAVED_STATES = 10
 

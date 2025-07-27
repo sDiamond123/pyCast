@@ -475,7 +475,7 @@ class UI_Composite ():
 
     def update(self, mouse : utils.Mouse_Manager, keys):
         coor = mouse.poll_rel()
-        size = self.display.size
+        size = self.display.get_size()
         m_x = coor[0] * size[0]
         m_y = coor[1] * size[1]
         for element in self.elements:
@@ -502,7 +502,7 @@ class UI_Heirarchy(UI_Composite):
 
     def update(self, mouse, keys):
         coor = mouse.poll_rel()
-        size = self.display.size
+        size = self.display.get_size()
         m_x = coor[0] * size[0]
         m_y = coor[1] * size[1]
         for screen in self.sub_composites:
