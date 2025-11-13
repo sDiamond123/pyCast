@@ -53,8 +53,8 @@ if __name__ == "__main__":
                 if event.type == MOUSEWHEEL:
                     mouse.set_mouse_wheel(event.y)
                 elif event.type == VIDEORESIZE:
-                    mouse.resize(screen.size)
-                    w = screen.size[0]
+                    mouse.resize(screen.get_size())
+                    w = screen.get_size()[0]
                     
         # run a frame of the game
         if running:
