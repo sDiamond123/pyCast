@@ -68,22 +68,22 @@ Loading a save (Extras)
 
 Map
 
-<img width="1199" height="950" alt="image" src="https://github.com/user-attachments/assets/8d635c56-9266-4eee-b7da-68b170e8d433" />
+<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/8d635c56-9266-4eee-b7da-68b170e8d433" />
 
 
 Pause Menu
 
-<img width="1199" height="945" alt="image" src="https://github.com/user-attachments/assets/b3433047-561c-4df6-81d4-7217329ed78c" />
+<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/b3433047-561c-4df6-81d4-7217329ed78c" />
 
 Exit Dialouge
 
-<img width="1205" height="941" alt="image" src="https://github.com/user-attachments/assets/df906c90-ed3e-4ccb-9e5b-25f84bb9ac72" />
+<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/df906c90-ed3e-4ccb-9e5b-25f84bb9ac72" />
 
 Various in game screenshots
 
-<img width="1204" height="945" alt="image" src="https://github.com/user-attachments/assets/fcc3da69-9cc4-4246-b06a-2f8033bc3adc" />
+<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/fcc3da69-9cc4-4246-b06a-2f8033bc3adc" />
 
-<img width="1198" height="949" alt="image" src="https://github.com/user-attachments/assets/9c7c65b6-a631-4552-b967-944426a23456" />
+<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/9c7c65b6-a631-4552-b967-944426a23456" />
 
 
 
