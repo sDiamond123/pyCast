@@ -1,7 +1,7 @@
 ![Recording2025-11-13at19 00 41-ezgif com-crop](https://github.com/user-attachments/assets/7d5ed64e-c4a3-4193-b6c8-891dc6761ccc)
 
 # What am I?
-This was a raycaster largely done as a proof of concept over the course of last year. 
+This was a [raycaster](https://en.wikipedia.org/wiki/Ray_casting) largely done as a proof of concept over the course of last year. 
 
 Most of what's here is mainly a placeholder as I continue to devolp the game. Turns out I like making the game systems more then I like making games. 
 
@@ -29,8 +29,12 @@ From the main menu:
     Extra: Load the differet test maps
     Settings: view and modify settings
     Exit: close the game
-    
-A log can be found in log.txt
+
+![Recording2025-11-13at21 46 06-ezgif com-crop](https://github.com/user-attachments/assets/fda28d5a-ab4c-4a3e-8919-ca66f99789dd)
+
+On exit, a log is automatically saved to:
+
+    data/log.txt
 
 # Settings
 
@@ -56,37 +60,60 @@ Custom saves are not implemented yet (loading is).
 
 When I last worked on it I was trying to get it to paritally load large maps from an overworld at runtime, instead of the entire map at load time.  This isn't really working (can see in test maps).
 
-# Screenshots
-Animated Textures
+# Features
 
-![Recording2025-11-13at19 59 45-ezgif com-crop](https://github.com/user-attachments/assets/2ed58da5-fa1f-4a9b-89ae-406d92e3824e)
 
-Dialouge System
+## Different Weapons
 
-<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/9d425e2a-ee91-4de3-981d-3f4a14580c5b" />
+![Recording2025-11-13at21 43 04-ezgif com-crop](https://github.com/user-attachments/assets/d1c752b5-8fc2-4974-8209-69165941b820)
 
-Loading a save (Extras)
+## Reload Mechanics
 
-![Recording2025-11-13at20 03 29-ezgif com-crop](https://github.com/user-attachments/assets/f52b9bae-5be9-4667-9485-21bc5fcae969)
+![Recording2025-11-13at22 06 40-ezgif com-crop](https://github.com/user-attachments/assets/91d141a2-8028-47c8-8297-d02464582a7b)
 
-Map
+## Rudamentary Enemy AI and Death Screen
+
+![Recording2025-11-13at22 18 56-ezgif com-crop](https://github.com/user-attachments/assets/a4439637-1052-4c7f-a737-1b35d4db9abc)
+
+## Dialouge System
+
+![Recording2025-11-13at21 50 56-ezgif com-crop](https://github.com/user-attachments/assets/ac8c073c-5b95-48fc-a907-b2657cb383e2)
+
+## Interactive Map
+
+![Recording2025-11-13at22 09 22-ezgif com-crop](https://github.com/user-attachments/assets/ae5f5d5c-86b4-49b8-85d0-4f889339a192)
 
 <img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/8d635c56-9266-4eee-b7da-68b170e8d433" />
 
+## Animated Textures
 
-Pause Menu
+![Recording2025-11-13at19 59 45-ezgif com-crop](https://github.com/user-attachments/assets/2ed58da5-fa1f-4a9b-89ae-406d92e3824e)
 
-<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/b3433047-561c-4df6-81d4-7217329ed78c" />
+## Loading a save (Extras)
 
-Exit Dialouge
+![Recording2025-11-13at20 03 29-ezgif com-crop](https://github.com/user-attachments/assets/f52b9bae-5be9-4667-9485-21bc5fcae969)
 
-<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/df906c90-ed3e-4ccb-9e5b-25f84bb9ac72" />
+## Pause Menu
 
-Various in game screenshots
+![Recording2025-11-13at22 13 24-ezgif com-crop](https://github.com/user-attachments/assets/a90ce9da-b7bf-492e-bd79-f6cba3f655cb)
+
+## Exit Dialouge
+
+![Recording2025-11-13at22 16 03-ezgif com-crop](https://github.com/user-attachments/assets/0b2bfa0a-abe9-4e78-91da-2e594bb7f14d)
+
+
+# Screenshots
+
+<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/fb045869-d15b-464a-876e-8914390f7a4c" />
 
 <img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/fcc3da69-9cc4-4246-b06a-2f8033bc3adc" />
 
 <img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/9c7c65b6-a631-4552-b967-944426a23456" />
+
+<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/a206accb-6024-418e-9b78-d1c8ab78ad7c" />
+
+<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/5f5d6a79-29ba-482d-a21a-8ab134a40945" />
+
 
 
 
