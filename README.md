@@ -49,8 +49,11 @@ There's also a rudimentary console (type 'help' for commands)
 
 This was mostly done as a proof of concept. 
 Graphics are CPU bound, attempted multi-threading to lack-luster results (think I'm running into python's global interpreter lock).
-Got side tracked rewriting it in rust and true SDL to avoid this, we'll see how it goes from there.
+
+Got side tracked rewriting it in rust binding of SDL to avoid this, we'll see how it goes from there.
+
 Custom saves are not implemented yet (loading is). 
+
 When I last worked on it I was trying to get it to paritally load large maps from an overworld at runtime, instead of the entire map at load time.  This isn't really working (can see in test maps).
 
 # Screenshots
